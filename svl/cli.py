@@ -41,19 +41,26 @@ def inject_dataset(visualization_spec):
     type=click.File('w'),
     default="visualization.html"
 )
-def cli(svl_source, output_file):
+@click.option(
+    "--debug/--no-debug",
+    default=False
+)
+def cli(svl_source, output_file, debug):
     svl_string = svl_source.read()
-    parsed_spec = svl.parse_svl(svl_string)
+    if not debug:
+        parsed_spec = svl.parse_svl(svl_string)
 
-    # Replace the dataset file with the dataset values.
-    vega_lite = inject_dataset(parsed_spec)
+        # Replace the dataset file with the dataset values.
+        vega_lite = inject_dataset(parsed_spec)
 
-    # TODO: Walk the tree and determine what the widths should _actually_ be.
+        # TODO: Walk the tree and determine what the widths should 
+        # _actually_ be.
 
-    output_file.write(
-        template.render(vis=vega_lite)
-    )
+        output_file.write(
+            template.render(vis=vega_lite)
+        )
 
-    output_path = os.path.realpath(output_file.name)
-    webbrowser.open("file://{}".format(output_path), new=2)
-    # print(svl.parse_svl(svl_string, debug=True).pretty())
+        output_path = os.path.realpath(output_file.name)
+        webbrowser.open("file://{}".format(output_path), new=2)
+    else:
+        print(svl.parse_svl(svl_string, debug=True).pretty())
