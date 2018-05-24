@@ -1,0 +1,5 @@
+*.html
+__pycache__/
+*.egg-info
+bin/
+data/

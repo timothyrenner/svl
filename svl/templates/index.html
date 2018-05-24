@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SVL Plots</title>
+        <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    </head>
+    <body>
+        <div id="vis"></div>
+        <script type="text/javascript">
+            var visualizationSpec = {{ vis | tojson }};
+            vegaEmbed("#vis", visualizationSpec);
+        </script>
+    </body>
+</html>

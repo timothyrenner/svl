@@ -1,0 +1,37 @@
+?start: visualization
+
+// Obviously more will be added here.
+?visualization: datasets views
+
+// Datasets.
+datasets: "DATASETS" (WORD ESCAPED_STRING)+
+
+// Views.
+views: view+
+
+view: mark data encoding
+
+encoding: (x | y) ~ 2
+
+x: "X" field? field_type? aggregation?
+
+y: "Y" field? field_type? aggregation?
+
+mark: BAR
+
+field: WORD
+
+aggregation: "AGGREGATE" ESCAPED_STRING
+
+field_type: "TYPE" ESCAPED_STRING
+
+data: WORD
+
+BAR: "BAR"
+
+%import common.WORD
+%import common.ESCAPED_STRING
+%import common.LETTER
+%import common.WS
+
+%ignore WS
