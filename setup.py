@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='svl',
     version='0.1.dev',
-    packages=find_packages(exclude=["scripts/"]),
+    packages=find_packages(exclude=["scripts/", "data/"]),
     license='MIT',
     author="Tim Renner",
     classifiers = [
