@@ -35,6 +35,18 @@ class SVLToVegaLiteTransformer(lark.Transformer):
         }
 
 
+    def hconcat(self, items):
+        return {
+            "hconcat": items
+        }
+
+
+    def vconcat(self, items):
+        return {
+            "vconcat": items
+        }
+
+
     def view(self, items):
         return merge(*items)
 

@@ -9,7 +9,11 @@ datasets: "DATASETS" (WORD ESCAPED_STRING)+
 // Views.
 views: view+
 
-view: mark data encoding
+hconcat: "CONCAT" "(" view+ ")"
+
+vconcat: "(" view+ ")"
+
+view: (mark data encoding) | hconcat |  vconcat
 
 encoding: (x | y) ~ 2
 
