@@ -22,7 +22,7 @@ class SVLToVegaLiteTransformer(lark.Transformer):
         return {
             "datasets": dict(
                 map(
-                    lambda x: (x[0], unquote_string(x[1])),
+                    lambda x: (str(x[0]), unquote_string(x[1])),
                     partition_all(2, items)
                 )
             )
