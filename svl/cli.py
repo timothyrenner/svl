@@ -7,8 +7,8 @@ import csv
 import svl
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-
-from toolz import get, valmap, assoc
+from toolz import get, valmap, assoc, thread_first
+from math import floor
 
 # Set up the template for HTML output.
 env = Environment(
@@ -34,6 +34,24 @@ def inject_dataset(visualization_spec):
     )
 
 
+def inject_width(view, width):
+    if 'vconcat' in view:
+        # For columns, inject the current width to all sub-views.
+        return assoc(view, "vconcat", [
+            inject_width(v, width) for v in view["vconcat"]
+        ])
+    elif 'hconcat' in view:
+        # For rows, inject (1/n) * current width to all sub-views.
+        return assoc(view, "hconcat", [
+            inject_width(v, floor(
+                (width/len(view["hconcat"]))*0.95
+                ))
+            for v in view["hconcat"]
+        ])
+    else:
+        # Otherwise just inject the width as a field.
+        return assoc(view, "width", width)
+
 @click.command()
 @click.argument("svl_source", type=click.File('r'))
 @click.option(
@@ -50,11 +68,12 @@ def cli(svl_source, output_file, debug):
     if not debug:
         parsed_spec = svl.parse_svl(svl_string)
 
-        # Replace the dataset file with the dataset values.
-        vega_lite = inject_dataset(parsed_spec)
-
-        # TODO: Walk the tree and determine what the widths should 
-        # _actually_ be.
+        # Add data + dimension to the vega lite spec.
+        vega_lite = thread_first(
+            parsed_spec,
+            inject_dataset,
+            (inject_width, 1200)
+        )
 
         output_file.write(
             template.render(vis=vega_lite)
