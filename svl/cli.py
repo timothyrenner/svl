@@ -7,7 +7,7 @@ import csv
 import svl
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-from toolz import get, valmap, assoc, thread_first
+from toolz import get, valmap, assoc, thread_first, dissoc
 from math import floor
 
 # Set up the template for HTML output.
@@ -60,12 +60,23 @@ def inject_width(view, width):
     default="visualization.html"
 )
 @click.option(
-    "--debug/--no-debug",
-    default=False
+    "--debug",
+    is_flag=True
 )
-def cli(svl_source, output_file, debug):
+@click.option(
+    "--no-browser",
+    is_flag=True
+)
+@click.option(
+    "--no-datasets",
+    is_flag=True
+)
+def cli(svl_source, output_file, debug, no_browser, no_datasets):
     svl_string = svl_source.read()
-    if not debug:
+
+    if debug:
+        print(svl.parse_svl(svl_string, debug=True).pretty())
+    else:
         parsed_spec = svl.parse_svl(svl_string)
 
         # Add data + dimension to the vega lite spec.
@@ -79,7 +90,11 @@ def cli(svl_source, output_file, debug):
             template.render(vis=vega_lite)
         )
 
-        output_path = os.path.realpath(output_file.name)
-        webbrowser.open("file://{}".format(output_path), new=2)
-    else:
-        print(svl.parse_svl(svl_string, debug=True).pretty())
+        if no_browser:
+            if no_datasets:
+                vega_lite = dissoc(vega_lite, "datasets")
+            print(json.dumps(vega_lite))
+        else:
+            output_path = os.path.realpath(output_file.name)
+            webbrowser.open("file://{}".format(output_path), new=2)
+        
