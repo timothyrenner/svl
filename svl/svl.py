@@ -77,6 +77,13 @@ class SVLToVegaLiteTransformer(lark.Transformer):
         return {"field": str(items[0])}
 
     
+    def bin(self, items):
+        if len(items) == 0:
+            return {"bin": True}
+        else:
+            return {"bin": {"step": items[0]}}
+
+    
     def aggregation(self, items):
         return {
             "aggregate": unquote_string(str(items[0])),

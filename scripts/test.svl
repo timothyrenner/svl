@@ -4,9 +4,14 @@ BAR bigfoot
     X state TYPE "nominal"
     Y AGGREGATE "count"
 CONCAT (
-    BAR bigfoot 
-        X classification TYPE "nominal" 
-        Y AGGREGATE "count"
+    (
+        BAR bigfoot 
+            X classification TYPE "nominal" 
+            Y AGGREGATE "count"
+        BAR bigfoot
+            X temperature_mid BIN STEP 5
+            Y AGGREGATE "count"
+    )
     (
         BAR bigfoot
             X classification TYPE "nominal"

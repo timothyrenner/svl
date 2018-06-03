@@ -4,7 +4,7 @@
 ?visualization: datasets views
 
 // Datasets.
-datasets: "DATASETS" (WORD ESCAPED_STRING)+
+datasets: "DATASETS" (CNAME ESCAPED_STRING)+
 
 // Views.
 views: view+
@@ -17,25 +17,28 @@ view: (mark data encoding) | hconcat |  vconcat
 
 encoding: (x | y) ~ 2
 
-x: "X" field? field_type? aggregation?
+x: "X" field? field_type? (aggregation? | bin?)
 
-y: "Y" field? field_type? aggregation?
+y: "Y" field? field_type? (aggregation? | bin?)
 
 mark: BAR
 
-field: WORD
+field: CNAME
+
+bin: "BIN" ("STEP" NUMBER)?
 
 aggregation: "AGGREGATE" ESCAPED_STRING
 
 field_type: "TYPE" ESCAPED_STRING
 
-data: WORD
+data: CNAME
 
 BAR: "BAR"
 
-%import common.WORD
+%import common.CNAME
 %import common.ESCAPED_STRING
 %import common.LETTER
 %import common.WS
+%import common.NUMBER
 
 %ignore WS
