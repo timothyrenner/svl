@@ -1,7 +1,7 @@
 import lark
 import pkg_resources
 
-from toolz import merge, partition_all, thread_last
+from toolz import merge, partition_all
 
 
 def unquote_string(string):
@@ -10,14 +10,12 @@ def unquote_string(string):
 
 class SVLToVegaLiteTransformer(lark.Transformer):
 
-    
     def visualization(self, items):
         return merge(
             {"$schema": "https://vega.github.io/schema/vega-lite/v2.0.json"},
             *items
         )
 
-    
     def datasets(self, items):
         return {
             "datasets": dict(
@@ -27,74 +25,61 @@ class SVLToVegaLiteTransformer(lark.Transformer):
                 )
             )
         }
-    
-    
+  
     def views(self, items):
         return {
             "vconcat": items
         }
-
 
     def hconcat(self, items):
         return {
             "hconcat": items
         }
 
-
     def vconcat(self, items):
         return {
             "vconcat": items
         }
 
-
     def view(self, items):
         return merge(*items)
-
 
     def encoding(self, items):
         return {
             "encoding": merge(*items)
         }
 
-
     def x(self, items):
         return {
             "x": merge(*items)
         }
 
-    
     def y(self, items):
         return {
             "y": merge(*items)
         }
 
-    
     def mark(self, items):
         return {"mark": str(items[0]).lower()}
 
-    
     def field(self, items):
         return {"field": str(items[0])}
 
-    
     def bin(self, items):
         if len(items) == 0:
             return {"bin": True}
         else:
             return {"bin": {"step": items[0]}}
 
-    
     def aggregation(self, items):
         return {
             "aggregate": unquote_string(str(items[0])),
             "type": "quantitative"
         }
 
-    
     def field_type(self, items):
         return {"type": unquote_string(str(items[0]))}
-    
-    
+
     def data(self, items):
         return {
             "data": {
@@ -102,7 +87,7 @@ class SVLToVegaLiteTransformer(lark.Transformer):
             }
         }
 
-    
+
 # This parser has the transformer embedded for speed.
 parser = lark.Lark(
     pkg_resources.resource_string("resources", "svl.lark").decode('utf-8'),
@@ -122,4 +107,3 @@ def parse_svl(svl_string, debug=False):
         return debug_parser.parse(svl_string)
     else:
         return parser.parse(svl_string)
-
