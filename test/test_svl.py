@@ -86,8 +86,65 @@ def test_concat():
 
 
 def test_histogram_step():
-    assert True  # TODO: WOO TDD.
+    """ Tests that the parse_svl function returns the correct dictionary when
+        there's a histogram with a specified step.
+    """
+    chart_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    BAR bigfoot
+        X temperature_mid BIN STEP 5
+        Y AGGREGATE "count"
+    """
+
+    chart_dict_truth = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.0.json",
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vconcat": [{
+            "data": {"name": "bigfoot"},
+            "mark": "bar",
+            "encoding": {
+                "x": {"field": "temperature_mid", "bin": {"step": 5}},
+                "y": {"aggregate": "count", "type": "quantitative"}
+            }
+        }]
+    }
+
+    chart_dict_answer = parse_svl(chart_string)
+
+    assert chart_dict_truth == chart_dict_answer
 
 
 def test_histogram_nostep():
-    assert True  # TODO: WOO TDD.
+    """ Tests that the parse_svl function returns the correct dictionary when
+        there's a histogram with an unspecified bin width.
+    """
+
+    chart_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    BAR bigfoot
+        X temperature_mid BIN
+        Y AGGREGATE "count"
+    """
+
+    chart_dict_truth = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.0.json",
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vconcat": [{
+            "data": {"name": "bigfoot"},
+            "mark": "bar",
+            "encoding": {
+                "x": {"field": "temperature_mid", "bin": True},
+                "y": {"aggregate": "count", "type": "quantitative"}
+            }
+        }]
+    }
+
+    chart_dict_answer = parse_svl(chart_string)
+
+    assert chart_dict_truth == chart_dict_answer
