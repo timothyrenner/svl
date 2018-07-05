@@ -6,3 +6,4 @@ data/
 .vscode/
 .ipynb_checkpoints/
 *.ipynb
+.pytest_cache/

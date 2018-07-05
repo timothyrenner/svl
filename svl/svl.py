@@ -69,7 +69,7 @@ class SVLToVegaLiteTransformer(lark.Transformer):
         if len(items) == 0:
             return {"bin": True}
         else:
-            return {"bin": {"step": items[0]}}
+            return {"bin": {"step": int(items[0])}}
 
     def aggregation(self, items):
         return {
