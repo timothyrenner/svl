@@ -25,7 +25,7 @@ class SVLToVegaLiteTransformer(lark.Transformer):
                 )
             )
         }
-  
+
     def views(self, items):
         return {
             "vconcat": items

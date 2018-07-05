@@ -52,6 +52,7 @@ def inject_width(view, width):
         # Otherwise just inject the width as a field.
         return assoc(view, "width", width)
 
+
 @click.command()
 @click.argument("svl_source", type=click.File('r'))
 @click.option(
@@ -97,4 +98,3 @@ def cli(svl_source, output_file, debug, no_browser, no_datasets):
         else:
             output_path = os.path.realpath(output_file.name)
             webbrowser.open("file://{}".format(output_path), new=2)
-        
