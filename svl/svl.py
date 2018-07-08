@@ -77,6 +77,11 @@ class SVLToVegaLiteTransformer(lark.Transformer):
             "type": "quantitative"
         }
 
+    def timeunit(self, items):
+        return {
+            "timeUnit": unquote_string(str(items[0]))
+        }
+
     def field_type(self, items):
         return {"type": unquote_string(str(items[0]))}
 

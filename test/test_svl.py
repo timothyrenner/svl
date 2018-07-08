@@ -148,3 +148,36 @@ def test_histogram_nostep():
     chart_dict_answer = parse_svl(chart_string)
 
     assert chart_dict_truth == chart_dict_answer
+
+
+def test_line_chart_temporal():
+    """ Tests that the parse_svl function returns the correct value for
+        line charts with temporal axes.
+    """
+
+    chart_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    LINE bigfoot
+        X date TYPE "temporal" TIMEUNIT "year"
+        Y AGGREGATE "count"
+    """
+
+    chart_dict_truth = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.0.json",
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vconcat": [{
+            "data": {"name": "bigfoot"},
+            "mark": "line",
+            "encoding": {
+                "x": {"field": "date", "type": "temporal", "timeUnit": "year"},
+                "y": {"aggregate": "count", "type": "quantitative"}
+            }
+        }]
+    }
+
+    chart_dict_answer = parse_svl(chart_string)
+
+    assert chart_dict_truth == chart_dict_answer

@@ -17,11 +17,11 @@ view: (mark data encoding) | hconcat |  vconcat
 
 encoding: (x | y) ~ 2
 
-x: "X" field? field_type? (aggregation? | bin?)
+x: "X" field? field_type? (aggregation? | bin? | timeunit?)
 
-y: "Y" field? field_type? (aggregation? | bin?)
+y: "Y" field? field_type? (aggregation? | bin? | timeunit?)
 
-mark: BAR
+mark: BAR | LINE
 
 field: CNAME
 
@@ -29,11 +29,15 @@ bin: "BIN" ("STEP" NUMBER)?
 
 aggregation: "AGGREGATE" ESCAPED_STRING
 
+timeunit: "TIMEUNIT" ESCAPED_STRING
+
 field_type: "TYPE" ESCAPED_STRING
 
 data: CNAME
 
 BAR: "BAR"
+
+LINE: "LINE"
 
 %import common.CNAME
 %import common.ESCAPED_STRING
