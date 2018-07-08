@@ -19,10 +19,10 @@ CONCAT (
     )
     (
         BAR bigfoot
-            X classification TYPE "nominal"
+            X wind_speed TYPE "nominal" BIN STEP 5
             Y AGGREGATE "count"
         BAR bigfoot
-            X classification TYPE "nominal"
+            X humidity TYPE "nominal" BIN STEP 0.1
             Y AGGREGATE "count"
     )
 )
