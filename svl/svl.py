@@ -59,6 +59,11 @@ class SVLToVegaLiteTransformer(lark.Transformer):
             "y": merge(*items)
         }
 
+    def color(self, items):
+        return {
+            "color": merge(*items)
+        }
+
     def mark(self, items):
         return {"mark": str(items[0]).lower()}
 

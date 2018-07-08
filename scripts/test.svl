@@ -3,9 +3,11 @@ DATASETS
 LINE bigfoot
     X date TYPE "temporal" TIMEUNIT "year"
     Y AGGREGATE "count"
+    COLOR classification TYPE "nominal"
 BAR bigfoot
     X state TYPE "nominal"
     Y AGGREGATE "count"
+    COLOR classification TYPE "nominal"
 CONCAT (
     (
         BAR bigfoot 

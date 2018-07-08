@@ -15,11 +15,13 @@ vconcat: "(" view+ ")"
 
 view: (mark data encoding) | hconcat |  vconcat
 
-encoding: (x | y) ~ 2
+encoding: (x | y | color)+
 
 x: "X" field? field_type? (aggregation? | bin? | timeunit?)
 
 y: "Y" field? field_type? (aggregation? | bin? | timeunit?)
+
+color: "COLOR" field? field_type? (aggregation? | bin? | timeunit?)
 
 mark: BAR | LINE
 

@@ -181,3 +181,37 @@ def test_line_chart_temporal():
     chart_dict_answer = parse_svl(chart_string)
 
     assert chart_dict_truth == chart_dict_answer
+
+
+def test_color_encoding():
+    """ Tests that encoding a field with a color returns the correct result.
+    """
+
+    chart_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    LINE bigfoot
+        X date TYPE "temporal" TIMEUNIT "year"
+        Y AGGREGATE "count"
+        COLOR classification TYPE "nominal"
+    """
+
+    chart_dict_truth = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.0.json",
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vconcat": [{
+            "data": {"name": "bigfoot"},
+            "mark": "line",
+            "encoding": {
+                "x": {"field": "date", "type": "temporal", "timeUnit": "year"},
+                "y": {"aggregate": "count", "type": "quantitative"},
+                "color": {"field": "classification", "type": "nominal"}
+            }
+        }]
+    }
+
+    chart_dict_answer = parse_svl(chart_string)
+
+    assert chart_dict_truth == chart_dict_answer
