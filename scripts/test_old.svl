@@ -1,0 +1,28 @@
+DATASETS 
+    bigfoot "data/bigfoot_sightings.csv"
+LINE bigfoot
+    X date TYPE "temporal" TIMEUNIT "year"
+    Y AGGREGATE "count"
+    COLOR classification TYPE "nominal"
+BAR bigfoot
+    X state TYPE "nominal"
+    Y AGGREGATE "count"
+    COLOR classification TYPE "nominal"
+CONCAT (
+    (
+        BAR bigfoot 
+            X classification TYPE "nominal" 
+            Y AGGREGATE "count"
+        BAR bigfoot
+            X temperature_mid BIN STEP 5
+            Y AGGREGATE "count"
+    )
+    (
+        BAR bigfoot
+            X wind_speed TYPE "nominal" BIN STEP 5
+            Y AGGREGATE "count"
+        BAR bigfoot
+            X humidity TYPE "nominal" BIN STEP 0.1
+            Y AGGREGATE "count"
+    )
+)

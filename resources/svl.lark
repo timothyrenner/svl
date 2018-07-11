@@ -1,50 +1,65 @@
 ?start: visualization
 
-// Obviously more will be added here.
-?visualization: datasets views
+?visualization: datasets charts
 
-// Datasets.
 datasets: "DATASETS" (CNAME ESCAPED_STRING)+
 
-// Views.
-views: view+
+charts: chart+
 
-hconcat: "CONCAT" "(" view+ ")"
+vcat: "(" chart+ ")"
 
-vconcat: "(" view+ ")"
+chart: (mark2d data dimensions) | (mark1d data mark1d_opts?) | vcat
 
-view: (mark data encoding) | hconcat |  vconcat
+?mark2d: SCATTER | LINE | BAR | BOXPLOT
 
-encoding: (x | y | color)+
+data: CNAME
 
-x: "X" field? field_type? (aggregation? | bin? | timeunit?)
+dimensions: (x | y | color)+
 
-y: "Y" field? field_type? (aggregation? | bin? | timeunit?)
+?mark1d: HISTOGRAM
 
-color: "COLOR" field? field_type? (aggregation? | bin? | timeunit?)
+mark1d_opts: field (step | bins)
 
-mark: BAR | LINE
+step: "STEP" NUMBER
+
+bins: "BINS" INT
+
+x: "X" field? (aggregation? | temporal?)
+
+y: "Y" field? (aggregation? | temporal?)
+
+color: "COLOR" field? (aggregation? | temporal?)
 
 field: CNAME
 
-bin: "BIN" ("STEP" NUMBER)?
+aggregation: COUNT | MIN | MAX | AVG
 
-aggregation: "AGGREGATE" ESCAPED_STRING
+temporal: "BY" time_unit
 
-timeunit: "TIMEUNIT" ESCAPED_STRING
+time_unit: "YEAR" | "QUARTER" | "MONTH" | "DAY" | "HOUR" | "MINUTE" | "SECOND"
 
-field_type: "TYPE" ESCAPED_STRING
-
-data: CNAME
+SCATTER: "SCATTER"
 
 BAR: "BAR"
 
 LINE: "LINE"
 
+HISTOGRAM: "HISTOGRAM"
+
+BOXPLOT: "BOXPLOT"
+
+COUNT: "COUNT"
+
+MIN: "MIN"
+
+MAX: "MAX"
+
+AVG: "AVG"
+
 %import common.CNAME
 %import common.ESCAPED_STRING
-%import common.LETTER
-%import common.WS
 %import common.NUMBER
+%import common.INT
+%import common.WS
 
 %ignore WS

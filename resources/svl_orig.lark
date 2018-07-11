@@ -1,0 +1,50 @@
+?start: visualization
+
+// Obviously more will be added here.
+?visualization: datasets views
+
+// Datasets.
+datasets: "DATASETS" (CNAME ESCAPED_STRING)+
+
+// Views.
+views: view+
+
+hconcat: "CONCAT" "(" view+ ")"
+
+vconcat: "(" view+ ")"
+
+view: (mark data encoding) | hconcat |  vconcat
+
+encoding: (x | y | color)+
+
+x: "X" field? field_type? (aggregation? | bin? | timeunit?)
+
+y: "Y" field? field_type? (aggregation? | bin? | timeunit?)
+
+color: "COLOR" field? field_type? (aggregation? | bin? | timeunit?)
+
+mark: BAR | LINE
+
+field: CNAME
+
+bin: "BIN" ("STEP" NUMBER)?
+
+aggregation: "AGGREGATE" ESCAPED_STRING
+
+timeunit: "TIMEUNIT" ESCAPED_STRING
+
+field_type: "TYPE" ESCAPED_STRING
+
+data: CNAME
+
+BAR: "BAR"
+
+LINE: "LINE"
+
+%import common.CNAME
+%import common.ESCAPED_STRING
+%import common.LETTER
+%import common.WS
+%import common.NUMBER
+
+%ignore WS
