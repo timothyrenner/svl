@@ -10,19 +10,19 @@ vcat: "(" chart+ ")"
 
 chart: (mark2d data dimensions) | (mark1d data mark1d_opts?) | vcat
 
-?mark2d: SCATTER | LINE | BAR | BOXPLOT
+mark2d: SCATTER | LINE | BAR | BOXPLOT
 
 data: CNAME
 
 dimensions: (x | y | color)+
 
-?mark1d: HISTOGRAM
+mark1d: HISTOGRAM
 
 mark1d_opts: field (step | bins)
 
 step: "STEP" NUMBER
 
-bins: "BINS" INT
+bins: "BINS" NUMBER
 
 x: "X" field? (aggregation? | temporal?)
 
@@ -34,9 +34,7 @@ field: CNAME
 
 aggregation: COUNT | MIN | MAX | AVG
 
-temporal: "BY" time_unit
-
-time_unit: "YEAR" | "QUARTER" | "MONTH" | "DAY" | "HOUR" | "MINUTE" | "SECOND"
+temporal: "BY" (YEAR | QUARTER | MONTH | DAY | HOUR | MINUTE | SECOND)
 
 SCATTER: "SCATTER"
 
@@ -56,10 +54,23 @@ MAX: "MAX"
 
 AVG: "AVG"
 
+YEAR: "YEAR"
+
+QUARTER: "QUARTER"
+
+MONTH: "MONTH"
+
+DAY: "DAY"
+
+HOUR: "HOUR"
+
+MINUTE: "MINUTE"
+
+SECOND: "SECOND"
+
 %import common.CNAME
 %import common.ESCAPED_STRING
 %import common.NUMBER
-%import common.INT
 %import common.WS
 
 %ignore WS
