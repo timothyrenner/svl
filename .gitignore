@@ -1,4 +1,3 @@
-*.html
 __pycache__/
 *.egg-info
 bin/
@@ -7,3 +6,4 @@ data/
 .ipynb_checkpoints/
 *.ipynb
 .pytest_cache/
+visualization.html
