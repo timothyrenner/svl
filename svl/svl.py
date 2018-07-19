@@ -29,6 +29,11 @@ class SVLTransformer(lark.Transformer):
             "vcat": items
         }
 
+    def hcat(self, items):
+        return {
+            "hcat": items
+        }
+
     def chart(self, items):
         print(items)
         return merge(*items)

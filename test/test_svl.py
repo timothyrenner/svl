@@ -192,3 +192,89 @@ def test_scatter():
     parsed_svl_answer = parse_svl(svl_string)
 
     assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_concat():
+    """ Tests that the concat function is correctly parsed and transformed.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    CONCAT(
+        SCATTER bigfoot
+            X latitude
+            Y temperature_mid
+        BAR bigfoot
+            X classification
+            Y COUNT
+    )
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vcat": [{
+            "hcat": [
+                {
+                    "data": "bigfoot",
+                    "type": "scatter",
+                    "x": {"field": "latitude"},
+                    "y": {"field": "temperature_mid"}
+                }, {
+                    "data": "bigfoot",
+                    "type": "bar",
+                    "x": {"field": "classification"},
+                    "y": {"agg": "COUNT"}
+                }
+            ]
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_implicit_vcat():
+    """ Tests that the implicit vertical concatenation of parenthesized
+        charts is correctly parsed and transformed.
+    """
+
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    (
+        SCATTER bigfoot
+            X latitude
+            Y temperature_mid
+        BAR bigfoot
+            X classification
+            Y COUNT
+    )
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vcat": [{
+            "vcat": [
+                {
+                    "data": "bigfoot",
+                    "type": "scatter",
+                    "x": {"field": "latitude"},
+                    "y": {"field": "temperature_mid"}
+                }, {
+                    "data": "bigfoot",
+                    "type": "bar",
+                    "x": {"field": "classification"},
+                    "y": {"agg": "COUNT"}
+                }
+            ]
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
