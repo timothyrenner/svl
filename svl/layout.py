@@ -11,7 +11,41 @@ START_POSITION = {
 }
 
 
-def shift_position(node, row_shift, column_shift, row_stretch, column_stretch):
+def shift_node_position(
+    node,
+    row_shift,
+    column_shift,
+    row_stretch,
+    column_stretch
+):
+    """ Shifts the position of a node in the plot layout tree, also adjusting
+        the length units of the start / end values for the rows and columns.
+
+        Parameters
+        ----------
+        node : dict
+            The node of the plot tree as a dictionary.
+
+        row_shift : int
+            The number of cells to shift the rows by. Applied after stretching.
+
+        column_shift : int
+            The number of cells to shift the columns by. Applied after
+            stretching.
+
+        row_stretch : int
+            The factor by which to stretch the rows. Applied prior to shifting.
+
+        column_stretch : int
+            The factor by which to stretch the columns. Applied prior to
+            shifting.
+
+        Returns
+        -------
+        dict
+            The nodes with the row and column positions adjusted.
+    """
+
     return merge(
         node,
         {
@@ -31,7 +65,39 @@ def shift_tree_positions(
     row_stretch,
     column_stretch
 ):
+    """ Shifts the positions of all nodes in the tree.
+
+        Parameters
+        ----------
+        tree : dict
+            The tree as a dictionary with two fields - one with "cat"
+            containing the method of tree concatenation, and one with "nodes"
+            containing a list of nodes, with each node itself being a tree
+            of this form.
+
+        row_shift : int
+            The number of rows to shift each tree by. Applied after stretching.
+
+        column_shift : int
+            The number of columns to shift each tree by. Applied after
+            stretching.
+
+        row_stretch : int
+            The factor by which to shift the rows. Applied prior to shifting.
+
+        column_stretch : int
+            The factor by which to shift the columns. Applied prior to
+            shifting.
+
+        Returns
+        -------
+        dict
+            A tree with the same structure, but with the node positions shifted
+            and stretched by the provided factors.
+    """
     if len(tree["nodes"]) > 1:
+        # If there is more than one node in the tree nodes, shift all
+        # subtrees.
         return {
             "cat": tree["cat"],
             "nodes": [
@@ -45,11 +111,12 @@ def shift_tree_positions(
             ]
         }
     else:
+        # If this is the only node, shift the node.
         return {
             "cat": tree["cat"],
             "nodes": [
                 # We know tree["nodes"] only has one dict in it :).
-                shift_position(
+                shift_node_position(
                     tree["nodes"][0],
                     row_shift,
                     column_shift,
@@ -61,6 +128,29 @@ def shift_tree_positions(
 
 
 def tree_to_grid(tree, parent_cat=None):
+    """ Transforms a parsed SVL tree without position information into a nested
+        list tree with grid positions.
+
+        Converts the provided tree of the form: `{"vcat": [{"hcat" [{ ...}]}]}`
+        into a tree of the form `[{"cat": "vcat", "nodes": [ ... ]}]` and adds
+        row and column start / end values to each of the node dictionaries
+        such that they can be flattened out into a grid.
+
+        Parameters
+        ----------
+        tree : dict
+            A parsed SVL tree.
+
+        parent_cat : str
+            The "cat" (either "vcat", "hcat" or None) of the parent SVL tree.
+            None (default) is for the top level SVL tree.
+
+        Returns
+        -------
+        list
+            The SVL tree with the concatenation mode flattened "next to" the
+            nodes instead of "above" them.
+    """
     if ("hcat" in tree) or ("vcat" in tree):
         cat = "hcat" if "hcat" in tree else "vcat"
 
@@ -76,6 +166,10 @@ def tree_to_grid(tree, parent_cat=None):
         # This seems counterintuitive, but two side by side columns
         # (via hcat) actually need their rows adjusted, while two
         # stacked rows (via vcat) need their columns adjusted to fit.
+
+        # NOTE: This _might_ not be quite right. It needs to support a double
+        # nested vcat / hcat and still adjust the length units accordingly.
+        # TODO: Add double vcat / hcat as explicit test cases.
         row_breadths = [
             len(subtree["nodes"]) if subtree["cat"] == "hcat" else 1
             for subtree in subtrees
@@ -117,6 +211,12 @@ def tree_to_grid(tree, parent_cat=None):
 
 
 def flatten_tree(tree):
+    """ Flattens a "cat-adjacent" tree into a list of nodes with the positions.
+
+        Converts the tree of the form [{"cat": "vcat", "nodes": [ ... ]}] into
+        a list of just the nodes. This function is designed to be applied after
+        the positions have been calculated.
+    """
     if "cat" in tree:
         return listmapcat(flatten_tree, tree["nodes"])
     else:
