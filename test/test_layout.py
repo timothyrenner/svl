@@ -42,4 +42,67 @@ def test_shift_tree_positions():
     """ Tests that the shift_tree_positions function returns the correct value.
     """
 
-    assert False  # TODO: implement.
+    tree = {
+        "cat": "vcat",
+        "nodes": [
+            {
+                "cat": "hcat",
+                "nodes": [{
+                    "plot": 1,
+                    "row_start": 0,
+                    "row_end": 1,
+                    "column_start": 1,
+                    "column_end": 2
+                }]
+            }, {
+                "cat": "hcat",
+                "nodes": [{
+                    "plot": 2,
+                    "row_start": 1,
+                    "row_end": 2,
+                    "column_start": 0,
+                    "column_end": 1
+                }]
+            }
+        ]
+    }
+
+    row_shift = 3
+    column_shift = 2
+    row_stretch = 3
+    column_stretch = 2
+
+    truth = {
+        "cat": "vcat",
+        "nodes": [
+            {
+                "cat": "hcat",
+                "nodes": [{
+                    "plot": 1,
+                    "row_start": 3,
+                    "row_end": 6,
+                    "column_start": 4,
+                    "column_end": 6
+                }]
+            }, {
+                "cat": "hcat",
+                "nodes": [{
+                    "plot": 2,
+                    "row_start": 6,
+                    "row_end": 9,
+                    "column_start": 2,
+                    "column_end": 4
+                }]
+            }
+        ]
+    }
+
+    answer = shift_tree_positions(
+        tree,
+        row_shift,
+        column_shift,
+        row_stretch,
+        column_stretch
+    )
+
+    assert truth == answer
