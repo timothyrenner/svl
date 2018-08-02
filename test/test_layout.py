@@ -257,3 +257,123 @@ def test_tree_to_grid_multiple_plots_hcat():
     answer = tree_to_grid(tree)
 
     assert truth == answer
+
+
+def test_tree_to_grid_stacked_vcats():
+    """ Tests that the tree_to_grid function returns the correct value for
+        multilayered vcats.
+    """
+    tree = {
+        "vcat": [
+            {"plot": 1},
+            {
+                "vcat": [
+                    {"plot": 2},
+                    {"plot": 3}
+                ]
+            }
+        ]
+    }
+
+    truth = {
+        "cat": None,
+        "nodes": [
+            {
+                "cat": "vcat",
+                "nodes": [{
+                    "plot": 1,
+                    "row_start": 0,
+                    "row_end": 2,
+                    "column_start": 0,
+                    "column_end": 1
+                }]
+            }, {
+                "cat": "vcat",
+                "nodes": [
+                    {
+                        "cat": "vcat",
+                        "nodes": [{
+                            "plot": 2,
+                            "row_start": 2,
+                            "row_end": 3,
+                            "column_start": 0,
+                            "column_end": 1
+                        }]
+                    }, {
+                        "cat": "vcat",
+                        "nodes": [{
+                            "plot": 3,
+                            "row_start": 3,
+                            "row_end": 4,
+                            "column_start": 0,
+                            "column_end": 1
+                        }]
+                    }
+                ]
+            }
+        ]
+    }
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
+def test_tree_to_grid_stacked_hcats():
+    """ Tests that the tree_to_grid function returns the correct value for
+        multilayered hcats.
+    """
+    tree = {
+        "hcat": [
+            {"plot": 1},
+            {
+                "hcat": [
+                    {"plot": 2},
+                    {"plot": 3}
+                ]
+            }
+        ]
+    }
+
+    truth = {
+        "cat": None,
+        "nodes": [
+            {
+                "cat": "hcat",
+                "nodes": [{
+                    "plot": 1,
+                    "row_start": 0,
+                    "row_end": 1,
+                    "column_start": 0,
+                    "column_end": 2
+                }]
+            }, {
+                "cat": "hcat",
+                "nodes": [
+                    {
+                        "cat": "hcat",
+                        "nodes": [{
+                            "plot": 2,
+                            "row_start": 0,
+                            "row_end": 1,
+                            "column_start": 2,
+                            "column_end": 3
+                        }]
+                    }, {
+                        "cat": "hcat",
+                        "nodes": [{
+                            "plot": 3,
+                            "row_start": 0,
+                            "row_end": 1,
+                            "column_start": 3,
+                            "column_end": 4
+                        }]
+                    }
+                ]
+            }
+        ]
+    }
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
