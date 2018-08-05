@@ -1,4 +1,4 @@
-from toolz import compose, mapcat, merge
+from toolz import compose, mapcat, merge, get
 from functools import reduce
 
 listmapcat = compose(list, mapcat)
@@ -170,29 +170,29 @@ def tree_to_grid(tree, parent_cat=None):
         # NOTE: This _might_ not be quite right. It needs to support a double
         # nested vcat / hcat and still adjust the length units accordingly.
         # TODO: Add double vcat / hcat as explicit test cases.
-        # row_breadths = [
-        #     len(subtree["nodes"]) if subtree["cat"] == "hcat" else 1
-        #     for subtree in subtrees
-        # ]
- 
-        # column_breadths = [
-        #     len(subtree["nodes"]) if subtree["cat"] == "vcat" else 1
-        #     for subtree in subtrees
-        # ]
+        row_breadths = [
+            reduce(max, [get("row_end", n, 1) for n in flatten_tree(subtree)])
+            # len(subtree["nodes"]) if subtree["cat"] == "vcat" else 1
+            for subtree in subtrees
+        ]
 
-        breadths = [len(subtree["nodes"]) for subtree in subtrees]
+        column_breadths = [
+            reduce(max, [get("column_end", n, 1) for n in flatten_tree(subtree)])
+            # len(subtree["nodes"]) if subtree["cat"] == "hcat" else 1
+            for subtree in subtrees
+        ]
 
         # Use the breadths to determine the row / column length units.
-        # row_length_unit = reduce(lambda a, x: a*x, row_breadths)
-        # column_length_unit = reduce(lambda a, x: a*x, column_breadths)
-        stretch_length_unit = reduce(lambda a, x: a*x, breadths)
+        row_length_unit = reduce(lambda a, x: a*x, row_breadths)
+        column_length_unit = reduce(lambda a, x: a*x, column_breadths)
+        # stretch_length_unit = reduce(lambda a, x: a*x, breadths)
         # row_length_unit = reduce(lambda a, x: a*x, breadths) if cat == "vcat" else 1
         # column_length_unit = reduce(lambda a, x: a*x, breadths) if cat == "hcat" else 1
 
         # Set the shift axis to vertical or horizontal.
         # vcat causes a row shift, hcat causes a column one.
-        row_shift = stretch_length_unit if cat == "vcat" else 0
-        column_shift = stretch_length_unit if cat == "hcat" else 0
+        row_shift = row_length_unit if cat == "vcat" else 0
+        column_shift = column_length_unit if cat == "hcat" else 0
 
         # Shift the positions of each of the nodes.
         shifted_subtrees = [
@@ -200,11 +200,23 @@ def tree_to_grid(tree, parent_cat=None):
                 subtree,
                 row_shift * ii,
                 column_shift * ii,
-                stretch_length_unit / breadths[ii] if cat == "vcat" else 1,
-                stretch_length_unit / breadths[ii] if cat == "hcat" else 1
+                int(
+                    row_length_unit / row_breadths[ii]
+                 ),
+                int(
+                    column_length_unit / column_breadths[ii]
+                )
             )
             for ii, subtree in enumerate(subtrees)
         ]
+
+        # DEBUG.
+        print(row_breadths)
+        print(column_breadths)
+        print(shifted_subtrees)
+        print(flatten_tree({"cat": parent_cat, "nodes": shifted_subtrees}))
+        print()
+        # END DEBUG.
 
         return {"cat": parent_cat, "nodes": shifted_subtrees}
 

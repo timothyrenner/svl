@@ -377,3 +377,84 @@ def test_tree_to_grid_stacked_hcats():
     answer = tree_to_grid(tree)
 
     assert truth == answer
+
+
+def test_tree_to_grid_mixed_hcat_vcat():
+    """ Tests that the tree_to_grid function returns the correct value when
+        there are mixed vcats and hcats.
+    """
+    tree = {
+        "hcat": [
+            {
+                "vcat": [
+                    {"plot": 1},
+                    {"plot": 2}
+                ]
+            }, {
+                "hcat": [
+                    {"plot": 3},
+                    {"plot": 4}
+                ]
+            }
+        ]
+    }
+
+    truth = {
+        "cat": None,
+        "nodes": [
+            {
+                "cat": "hcat",
+                "nodes": [
+                    {
+                        "cat": "vcat",
+                        "nodes": [{
+                            "cat": "vcat",
+                            "nodes": [{
+                                "plot": 1,
+                                "row_start": 0,
+                                "row_end": 1,
+                                "column_start": 0,
+                                "column_end": 2
+                            }]
+                        }, {
+                            "cat": "vcat",
+                            "nodes": [{
+                                "plot": 2,
+                                "row_start": 1,
+                                "row_end": 2,
+                                "column_start": 0,
+                                "column_end": 2
+                            }]
+                        }]
+                    }, {
+                        "cat": "hcat",
+                        "nodes": [{
+                            "cat": "hcat",
+                                "nodes": [{
+                                    "plot": 3,
+                                    "row_start": 0,
+                                    "row_end": 2,
+                                    "column_start": 2,
+                                    "column_end": 3
+                        }]
+                    }, {
+                        "cat": "hcat",
+                        "nodes": [{
+                            "plot": 4,
+                            "row_start": 0,
+                            "row_end": 2,
+                            "column_start": 3,
+                            "column_end": 4
+                        }]
+                    }
+                        ]}
+                ]
+            }
+        ]
+    }
+
+    answer = tree_to_grid(tree)
+
+    print(truth)
+    print(answer)
+    assert truth == answer
