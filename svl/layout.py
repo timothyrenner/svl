@@ -1,7 +1,7 @@
-from toolz import compose, mapcat, merge, get
+from toolz import compose, merge, concat
 from functools import reduce
 
-listmapcat = compose(list, mapcat)
+listconcat = compose(list, concat)
 
 START_POSITION = {
     "row_start": 0,
@@ -58,185 +58,70 @@ def shift_node_position(
     )
 
 
-def shift_tree_positions(
-    tree,
-    row_shift,
-    column_shift,
-    row_stretch,
-    column_stretch
-):
-    """ Shifts the positions of all nodes in the tree.
-
-        Parameters
-        ----------
-        tree : dict
-            The tree as a dictionary with two fields - one with "cat"
-            containing the method of tree concatenation, and one with "nodes"
-            containing a list of nodes, with each node itself being a tree
-            of this form.
-
-        row_shift : int
-            The number of rows to shift each tree by. Applied after stretching.
-
-        column_shift : int
-            The number of columns to shift each tree by. Applied after
-            stretching.
-
-        row_stretch : int
-            The factor by which to shift the rows. Applied prior to shifting.
-
-        column_stretch : int
-            The factor by which to shift the columns. Applied prior to
-            shifting.
-
-        Returns
-        -------
-        dict
-            A tree with the same structure, but with the node positions shifted
-            and stretched by the provided factors.
-    """
-    if len(tree["nodes"]) > 1:
-        # If there is more than one node in the tree nodes, shift all
-        # subtrees.
-        return {
-            "cat": tree["cat"],
-            "nodes": [
-                shift_tree_positions(
-                    subtree,
-                    row_shift,
-                    column_shift,
-                    row_stretch,
-                    column_stretch
-                ) for subtree in tree["nodes"]
-            ]
-        }
-    else:
-        # If this is the only node, shift the node.
-        return {
-            "cat": tree["cat"],
-            "nodes": [
-                # We know tree["nodes"] only has one dict in it :).
-                shift_node_position(
-                    tree["nodes"][0],
-                    row_shift,
-                    column_shift,
-                    row_stretch,
-                    column_stretch
-                )
-            ]
-        }
-
-
-def tree_to_grid(tree, parent_cat=None):
-    """ Transforms a parsed SVL tree without position information into a nested
-        list tree with grid positions.
-
-        Converts the provided tree of the form: `{"vcat": [{"hcat" [{ ...}]}]}`
-        into a tree of the form `[{"cat": "vcat", "nodes": [ ... ]}]` and adds
-        row and column start / end values to each of the node dictionaries
-        such that they can be flattened out into a grid.
+def tree_to_grid(tree):
+    """ Transforms a parsed SVL tree without position information into a list
+        of nodes with the grid positions.
 
         Parameters
         ----------
         tree : dict
             A parsed SVL tree.
 
-        parent_cat : str
-            The "cat" (either "vcat", "hcat" or None) of the parent SVL tree.
-            None (default) is for the top level SVL tree.
-
         Returns
         -------
         list
-            The SVL tree with the concatenation mode flattened "next to" the
-            nodes instead of "above" them.
+            The nodes in the tree with their associated positions in a flat
+            list.
     """
     if ("hcat" in tree) or ("vcat" in tree):
         cat = "hcat" if "hcat" in tree else "vcat"
 
-        # Obtain subtrees. On the first traversal down, "nodes" and "cat"
-        # have note been injected as fields.
-        subtrees = [
-            tree_to_grid(subtree, parent_cat=cat) for subtree in tree[cat]
-        ]
+        # Obtain subtrees. Note this flattens them.
+        subtrees = [tree_to_grid(subtree) for subtree in tree[cat]]
 
         # Calculate the breadths in horizonal and vertical dimensions.
-        # This is done by examining whether each subtree is in a vcat or
-        # hcat. vcats set column sizes, hcats set row sizes.
-        # This seems counterintuitive, but two side by side columns
-        # (via hcat) actually need their rows adjusted, while two
-        # stacked rows (via vcat) need their columns adjusted to fit.
-
-        # NOTE: This _might_ not be quite right. It needs to support a double
-        # nested vcat / hcat and still adjust the length units accordingly.
-        # TODO: Add double vcat / hcat as explicit test cases.
+        # This is done by examining the maximum row and column end points of
+        # each of the subtrees.
         row_breadths = [
-            reduce(max, [get("row_end", n, 1) for n in flatten_tree(subtree)])
-            # len(subtree["nodes"]) if subtree["cat"] == "vcat" else 1
+            reduce(max, [n["row_end"] for n in subtree])
             for subtree in subtrees
         ]
 
         column_breadths = [
-            reduce(max, [get("column_end", n, 1) for n in flatten_tree(subtree)])
-            # len(subtree["nodes"]) if subtree["cat"] == "hcat" else 1
+            reduce(max, [n["column_end"] for n in subtree])
             for subtree in subtrees
         ]
 
-        # Use the breadths to determine the row / column length units.
+        # Use the breadths to determine the row / column length units. This
+        # is the "final" length unit of the current tree.
         row_length_unit = reduce(lambda a, x: a*x, row_breadths)
         column_length_unit = reduce(lambda a, x: a*x, column_breadths)
-        # stretch_length_unit = reduce(lambda a, x: a*x, breadths)
-        # row_length_unit = reduce(lambda a, x: a*x, breadths) if cat == "vcat" else 1
-        # column_length_unit = reduce(lambda a, x: a*x, breadths) if cat == "hcat" else 1
 
         # Set the shift axis to vertical or horizontal.
         # vcat causes a row shift, hcat causes a column one.
         row_shift = row_length_unit if cat == "vcat" else 0
         column_shift = column_length_unit if cat == "hcat" else 0
 
-        # Shift the positions of each of the nodes.
+        # Shift the positions of each of the subtrees.
         shifted_subtrees = [
-            shift_tree_positions(
-                subtree,
-                row_shift * ii,
-                column_shift * ii,
-                int(
-                    row_length_unit / row_breadths[ii]
-                 ),
-                int(
-                    column_length_unit / column_breadths[ii]
-                )
-            )
-            for ii, subtree in enumerate(subtrees)
+            # Map the shift_node_position function to each subtree's nodes.
+            [
+                shift_node_position(
+                    node,
+                    row_shift * ii,
+                    column_shift * ii,
+                    # The stretch factor of the subtree depends on the breadth
+                    # and the length unit of the total tree.
+                    int(row_length_unit / row_breadths[ii]),
+                    int(column_length_unit / column_breadths[ii])
+                ) for node in subtree
+            ] for ii, subtree in enumerate(subtrees)
         ]
 
-        # DEBUG.
-        print(row_breadths)
-        print(column_breadths)
-        print(shifted_subtrees)
-        print(flatten_tree({"cat": parent_cat, "nodes": shifted_subtrees}))
-        print()
-        # END DEBUG.
-
-        return {"cat": parent_cat, "nodes": shifted_subtrees}
+        # Concatenate all of the shifted subtrees into a single list.
+        return listconcat(shifted_subtrees)
 
     else:
-        # For a leaf node, wrap it in a container that indicates which cat it
-        # belongs to so we know how to stretch it, and inject the start
-        # position in the nodes.
-        return {"cat": parent_cat, "nodes": [merge(tree, START_POSITION)]}
-
-
-def flatten_tree(tree):
-    """ Flattens a "cat-adjacent" tree into a list of nodes with the positions.
-
-        Converts the tree of the form [{"cat": "vcat", "nodes": [ ... ]}] into
-        a list of just the nodes. This function is designed to be applied after
-        the positions have been calculated.
-    """
-    if "cat" in tree:
-        return listmapcat(flatten_tree, tree["nodes"])
-    else:
-        # Return the tree as a single element list. This
-        # makes listmapcat behave on leaf nodes.
-        return [tree]
+        # For a leaf node, inject the start position of (0 / 1, 0 / 1) and
+        # wrap into a list.
+        return [merge(tree, START_POSITION)]
