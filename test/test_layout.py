@@ -241,6 +241,147 @@ def test_tree_to_grid_stacked_hcats():
     assert truth == answer
 
 
+def test_tree_to_grid_hcat_vcat():
+    """ Tests that the tree_to_grid function returns the correct value when
+        a single plot is horizontally concatenated with two vertically
+        concatenated plots.
+    """
+    tree = {
+        "hcat": [
+            {"plot": 1},
+            {
+                "vcat": [
+                    {"plot": 2},
+                    {"plot": 3}
+                ]
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 2,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 1,
+            "column_end": 2
+        }, {
+            "plot": 3,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
+def test_tree_to_grid_vcat_hcat():
+    """ Tests that the tree_to_grid function returns the correct answer when
+        a single plot is vertically concatenated with two horizontally
+        concatenated plots.
+    """
+    tree = {
+        "vcat": [
+            {"plot": 1},
+            {
+                "hcat": [
+                    {"plot": 2},
+                    {"plot": 3}
+                ]
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 0,
+            "column_end": 2
+        }, {
+            "plot": 2,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 3,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
+def test_tree_to_grid_regular_grid_vcat():
+    """ Tests that the tree_to_grid function returns the correct value when the
+        plots are placed on a regular 2x2 grid with vertical concatenation.
+    """
+    tree = {
+        "vcat": [
+            {
+                "hcat": [
+                    {"plot": 1},
+                    {"plot": 2}
+                ]
+            }, {
+                "hcat": [
+                    {"plot": 3},
+                    {"plot": 4}
+                ]
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 2,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 1,
+            "column_end": 2
+        }, {
+            "plot": 3,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 4,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
 def test_tree_to_grid_mixed_hcat_vcat():
     """ Tests that the tree_to_grid function returns the correct value when
         there are mixed vcats and hcats.

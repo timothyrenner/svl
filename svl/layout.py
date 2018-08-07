@@ -94,6 +94,10 @@ def tree_to_grid(tree):
 
         # Use the breadths to determine the row / column length units. This
         # is the "final" length unit of the current tree.
+        # NOTE: There's an edge case that produces correct, but inconvenient
+        # results: when the breadths share a common factor (i.e. both are 2),
+        # then the resulting length unit should still be 2, but is 4 by this
+        # algorithm. I think should really be the lowest common multiple.
         row_length_unit = reduce(lambda a, x: a*x, row_breadths)
         column_length_unit = reduce(lambda a, x: a*x, column_breadths)
 
