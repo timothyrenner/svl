@@ -7,17 +7,17 @@ setup(
     packages=find_packages(exclude=["scripts/", "data/"]),
     license='MIT',
     author="Tim Renner",
-    classifiers = [
+    classifiers=[
       "Development Status :: 3 - Alpha",
       "Programming Language :: Python :: 3.6"
     ],
-    install_requires = [
+    install_requires=[
         'click',
         'toolz',
         'lark-parser',
         'jinja2'
     ],
-    entry_points = {
+    entry_points={
         "console_scripts": ["svl=svl.cli:cli"]
         }
 )
