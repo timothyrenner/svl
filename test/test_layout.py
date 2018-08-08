@@ -568,3 +568,123 @@ def test_tree_to_grid_mixed_vcat_hcat():
     answer = tree_to_grid(tree)
 
     assert truth == answer
+
+
+def test_tree_to_grid_doomsday():
+    """ The gnarliest of tests.
+    """
+    tree = {
+        "vcat": [
+            {
+                "hcat": [
+                    {
+                        "plot": 1
+                    }, {
+                        "vcat": [
+                            {"plot": 2},
+                            {"plot": 3},
+                            {"plot": 4}
+                        ]
+                    }, {
+                        "vcat": [
+                            {"plot": 5},
+                            {
+                                "hcat": [
+                                    {"plot": 6},
+                                    {"plot": 7}
+                                ]
+                            }
+                        ]
+                    }, {
+                        "vcat": [
+                            {
+                                "hcat": [
+                                    {"plot": 8},
+                                    {"plot": 9}
+                                ]
+                            }, {
+                                "plot": 10
+                            }
+                        ]
+                    }
+                ]
+            }, {
+                "plot": 11
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 6,
+            "column_start": 0,
+            "column_end": 2
+        }, {
+            "plot": 2,
+            "row_start": 0,
+            "row_end": 2,
+            "column_start": 2,
+            "column_end": 4
+        }, {
+            "plot": 3,
+            "row_start": 2,
+            "row_end": 4,
+            "column_start": 2,
+            "column_end": 4
+        }, {
+            "plot": 4,
+            "row_start": 4,
+            "row_end": 6,
+            "column_start": 2,
+            "column_end": 4
+        }, {
+            "plot": 5,
+            "row_start": 0,
+            "row_end": 3,
+            "column_start": 4,
+            "column_end": 6
+        }, {
+            "plot": 6,
+            "row_start": 3,
+            "row_end": 6,
+            "column_start": 4,
+            "column_end": 5
+        }, {
+            "plot": 7,
+            "row_start": 3,
+            "row_end": 6,
+            "column_start": 5,
+            "column_end": 6
+        }, {
+            "plot": 8,
+            "row_start": 0,
+            "row_end": 3,
+            "column_start": 6,
+            "column_end": 7
+        }, {
+            "plot": 9,
+            "row_start": 0,
+            "row_end": 3,
+            "column_start": 7,
+            "column_end": 8
+        }, {
+            "plot": 10,
+            "row_start": 3,
+            "row_end": 6,
+            "column_start": 6,
+            "column_end": 8
+        }, {
+            "plot": 11,
+            "row_start": 6,
+            "row_end": 12,
+            "column_start": 0,
+            "column_end": 8
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
