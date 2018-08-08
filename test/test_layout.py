@@ -687,4 +687,3 @@ def test_tree_to_grid_doomsday():
     answer = tree_to_grid(tree)
 
     assert truth == answer
-
