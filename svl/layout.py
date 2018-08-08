@@ -11,6 +11,22 @@ START_POSITION = {
 }
 
 
+def gcd(a, b):
+    """ Computes the greatest common divisor between the two numbers using
+        Euclid's algorithm.
+    """
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+
+
+def lcm(a, b):
+    """ Computes the least common multiple between the two numbers.
+    """
+    return (a * b) / gcd(a, b)
+
+
 def shift_node_position(
     node,
     row_shift,
@@ -94,12 +110,8 @@ def tree_to_grid(tree):
 
         # Use the breadths to determine the row / column length units. This
         # is the "final" length unit of the current tree.
-        # NOTE: There's an edge case that produces correct, but inconvenient
-        # results: when the breadths share a common factor (i.e. both are 2),
-        # then the resulting length unit should still be 2, but is 4 by this
-        # algorithm. I think should really be the lowest common multiple.
-        row_length_unit = reduce(lambda a, x: a*x, row_breadths)
-        column_length_unit = reduce(lambda a, x: a*x, column_breadths)
+        row_length_unit = reduce(lambda a, x: lcm(a, x), row_breadths)
+        column_length_unit = reduce(lambda a, x: lcm(a, x), column_breadths)
 
         # Set the shift axis to vertical or horizontal.
         # vcat causes a row shift, hcat causes a column one.

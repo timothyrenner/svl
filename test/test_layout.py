@@ -1,7 +1,35 @@
 from svl.layout import (
     shift_node_position,
-    tree_to_grid
+    tree_to_grid,
+    gcd,
+    lcm
 )
+
+
+def test_gcd():
+    """ Tests that the gcd function returns the correct answer.
+    """
+    a = 54
+    b = 24
+
+    truth = 6
+
+    answer = gcd(a, b)
+
+    assert truth == answer
+
+
+def test_lcm():
+    """ Tests that the lcm function returns the correct answer.
+    """
+    a = 3
+    b = 2
+
+    truth = 6
+
+    answer = lcm(a, b)
+
+    assert truth == answer
 
 
 def test_shift_node_position():
@@ -382,6 +410,60 @@ def test_tree_to_grid_regular_grid_vcat():
     assert truth == answer
 
 
+def test_tree_to_grid_regular_grid_hcat():
+    """ Tests that the tree_to_grid function returns the correct value when the
+        plots are placed on a regular 2x2 grid with horizontal concatenation.
+    """
+
+    tree = {
+        "hcat": [
+            {
+                "vcat": [
+                    {"plot": 1},
+                    {"plot": 2}
+                ]
+            }, {
+                "vcat": [
+                    {"plot": 3},
+                    {"plot": 4}
+                ]
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 2,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 3,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 1,
+            "column_end": 2
+        }, {
+            "plot": 4,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
 def test_tree_to_grid_mixed_hcat_vcat():
     """ Tests that the tree_to_grid function returns the correct value when
         there are mixed vcats and hcats.
@@ -427,6 +509,59 @@ def test_tree_to_grid_mixed_hcat_vcat():
             "row_end": 2,
             "column_start": 3,
             "column_end": 4
+        }
+    ]
+
+    answer = tree_to_grid(tree)
+
+    assert truth == answer
+
+
+def test_tree_to_grid_mixed_vcat_hcat():
+    """ Tests that the tree_to_grid function returns the correct value when
+        there are mixed vcats and hcats.
+    """
+    tree = {
+        "vcat": [
+            {
+                "hcat": [
+                    {"plot": 1},
+                    {"plot": 2}
+                ]
+            }, {
+                "vcat": [
+                    {"plot": 3},
+                    {"plot": 4}
+                ]
+            }
+        ]
+    }
+
+    truth = [
+        {
+            "plot": 1,
+            "row_start": 0,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1
+        }, {
+            "plot": 2,
+            "row_start": 0,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2
+        }, {
+            "plot": 3,
+            "row_start": 2,
+            "row_end": 3,
+            "column_start": 0,
+            "column_end": 2
+        }, {
+            "plot": 4,
+            "row_start": 3,
+            "row_end": 4,
+            "column_start": 0,
+            "column_end": 2
         }
     ]
 
