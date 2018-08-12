@@ -15,7 +15,8 @@ setup(
         'click',
         'toolz',
         'lark-parser',
-        'jinja2'
+        'jinja2',
+        'maya'
     ],
     entry_points={
         "console_scripts": ["svl=svl.cli:cli"]
