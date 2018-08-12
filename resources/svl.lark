@@ -36,7 +36,7 @@ field: CNAME
 
 aggregation: COUNT | MIN | MAX | AVG
 
-temporal: "BY" (YEAR | QUARTER | MONTH | DAY | HOUR | MINUTE | SECOND)
+temporal: "BY" (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
 
 SCATTER: "SCATTER"
 
@@ -57,8 +57,6 @@ MAX: "MAX"
 AVG: "AVG"
 
 YEAR: "YEAR"
-
-QUARTER: "QUARTER"
 
 MONTH: "MONTH"
 

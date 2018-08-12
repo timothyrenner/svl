@@ -7,3 +7,4 @@ data/
 *.ipynb
 .pytest_cache/
 visualization.html
+.idea/
