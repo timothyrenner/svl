@@ -1,7 +1,7 @@
 import maya
+import math
 
 from toolz import curry, merge, identity, compose
-from statistics import mean
 
 
 def _convert_datetime(dt, snap):
@@ -45,11 +45,30 @@ def append(*fields):
     return _append
 
 
+def _mean(a, x):
+    new_sum = a["sum"] + x
+    new_count = a["count"] + 1
+    new_avg = new_sum / new_count
+
+    return {
+        "sum": new_sum,
+        "count": new_count,
+        "avg": new_avg
+    }
+
+
 AGG_FUNCTIONS = {
-    "COUNT": len,
+    "COUNT": lambda a, x: a+1,
     "MIN": min,
     "MAX": max,
-    "AVG": mean
+    "AVG": _mean
+}
+
+AGG_INITS = {
+    "COUNT": 0,
+    "MIN": math.inf,
+    "MAX": -math.inf,
+    "AVG": {"sum": 0, "count": 0}
 }
 
 
@@ -59,12 +78,12 @@ def aggregate(group_field, agg_field, agg_func):
 
     def _aggregate(datum):
         if datum[group_field] not in aggregated_values:
-            aggregated_values[datum[group_field]] = datum[agg_field]
-        else:
-            aggregated_values[datum[group_field]] = AGG_FUNCTIONS[agg_func](
-                aggregated_values[datum[group_field]],
-                datum[agg_field]
-            )
+            aggregated_values[datum[group_field]] = AGG_INITS[agg_func]
+
+        aggregated_values[datum[group_field]] = AGG_FUNCTIONS[agg_func](
+            aggregated_values[datum[group_field]],
+            datum[agg_field]
+        )
 
         return aggregated_values
 
@@ -85,7 +104,8 @@ def color(color_field, transformer):
             color_transformers[datum[color_field]] = transformer()
 
         # Now apply that transformer to the data point under that color.
-        color_values[datum[color_field]] = transformer(datum)
+        color_values[datum[color_field]] = \
+            color_transformers[datum[color_field]](datum)
 
         return color_values
 
