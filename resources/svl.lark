@@ -26,10 +26,16 @@ step: "STEP" NUMBER
 
 bins: "BINS" NUMBER
 
+// NOTE: This allows for both x and y to have aggregations, which results in
+// order ambiguity (i.e. which aggregation gets applied first?). Same goes
+// for temporal transformations. How does one plot two time axes against
+// each other.
+// TODO: Find a way to enforce only one aggregation / temporal transformation.
 x: "X" field? (aggregation? | temporal?)
 
 y: "Y" field? (aggregation? | temporal?)
 
+// For color temporal or aggregation is supported irrespective of x and y.
 color: "COLOR" field? (aggregation? | temporal?)
 
 field: CNAME
