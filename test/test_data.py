@@ -4,7 +4,8 @@ from svl.data import (
     transform,
     append,
     aggregate,
-    color
+    color,
+    plot_to_reducer
 )
 
 
@@ -26,14 +27,14 @@ def test_transform():
     """ Tests that the transform function returns the correct value.
     """
 
-    field = "x"
+    field = "time"
 
     def transformation(x):
         return x+1
 
-    datum = {"x": 1, "y": 2}
+    datum = {"time": 1, "id": 2}
 
-    truth = {"x": 2, "y": 2}
+    truth = {"time": 2, "id": 2}
     answer = transform(field, transformation, datum)
 
     assert truth == answer
@@ -211,7 +212,7 @@ def test_color():
     """ Tests that the color function returns the correct value.
     """
     color_field = "z"
-    
+
     def transformer():
         return append("x", "y")
 
@@ -258,4 +259,62 @@ def test_color():
             "x": ["a"],
             "y": [2]
         }
+    }
+
+
+def test_plot_to_reducer_histogram():
+    """ Tests that the plot_to_reducer function returns the correct value
+        for histogram plots.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "field": "x"
+    }
+
+    data = [
+        {"x": 1},
+        {"x": -1},
+        {"x": 2}
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {"x": [1]}
+    assert reducer(data[1]) == {"x": [1, -1]}
+    assert reducer(data[2]) == {"x": [1, -1, 2]}
+
+
+def test_plot_to_reducer_temporal_x_count_y():
+    """ Tests that the plot_to_reducer function returns the correct value
+        when there's a temporal transformation on x and a count aggregation
+        on y.
+    """
+    svl_plot = {
+        "type": "line",
+        "x": {
+            "field": "time",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "agg": "COUNT",
+            "field": "time"
+        }
+    }
+
+    data = [
+        {"time": "2018-08-01", "id": 1},
+        {"time": "2018-10-02", "id": 2},
+        {"time": "2018-08-04", "id": 3}
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {"2018-08-01T00:00:00Z": 1}
+    assert reducer(data[1]) == {
+        "2018-08-01T00:00:00Z": 1,
+        "2018-10-01T00:00:00Z": 1
+    }
+    assert reducer(data[2]) == {
+        "2018-08-01T00:00:00Z": 2,
+        "2018-10-01T00:00:00Z": 1
     }

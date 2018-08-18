@@ -129,43 +129,40 @@ def plot_to_reducer(svl_plot):
         # transformer.
         if "temporal" in svl_plot["x"]:
             temporal_transform_x = curry(transform)(
-                field="x",
+                field=svl_plot["x"]["field"],
                 transformation=TEMPORAL_CONVERTERS[svl_plot["x"]["temporal"]]
             )
             transformer = compose(temporal_transform_x, transformer)
 
         if "temporal" in svl_plot["y"]:
             temporal_transform_y = curry(transform)(
-                field="y",
+                field=svl_plot["y"]["field"],
                 transformation=TEMPORAL_CONVERTERS[svl_plot["y"]["temporal"]]
             )
             transformer = compose(temporal_transform_y, transformer)
 
         # Step 2: Determine if it's an aggregation or appendation (?)and create
         # a delayed transformer.
-        if ("agg" in svl_plot["x"]) or ("agg" in svl_plot["y"]):
-            if "agg" in svl_plot["x"]:
-                group_field = "y"
-                agg_field = "x"
-                agg_func = AGG_FUNCTIONS[svl_plot["x"]["agg"]]
-            else:
-                group_field = "x"
-                agg_field = "y"
-                agg_func = AGG_FUNCTIONS[svl_plot["y"]["agg"]]
-
+        if "agg" in svl_plot["x"]:
             # Delay evaluation in case there's a color field.
             def delayed_transformer():
                 return aggregate(
-                    group_field,
-                    agg_field,
-                    agg_func
+                    group_field=svl_plot["y"]["field"],
+                    agg_field=svl_plot["x"]["field"],
+                    agg_func=AGG_FUNCTIONS[svl_plot["x"]["agg"]]
+                )
+
+        elif "agg" in svl_plot["y"]:
+            # Delay evaluation in case there's a color field.
+            def delayed_transformer():
+                return aggregate(
+                    group_field=svl_plot["x"]["field"],
+                    agg_field=svl_plot["y"]["field"],
+                    agg_func=AGG_FUNCTIONS[svl_plot["y"]["agg"]]
                 )
         else:
             def delayed_transformer():
-                return compose(
-                    append(svl_plot["x"]["field"]),
-                    append(svl_plot["y"]["field"])
-                )
+                return append(svl_plot["x"]["field"], svl_plot["y"]["field"])
 
         # Step 3: Now determine if it's a color transformer or not. If not,
         # materialize the delayed transformer, otherwise build the color
