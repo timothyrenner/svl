@@ -129,15 +129,15 @@ def plot_to_reducer(svl_plot):
         # transformer.
         if "temporal" in svl_plot["x"]:
             temporal_transform_x = curry(transform)(
-                field=svl_plot["x"]["field"],
-                transformation=TEMPORAL_CONVERTERS[svl_plot["x"]["temporal"]]
+                svl_plot["x"]["field"],
+                TEMPORAL_CONVERTERS[svl_plot["x"]["temporal"]]
             )
             transformer = compose(temporal_transform_x, transformer)
 
         if "temporal" in svl_plot["y"]:
             temporal_transform_y = curry(transform)(
-                field=svl_plot["y"]["field"],
-                transformation=TEMPORAL_CONVERTERS[svl_plot["y"]["temporal"]]
+                svl_plot["y"]["field"],
+                TEMPORAL_CONVERTERS[svl_plot["y"]["temporal"]]
             )
             transformer = compose(temporal_transform_y, transformer)
 
@@ -149,7 +149,7 @@ def plot_to_reducer(svl_plot):
                 return aggregate(
                     group_field=svl_plot["y"]["field"],
                     agg_field=svl_plot["x"]["field"],
-                    agg_func=AGG_FUNCTIONS[svl_plot["x"]["agg"]]
+                    agg_func=svl_plot["x"]["agg"]
                 )
 
         elif "agg" in svl_plot["y"]:
@@ -158,7 +158,7 @@ def plot_to_reducer(svl_plot):
                 return aggregate(
                     group_field=svl_plot["x"]["field"],
                     agg_field=svl_plot["y"]["field"],
-                    agg_func=AGG_FUNCTIONS[svl_plot["y"]["agg"]]
+                    agg_func=svl_plot["y"]["agg"]
                 )
         else:
             def delayed_transformer():
