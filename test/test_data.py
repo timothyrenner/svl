@@ -5,7 +5,8 @@ from svl.data import (
     append,
     aggregate,
     color,
-    plot_to_reducer
+    plot_to_reducer,
+    construct_data
 )
 
 
@@ -464,7 +465,7 @@ def test_plot_to_reducer_color_group_x_max_y():
 def test_plot_to_reducer_temporal_color_group_x_mean_y():
     """ Tests that the plot_to_reducer function returns the correct value
         when there's a temporal converter on the color field and a mean
-        aggregation on the y field. This is effectively a doomsday test.
+        aggregation on the y field.
     """
     svl_plot = {
         "type": "bar",
@@ -560,3 +561,66 @@ def test_plot_to_reducer_temporal_color_group_x_mean_y():
             "B": {"sum": 150, "count": 2, "avg": 75}
         }
     }
+
+
+def test_construct_data():
+    """ Tests that the construct_data function returns the correct value.
+    """
+    svl_plots = [
+        {
+            "type": "bar",
+            "x": {"field": "classification"},
+            "y": {"agg": "COUNT", "field": "classification"}
+        }, {
+            "type": "line",
+            "x": {"field": "date", "temporal": "YEAR"},
+            "y": {"agg": "MIN", "field": "temperature"},
+            "color": {"field": "classification"}
+        }, {
+            "type": "histogram",
+            "field": "temperature"
+        }, {
+            "type": "scatter",
+            "x": {"field": "date", "temporal": "MONTH"},
+            "y": {"field": "temperature"}
+        }
+    ]
+
+    data = [
+        {"date": "2018-08-01", "classification": "A", "temperature": 100},
+        {"date": "2017-10-01", "classification": "B", "temperature": 50},
+        {"date": "2017-06-01", "classification": "A", "temperature": 100},
+        {"date": "2018-03-21", "classification": "B", "temperature": 50},
+        {"date": "2018-12-31", "classification": "A", "temperature": 50},
+        {"date": "2018-01-01", "classification": "B", "temperature": 25},
+        {"date": "2017-04-24", "classification": "A", "temperature": 75},
+        {"date": "2017-06-12", "classification": "B", "temperature": 100}
+    ]
+
+    constructed_data_truth = [
+        {
+            "A": 4,
+            "B": 4
+        }, {
+            "A": {"2017-01-01T00:00:00Z": 75, "2018-01-01T00:00:00Z": 50},
+            "B": {"2017-01-01T00:00:00Z": 50, "2018-01-01T00:00:00Z": 25}
+        }, {
+            "temperature": [100, 50, 100, 50, 50, 25, 75, 100]
+        }, {
+            "date": [
+                "2018-08-01T00:00:00Z",
+                "2017-10-01T00:00:00Z",
+                "2017-06-01T00:00:00Z",
+                "2018-03-01T00:00:00Z",
+                "2018-12-01T00:00:00Z",
+                "2018-01-01T00:00:00Z",
+                "2017-04-01T00:00:00Z",
+                "2017-06-01T00:00:00Z"
+            ],
+            "temperature": [100, 50, 100, 50, 50, 25, 75, 100]
+        }
+    ]
+
+    constructed_data_answer = construct_data(svl_plots, data)
+
+    assert constructed_data_truth == constructed_data_answer
