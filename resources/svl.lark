@@ -16,6 +16,8 @@ mark2d: SCATTER | LINE | BAR | BOXPLOT
 
 data: CNAME
 
+// TODO: I don't think color should take aggs, but it can be bucketed.
+// X and Y should be bucketable too.
 dimensions: (x | y | color)+
 
 mark1d: HISTOGRAM
@@ -26,7 +28,7 @@ step: "STEP" NUMBER
 
 bins: "BINS" NUMBER
 
-// NOTE: This allows for both x and y to have aggregations, which results in
+// TODO: This allows for both x and y to have aggregations, which results in
 // order ambiguity (i.e. which aggregation gets applied first?). Same goes
 // for temporal transformations. How does one plot two time axes against
 // each other.
@@ -36,6 +38,7 @@ x: "X" field? (aggregation? | temporal?)
 y: "Y" field? (aggregation? | temporal?)
 
 // For color temporal or aggregation is supported irrespective of x and y.
+// TODO: Color should not take aggs.
 color: "COLOR" field? (aggregation? | temporal?)
 
 field: CNAME

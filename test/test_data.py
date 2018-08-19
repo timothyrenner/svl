@@ -318,3 +318,144 @@ def test_plot_to_reducer_temporal_x_count_y():
         "2018-08-01T00:00:00Z": 2,
         "2018-10-01T00:00:00Z": 1
     }
+
+
+def test_plot_to_reducer_temporal_y_min_x():
+    """ Tests that the plot_to_reducer function returns the correct value
+        when there's a temporal transformation on y and a min aggregation
+        on x.
+    """
+    svl_plot = {
+        "type": "bar",
+        "x": {
+            "agg": "MIN",
+            "field": "price"
+        },
+        "y": {
+            "temporal": "YEAR",
+            "field": "date"
+        }
+    }
+
+    data = [
+        {"date": "2017-08-14", "price": 2.05},
+        {"date": "2018-09-14", "price": 3.51},
+        {"date": "2018-10-12", "price": 3.45}
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {"2017-01-01T00:00:00Z": 2.05}
+    assert reducer(data[1]) == {
+        "2017-01-01T00:00:00Z": 2.05,
+        "2018-01-01T00:00:00Z": 3.51
+    }
+    assert reducer(data[2]) == {
+        "2017-01-01T00:00:00Z": 2.05,
+        "2018-01-01T00:00:00Z": 3.45
+    }
+
+
+def test_plot_to_reducer_color_append_x_append_y():
+    """ Tests that the plot_to_reducer function returns the correct value when
+        there's a color field and append aggregators for x and y.
+    """
+    svl_plot = {
+        "type": "scatter",
+        "x": {
+            "field": "latitude"
+        },
+        "y": {
+            "field": "temperature"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    data = [
+        {
+            "latitude": 0.1,
+            "temperature": 84.3,
+            "classification": "A"
+        }, {
+            "latitude": 24.1,
+            "temperature": 94.2,
+            "classification": "B"
+        }, {
+            "latitude": 94.1,
+            "temperature": -10.4,
+            "classification": "A"
+        }
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {
+        "A": {
+            "latitude": [0.1],
+            "temperature": [84.3]
+        }
+    }
+    assert reducer(data[1]) == {
+        "A": {
+            "latitude": [0.1],
+            "temperature": [84.3]
+        },
+        "B": {
+            "latitude": [24.1],
+            "temperature": [94.2]
+        }
+    }
+    assert reducer(data[2]) == {
+        "A": {
+            "latitude": [0.1, 94.1],
+            "temperature": [84.3, -10.4]
+        },
+        "B": {
+            "latitude": [24.1],
+            "temperature": [94.2]
+        }
+    }
+
+
+def test_plot_to_reducer_color_group_x_max_y():
+    """ Tests that the plot_to_reducer function returns the correct value when
+        there's a color field, a group on x and a minimum agg function on y.
+    """
+    svl_plot = {
+        "type": "bar",
+        "x": {
+            "field": "temperature",
+            "agg": "MAX"
+        },
+        "y": {
+            "field": "state"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    data = [
+        {"classification": "A", "state": "TX", "temperature": 85.0},
+        {"classification": "B", "state": "LA", "temperature": 93.1},
+        {"classification": "B", "state": "LA", "temperature": 81.2},
+        {"classification": "B", "state": "TX", "temperature": 102.4}
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {"A": {"TX": 85.0}}
+    assert reducer(data[1]) == {
+        "A": {"TX": 85.0},
+        "B": {"LA": 93.1}
+    }
+    assert reducer(data[2]) == {
+        "A": {"TX": 85.0},
+        "B": {"LA": 93.1}
+    }
+    assert reducer(data[3]) == {
+        "A": {"TX": 85.0},
+        "B": {"TX": 102.4, "LA": 93.1}
+    }

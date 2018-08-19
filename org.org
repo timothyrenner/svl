@@ -1,0 +1,21 @@
+* Grammar
+** TODO Color should not take aggs.
+** TODO Add a bucket directive that can be attached and applied as a mapper.
+** TODO Enforce aggregation OR some mappable transformation between x and y.
+
+* Data
+** DOING Complete test coverage of plot_to_reducer.
+** TODO Change agg initializers to be zero-arg functions instead of values.
+** TODO Change the _mean function to mutate the dictionary after initializers are turned into functions.
+
+* Plotly
+** TODO Implement scatter plot.
+** TODO Implement box plot.
+** TODO Implement histogram.
+** TODO Implement bar plot.
+** TODO Implement line chart.
+
+* CI/CD
+** TODO Add code coverage to the pytest command.
+** TODO Set up coveralls.
+** TODO Add integration tests with a sample dataset.
