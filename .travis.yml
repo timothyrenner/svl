@@ -3,7 +3,7 @@ python:
   - "3.5"
   - "3.6"
 install:
-  - pip install pytest
+  - pip install -r test_requirements.txt
   - pip install -e .
 script:
-  - pytest test/
+  - pytest test/ --cov=svl/

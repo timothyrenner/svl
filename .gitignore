@@ -8,3 +8,4 @@ data/
 .pytest_cache/
 visualization.html
 .idea/
+.coverage

@@ -4,7 +4,8 @@
 ** TODO Enforce aggregation OR some mappable transformation between x and y.
 
 * Data
-** DOING Complete test coverage of plot_to_reducer.
+** DONE Complete test coverage of plot_to_reducer.
+** TODO Complete test coverage for data.py.
 ** TODO Change agg initializers to be zero-arg functions instead of values.
 ** TODO Change the _mean function to mutate the dictionary after initializers are turned into functions.
 
@@ -16,6 +17,6 @@
 ** TODO Implement line chart.
 
 * CI/CD
-** TODO Add code coverage to the pytest command.
+** DONE Add code coverage to the pytest command.
 ** TODO Set up coveralls.
 ** TODO Add integration tests with a sample dataset.
