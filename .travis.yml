@@ -7,3 +7,5 @@ install:
   - pip install -e .
 script:
   - pytest test/ --cov=svl/
+after_success:
+  - coveralls
