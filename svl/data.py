@@ -46,15 +46,11 @@ def append(*fields):
 
 
 def _mean(a, x):
-    new_sum = a["sum"] + x
-    new_count = a["count"] + 1
-    new_avg = new_sum / new_count
+    a["sum"] += x
+    a["count"] += 1
+    a["avg"] = a["sum"] / a["count"]
 
-    return {
-        "sum": new_sum,
-        "count": new_count,
-        "avg": new_avg
-    }
+    return a
 
 
 AGG_FUNCTIONS = {

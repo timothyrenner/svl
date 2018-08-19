@@ -7,7 +7,7 @@
 ** DONE Complete test coverage of plot_to_reducer.
 ** DONE Complete test coverage for data.py.
 ** DONE Change agg initializers to be zero-arg functions instead of values.
-** TODO Change the _mean function to mutate the dictionary for better perf.
+** DONE Change the _mean function to mutate the dictionary for better perf.
 ** TODO Refactor tests to use a fixture for the test data.
 ** TODO Add property tests for data.py.
 
