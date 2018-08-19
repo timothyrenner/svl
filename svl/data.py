@@ -64,11 +64,15 @@ AGG_FUNCTIONS = {
     "AVG": _mean
 }
 
+# The initialization is done with a zero arg function. It doesn't matter for
+# count, min or max, but for avg it allows a mutable accumulator, which should
+# improve perf by preventing a new dict from being created for every point in
+# the dataset.
 AGG_INITS = {
-    "COUNT": 0,
-    "MIN": math.inf,
-    "MAX": -math.inf,
-    "AVG": {"sum": 0, "count": 0}
+    "COUNT": lambda: 0,
+    "MIN": lambda: math.inf,
+    "MAX": lambda: -math.inf,
+    "AVG": lambda: {"sum": 0, "count": 0}
 }
 
 
@@ -78,7 +82,7 @@ def aggregate(group_field, agg_field, agg_func):
 
     def _aggregate(datum):
         if datum[group_field] not in aggregated_values:
-            aggregated_values[datum[group_field]] = AGG_INITS[agg_func]
+            aggregated_values[datum[group_field]] = AGG_INITS[agg_func]()
 
         aggregated_values[datum[group_field]] = AGG_FUNCTIONS[agg_func](
             aggregated_values[datum[group_field]],
