@@ -141,7 +141,12 @@ def plot_to_reducer(svl_plot):
             )
             transformer = compose(temporal_transform_y, transformer)
 
-        # TODO: Check if color is temporal.
+        if ("color" in svl_plot) and ("temporal" in svl_plot["color"]):
+            temporal_transform_c = curry(transform)(
+                svl_plot["color"]["field"],
+                TEMPORAL_CONVERTERS[svl_plot["color"]["temporal"]]
+            )
+            transformer = compose(temporal_transform_c, transformer)
 
         # Step 2: Determine if it's an aggregation or appendation (?)and create
         # a delayed transformer.

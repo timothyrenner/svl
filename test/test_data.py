@@ -459,3 +459,104 @@ def test_plot_to_reducer_color_group_x_max_y():
         "A": {"TX": 85.0},
         "B": {"TX": 102.4, "LA": 93.1}
     }
+
+
+def test_plot_to_reducer_temporal_color_group_x_mean_y():
+    """ Tests that the plot_to_reducer function returns the correct value
+        when there's a temporal converter on the color field and a mean
+        aggregation on the y field. This is effectively a doomsday test.
+    """
+    svl_plot = {
+        "type": "bar",
+        "x": {
+            "field": "classification"
+        },
+        "y": {
+            "agg": "AVG",
+            "field": "temperature"
+        },
+        "color": {
+            "field": "date",
+            "temporal": "YEAR"
+        }
+    }
+
+    data = [
+        {"date": "2018-08-01", "classification": "A", "temperature": 100},
+        {"date": "2017-10-01", "classification": "B", "temperature": 50},
+        {"date": "2017-06-01", "classification": "A", "temperature": 100},
+        {"date": "2018-03-21", "classification": "B", "temperature": 50},
+        {"date": "2018-12-31", "classification": "A", "temperature": 50},
+        {"date": "2018-01-01", "classification": "B", "temperature": 25},
+        {"date": "2017-04-24", "classification": "A", "temperature": 75},
+        {"date": "2017-06-12", "classification": "B", "temperature": 100}
+    ]
+
+    reducer = plot_to_reducer(svl_plot)
+
+    assert reducer(data[0]) == {
+        "2018-01-01T00:00:00Z": {"A": {"sum": 100, "count": 1, "avg": 100}}
+    }
+    assert reducer(data[1]) == {
+        "2018-01-01T00:00:00Z": {"A": {"sum": 100, "count": 1, "avg": 100}},
+        "2017-01-01T00:00:00Z": {"B": {"sum": 50, "count": 1, "avg": 50}}
+    }
+    assert reducer(data[2]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        }
+    }
+    assert reducer(data[3]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        }
+    }
+    assert reducer(data[4]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 150, "count": 2, "avg": 75},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        }
+    }
+    assert reducer(data[5]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 150, "count": 2, "avg": 75},
+            "B": {"sum": 75, "count": 2, "avg": 37.5}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 100, "count": 1, "avg": 100},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        }
+    }
+    assert reducer(data[6]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 150, "count": 2, "avg": 75},
+            "B": {"sum": 75, "count": 2, "avg": 37.5}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 175, "count": 2, "avg": 87.5},
+            "B": {"sum": 50, "count": 1, "avg": 50}
+        }
+    }
+    assert reducer(data[7]) == {
+        "2018-01-01T00:00:00Z": {
+            "A": {"sum": 150, "count": 2, "avg": 75},
+            "B": {"sum": 75, "count": 2, "avg": 37.5}
+        },
+        "2017-01-01T00:00:00Z": {
+            "A": {"sum": 175, "count": 2, "avg": 87.5},
+            "B": {"sum": 150, "count": 2, "avg": 75}
+        }
+    }
