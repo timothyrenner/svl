@@ -18,5 +18,5 @@
 
 * CI/CD
 ** DONE Add code coverage to the pytest command.
-** TODO Set up coveralls.
+** DONE Set up coveralls.
 ** TODO Add integration tests with a sample dataset.
