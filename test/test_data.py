@@ -9,6 +9,24 @@ from svl.data import (
     construct_data
 )
 
+import pytest
+
+
+@pytest.fixture()
+def data():
+    """ Sample data.
+    """
+    return [
+        {"date": "2018-08-01", "classification": "A", "temperature": 100},
+        {"date": "2017-10-01", "classification": "B", "temperature": 50},
+        {"date": "2017-06-01", "classification": "A", "temperature": 100},
+        {"date": "2018-03-21", "classification": "B", "temperature": 50},
+        {"date": "2018-12-31", "classification": "A", "temperature": 50},
+        {"date": "2018-01-01", "classification": "B", "temperature": 25},
+        {"date": "2017-04-24", "classification": "A", "temperature": 75},
+        {"date": "2017-06-12", "classification": "B", "temperature": 100}
+    ]
+
 
 def test_convert_datetime():
     """ Tests that the convert_datetime function returns the correct value.
@@ -24,44 +42,39 @@ def test_convert_datetime():
     assert truth == answer
 
 
-def test_transform():
+def test_transform(data):
     """ Tests that the transform function returns the correct value.
     """
 
-    field = "time"
+    field = "temperature"
 
     def transformation(x):
         return x+1
 
-    datum = {"time": 1, "id": 2}
+    datum = data[0]
 
-    truth = {"time": 2, "id": 2}
+    truth = {"date": "2018-08-01", "classification": "A", "temperature": 101}
+
     answer = transform(field, transformation, datum)
 
     assert truth == answer
 
 
-def test_append():
+def test_append(data):
     """ Tests that the append function returns the correct value.
     """
-    data = [
-        {
-            "x": 1,
-            "y": 1
-        }, {
-            "x": 2,
-            "y": 2
-        }, {
-            "x": 3,
-            "y": 3
-        }
-    ]
 
-    appender = append("x", "y")
+    appender = append("date", "temperature")
 
-    assert appender(data[0]) == {"x": [1], "y": [1]}
-    assert appender(data[1]) == {"x": [1, 2], "y": [1, 2]}
-    assert appender(data[2]) == {"x": [1, 2, 3], "y": [1, 2, 3]}
+    assert appender(data[0]) == {"date": ["2018-08-01"], "temperature": [100]}
+    assert appender(data[1]) == {
+        "date": ["2018-08-01", "2017-10-01"],
+        "temperature": [100, 50]
+    }
+    assert appender(data[2]) == {
+        "date": ["2018-08-01", "2017-10-01", "2017-06-01"],
+        "temperature": [100, 50, 100]
+    }
 
 
 def test_mean():
@@ -76,216 +89,153 @@ def test_mean():
     assert truth == answer
 
 
-def test_aggregate_count():
+def test_aggregate_count(data):
     """ Tests that the aggregate function returns the correct value.
     """
-    group_field = "x"
-    agg_field = "y"
+    group_field = "classification"
+    agg_field = "temperature"
     agg_func = "COUNT"
-
-    data = [
-        {
-            "x": "a",
-            "y": 1
-        }, {
-            "x": "a",
-            "y": 5
-        }, {
-            "x": "b",
-            "y": 10
-        }
-    ]
 
     aggregator = aggregate(group_field, agg_field, agg_func)
 
-    assert aggregator(data[0]) == {"a": 1}
-    assert aggregator(data[1]) == {"a": 2}
-    assert aggregator(data[2]) == {"a": 2, "b": 1}
+    assert aggregator(data[0]) == {"A": 1}
+    assert aggregator(data[1]) == {"A": 1, "B": 1}
+    assert aggregator(data[2]) == {"A": 2, "B": 1}
 
 
-def test_aggregate_min():
+def test_aggregate_min(data):
     """ Tests that the aggregate function returns the correct value for the
         minimum aggregation function.
     """
-    group_field = "y"
-    agg_field = "x"
+    group_field = "classification"
+    agg_field = "temperature"
     agg_func = "MIN"
-
-    data = [
-        {
-            "x": 1,
-            "y": "a"
-        }, {
-            "x": -1,
-            "y": "a"
-        }, {
-            "x": -5,
-            "y": "b"
-        }
-    ]
 
     aggregator = aggregate(group_field, agg_field, agg_func)
 
-    assert aggregator(data[0]) == {"a": 1}
-    assert aggregator(data[1]) == {"a": -1}
-    assert aggregator(data[2]) == {"a": -1, "b": -5}
+    assert aggregator(data[0]) == {"A": 100}
+    assert aggregator(data[1]) == {"A": 100, "B": 50}
+    assert aggregator(data[2]) == {"A": 100, "B": 50}
+    assert aggregator(data[3]) == {"A": 100, "B": 50}
+    assert aggregator(data[4]) == {"A": 50, "B": 50}
+    assert aggregator(data[5]) == {"A": 50, "B": 25}
 
 
-def test_aggregate_max():
+def test_aggregate_max(data):
     """ Tests that the aggregate function returns the correct value when the
         aggregator function is max.
     """
-    group_field = "x"
-    agg_field = "y"
+    group_field = "classification"
+    agg_field = "temperature"
     agg_func = "MAX"
-
-    data = [
-        {
-            "x": "a",
-            "y": -1
-        }, {
-            "x": "a",
-            "y": 1
-        }, {
-            "x": "b",
-            "y": -10
-        }
-    ]
 
     aggregator = aggregate(group_field, agg_field, agg_func)
 
-    assert aggregator(data[0]) == {"a": -1}
-    assert aggregator(data[1]) == {"a": 1}
-    assert aggregator(data[2]) == {"a": 1, "b": -10}
+    assert aggregator(data[0]) == {"A": 100}
+    assert aggregator(data[1]) == {"A": 100, "B": 50}
+    assert aggregator(data[2]) == {"A": 100, "B": 50}
+    assert aggregator(data[3]) == {"A": 100, "B": 50}
+    assert aggregator(data[4]) == {"A": 100, "B": 50}
+    assert aggregator(data[5]) == {"A": 100, "B": 50}
 
 
-def test_aggregate_avg():
+def test_aggregate_avg(data):
     """ Tests that the aggregate function returns the correct value when the
         aggregator is average.
     """
-    group_field = "x"
-    agg_field = "y"
+    group_field = "classification"
+    agg_field = "temperature"
     agg_func = "AVG"
-
-    data = [
-        {
-            "x": "a",
-            "y": 5
-        }, {
-            "x": "a",
-            "y": 15
-        }, {
-            "x": "b",
-            "y": 5
-        }
-    ]
 
     aggregator = aggregate(group_field, agg_field, agg_func)
 
     assert aggregator(data[0]) == {
-        "a": {
-            "sum": 5,
+        "A": {
+            "sum": 100,
             "count": 1,
-            "avg": 5
+            "avg": 100
         }
     }
     assert aggregator(data[1]) == {
-        "a": {
-            "sum": 20,
-            "count": 2,
-            "avg": 10
+        "A": {
+            "sum": 100,
+            "count": 1,
+            "avg": 100
+        },
+        "B": {
+            "sum": 50,
+            "count": 1,
+            "avg": 50
         }
     }
     assert aggregator(data[2]) == {
-        "a": {
-            "sum": 20,
+        "A": {
+            "sum": 200,
             "count": 2,
-            "avg": 10
-        }, "b": {
-            "sum": 5,
+            "avg": 100
+        }, "B": {
+            "sum": 50,
             "count": 1,
-            "avg": 5
+            "avg": 50
         }
     }
 
 
-def test_color():
+def test_color(data):
     """ Tests that the color function returns the correct value.
     """
-    color_field = "z"
+    color_field = "classification"
 
     def transformer():
-        return append("x", "y")
-
-    data = [
-        {
-            "x": "a",
-            "y": 1,
-            "z": "X"
-        }, {
-            "x": "a",
-            "y": 2,
-            "z": "Y"
-        }, {
-            "x": "b",
-            "y": 1,
-            "z": "X"
-        }
-    ]
+        return append("date", "temperature")
 
     color_transformer = color(color_field, transformer)
 
     assert color_transformer(data[0]) == {
-        "X": {
-            "x": ["a"],
-            "y": [1]
+        "A": {
+            "date": ["2018-08-01"],
+            "temperature": [100]
         }
     }
     assert color_transformer(data[1]) == {
-        "X": {
-            "x": ["a"],
-            "y": [1]
+        "A": {
+            "date": ["2018-08-01"],
+            "temperature": [100]
         },
-        "Y": {
-            "x": ["a"],
-            "y": [2]
+        "B": {
+            "date": ["2017-10-01"],
+            "temperature": [50]
         }
     }
     assert color_transformer(data[2]) == {
-        "X": {
-            "x": ["a", "b"],
-            "y": [1, 1]
+        "A": {
+            "date": ["2018-08-01", "2017-06-01"],
+            "temperature": [100, 100]
         },
-        "Y": {
-            "x": ["a"],
-            "y": [2]
+        "B": {
+            "date": ["2017-10-01"],
+            "temperature": [50]
         }
     }
 
 
-def test_plot_to_reducer_histogram():
+def test_plot_to_reducer_histogram(data):
     """ Tests that the plot_to_reducer function returns the correct value
         for histogram plots.
     """
     svl_plot = {
         "type": "histogram",
-        "field": "x"
+        "field": "temperature"
     }
-
-    data = [
-        {"x": 1},
-        {"x": -1},
-        {"x": 2}
-    ]
 
     reducer = plot_to_reducer(svl_plot)
 
-    assert reducer(data[0]) == {"x": [1]}
-    assert reducer(data[1]) == {"x": [1, -1]}
-    assert reducer(data[2]) == {"x": [1, -1, 2]}
+    assert reducer(data[0]) == {"temperature": [100]}
+    assert reducer(data[1]) == {"temperature": [100, 50]}
+    assert reducer(data[2]) == {"temperature": [100, 50, 100]}
 
 
-def test_plot_to_reducer_temporal_x_count_y():
+def test_plot_to_reducer_temporal_x_count_y(data):
     """ Tests that the plot_to_reducer function returns the correct value
         when there's a temporal transformation on x and a count aggregation
         on y.
@@ -293,35 +243,29 @@ def test_plot_to_reducer_temporal_x_count_y():
     svl_plot = {
         "type": "line",
         "x": {
-            "field": "time",
-            "temporal": "MONTH"
+            "field": "date",
+            "temporal": "YEAR"
         },
         "y": {
             "agg": "COUNT",
-            "field": "time"
+            "field": "date"
         }
     }
 
-    data = [
-        {"time": "2018-08-01", "id": 1},
-        {"time": "2018-10-02", "id": 2},
-        {"time": "2018-08-04", "id": 3}
-    ]
-
     reducer = plot_to_reducer(svl_plot)
 
-    assert reducer(data[0]) == {"2018-08-01T00:00:00Z": 1}
+    assert reducer(data[0]) == {"2018-01-01T00:00:00Z": 1}
     assert reducer(data[1]) == {
-        "2018-08-01T00:00:00Z": 1,
-        "2018-10-01T00:00:00Z": 1
+        "2018-01-01T00:00:00Z": 1,
+        "2017-01-01T00:00:00Z": 1
     }
     assert reducer(data[2]) == {
-        "2018-08-01T00:00:00Z": 2,
-        "2018-10-01T00:00:00Z": 1
+        "2018-01-01T00:00:00Z": 1,
+        "2017-01-01T00:00:00Z": 2
     }
 
 
-def test_plot_to_reducer_temporal_y_min_x():
+def test_plot_to_reducer_temporal_y_min_x(data):
     """ Tests that the plot_to_reducer function returns the correct value
         when there's a temporal transformation on y and a min aggregation
         on x.
@@ -330,7 +274,7 @@ def test_plot_to_reducer_temporal_y_min_x():
         "type": "bar",
         "x": {
             "agg": "MIN",
-            "field": "price"
+            "field": "temperature"
         },
         "y": {
             "temporal": "YEAR",
@@ -338,33 +282,28 @@ def test_plot_to_reducer_temporal_y_min_x():
         }
     }
 
-    data = [
-        {"date": "2017-08-14", "price": 2.05},
-        {"date": "2018-09-14", "price": 3.51},
-        {"date": "2018-10-12", "price": 3.45}
-    ]
-
     reducer = plot_to_reducer(svl_plot)
 
-    assert reducer(data[0]) == {"2017-01-01T00:00:00Z": 2.05}
+    assert reducer(data[0]) == {"2018-01-01T00:00:00Z": 100}
     assert reducer(data[1]) == {
-        "2017-01-01T00:00:00Z": 2.05,
-        "2018-01-01T00:00:00Z": 3.51
+        "2018-01-01T00:00:00Z": 100,
+        "2017-01-01T00:00:00Z": 50
     }
     assert reducer(data[2]) == {
-        "2017-01-01T00:00:00Z": 2.05,
-        "2018-01-01T00:00:00Z": 3.45
+        "2018-01-01T00:00:00Z": 100,
+        "2017-01-01T00:00:00Z": 50
     }
 
 
-def test_plot_to_reducer_color_append_x_append_y():
+def test_plot_to_reducer_color_append_x_append_y(data):
     """ Tests that the plot_to_reducer function returns the correct value when
         there's a color field and append aggregators for x and y.
     """
     svl_plot = {
         "type": "scatter",
         "x": {
-            "field": "latitude"
+            "field": "date",
+            "temporal": "DAY"
         },
         "y": {
             "field": "temperature"
@@ -374,53 +313,37 @@ def test_plot_to_reducer_color_append_x_append_y():
         }
     }
 
-    data = [
-        {
-            "latitude": 0.1,
-            "temperature": 84.3,
-            "classification": "A"
-        }, {
-            "latitude": 24.1,
-            "temperature": 94.2,
-            "classification": "B"
-        }, {
-            "latitude": 94.1,
-            "temperature": -10.4,
-            "classification": "A"
-        }
-    ]
-
     reducer = plot_to_reducer(svl_plot)
 
     assert reducer(data[0]) == {
         "A": {
-            "latitude": [0.1],
-            "temperature": [84.3]
+            "date": ["2018-08-01T00:00:00Z"],
+            "temperature": [100]
         }
     }
     assert reducer(data[1]) == {
         "A": {
-            "latitude": [0.1],
-            "temperature": [84.3]
+            "date": ["2018-08-01T00:00:00Z"],
+            "temperature": [100]
         },
         "B": {
-            "latitude": [24.1],
-            "temperature": [94.2]
+            "date": ["2017-10-01T00:00:00Z"],
+            "temperature": [50]
         }
     }
     assert reducer(data[2]) == {
         "A": {
-            "latitude": [0.1, 94.1],
-            "temperature": [84.3, -10.4]
+            "date": ["2018-08-01T00:00:00Z", "2017-06-01T00:00:00Z"],
+            "temperature": [100, 100]
         },
         "B": {
-            "latitude": [24.1],
-            "temperature": [94.2]
+            "date": ["2017-10-01T00:00:00Z"],
+            "temperature": [50]
         }
     }
 
 
-def test_plot_to_reducer_color_group_x_max_y():
+def test_plot_to_reducer_color_group_x_max_y(data):
     """ Tests that the plot_to_reducer function returns the correct value when
         there's a color field, a group on x and a minimum agg function on y.
     """
@@ -431,38 +354,53 @@ def test_plot_to_reducer_color_group_x_max_y():
             "agg": "MAX"
         },
         "y": {
-            "field": "state"
+            "field": "date",
+            "temporal": "YEAR"
         },
         "color": {
             "field": "classification"
         }
     }
 
-    data = [
-        {"classification": "A", "state": "TX", "temperature": 85.0},
-        {"classification": "B", "state": "LA", "temperature": 93.1},
-        {"classification": "B", "state": "LA", "temperature": 81.2},
-        {"classification": "B", "state": "TX", "temperature": 102.4}
-    ]
-
     reducer = plot_to_reducer(svl_plot)
 
-    assert reducer(data[0]) == {"A": {"TX": 85.0}}
+    assert reducer(data[0]) == {"A": {"2018-01-01T00:00:00Z": 100}}
     assert reducer(data[1]) == {
-        "A": {"TX": 85.0},
-        "B": {"LA": 93.1}
+        "A": {"2018-01-01T00:00:00Z": 100},
+        "B": {"2017-01-01T00:00:00Z": 50}
     }
     assert reducer(data[2]) == {
-        "A": {"TX": 85.0},
-        "B": {"LA": 93.1}
+        "A": {
+            "2018-01-01T00:00:00Z": 100,
+            "2017-01-01T00:00:00Z": 100
+        },
+        "B": {
+            "2017-01-01T00:00:00Z": 50
+        }
     }
     assert reducer(data[3]) == {
-        "A": {"TX": 85.0},
-        "B": {"TX": 102.4, "LA": 93.1}
+        "A": {
+            "2018-01-01T00:00:00Z": 100,
+            "2017-01-01T00:00:00Z": 100
+        },
+        "B": {
+            "2017-01-01T00:00:00Z": 50,
+            "2018-01-01T00:00:00Z": 50
+        }
+    }
+    assert reducer(data[4]) == {
+        "A": {
+            "2018-01-01T00:00:00Z": 100,
+            "2017-01-01T00:00:00Z": 100
+        },
+        "B": {
+            "2017-01-01T00:00:00Z": 50,
+            "2018-01-01T00:00:00Z": 50
+        }
     }
 
 
-def test_plot_to_reducer_temporal_color_group_x_mean_y():
+def test_plot_to_reducer_temporal_color_group_x_mean_y(data):
     """ Tests that the plot_to_reducer function returns the correct value
         when there's a temporal converter on the color field and a mean
         aggregation on the y field.
@@ -481,17 +419,6 @@ def test_plot_to_reducer_temporal_color_group_x_mean_y():
             "temporal": "YEAR"
         }
     }
-
-    data = [
-        {"date": "2018-08-01", "classification": "A", "temperature": 100},
-        {"date": "2017-10-01", "classification": "B", "temperature": 50},
-        {"date": "2017-06-01", "classification": "A", "temperature": 100},
-        {"date": "2018-03-21", "classification": "B", "temperature": 50},
-        {"date": "2018-12-31", "classification": "A", "temperature": 50},
-        {"date": "2018-01-01", "classification": "B", "temperature": 25},
-        {"date": "2017-04-24", "classification": "A", "temperature": 75},
-        {"date": "2017-06-12", "classification": "B", "temperature": 100}
-    ]
 
     reducer = plot_to_reducer(svl_plot)
 
@@ -563,7 +490,7 @@ def test_plot_to_reducer_temporal_color_group_x_mean_y():
     }
 
 
-def test_construct_data():
+def test_construct_data(data):
     """ Tests that the construct_data function returns the correct value.
     """
     svl_plots = [
@@ -584,17 +511,6 @@ def test_construct_data():
             "x": {"field": "date", "temporal": "MONTH"},
             "y": {"field": "temperature"}
         }
-    ]
-
-    data = [
-        {"date": "2018-08-01", "classification": "A", "temperature": 100},
-        {"date": "2017-10-01", "classification": "B", "temperature": 50},
-        {"date": "2017-06-01", "classification": "A", "temperature": 100},
-        {"date": "2018-03-21", "classification": "B", "temperature": 50},
-        {"date": "2018-12-31", "classification": "A", "temperature": 50},
-        {"date": "2018-01-01", "classification": "B", "temperature": 25},
-        {"date": "2017-04-24", "classification": "A", "temperature": 75},
-        {"date": "2017-06-12", "classification": "B", "temperature": 100}
     ]
 
     constructed_data_truth = [

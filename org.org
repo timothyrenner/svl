@@ -8,7 +8,7 @@
 ** DONE Complete test coverage for data.py.
 ** DONE Change agg initializers to be zero-arg functions instead of values.
 ** DONE Change the _mean function to mutate the dictionary for better perf.
-** TODO Refactor tests to use a fixture for the test data.
+** DONE Refactor tests to use a fixture for the test data.
 ** TODO Add property tests for data.py.
 
 * Plotly
