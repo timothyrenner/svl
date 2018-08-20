@@ -10,6 +10,7 @@ from svl.data import (
 )
 
 import pytest
+import math
 
 from hypothesis import given
 from hypothesis.strategies import (
@@ -574,3 +575,32 @@ def test_append_properties(generated_data):
     assert "temperature" in result
     assert len(result.keys()) == 2
     assert len(result["date"]) == len(result["temperature"])
+
+
+@given(
+    # This function will not be called on empty lists.
+    generated_data=lists(floats()).filter(lambda x: len(x) > 0)
+)
+def test_mean_properties(generated_data):
+    """ Tests that the _mean function produces a dict with the correct fields
+        with counts greater than zero and the correct calculated average.
+    """
+    accumulator = {
+        "sum": 0,
+        "count": 0,
+        "avg": math.nan
+    }
+
+    for datum in generated_data:
+        accumulator = _mean(accumulator, datum)
+
+    assert "sum" in accumulator
+    assert "count" in accumulator
+    assert len(accumulator.keys()) == 3
+    assert accumulator["count"] >= 0
+    # If the only values generated are nans, then that means no counters were
+    # active, which would fail the test. Use math.isnan to short circuit around
+    # the zero division error.
+    assert math.isnan(accumulator["avg"]) or (
+        accumulator["avg"] == (accumulator["sum"] / accumulator["count"])
+    )

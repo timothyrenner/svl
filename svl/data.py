@@ -46,6 +46,9 @@ def append(*fields):
 
 
 def _mean(a, x):
+    if math.isnan(x):
+        return a
+
     a["sum"] += x
     a["count"] += 1
     a["avg"] = a["sum"] / a["count"]
@@ -68,7 +71,7 @@ AGG_INITS = {
     "COUNT": lambda: 0,
     "MIN": lambda: math.inf,
     "MAX": lambda: -math.inf,
-    "AVG": lambda: {"sum": 0, "count": 0}
+    "AVG": lambda: {"sum": 0, "count": 0, "avg": math.nan}
 }
 
 
