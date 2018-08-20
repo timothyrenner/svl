@@ -597,7 +597,9 @@ def test_mean_properties(generated_data):
     assert "sum" in accumulator
     assert "count" in accumulator
     assert len(accumulator.keys()) == 3
-    assert accumulator["count"] >= 0
+    assert accumulator["count"] == len(
+        list(filter(lambda x: not math.isnan(x), generated_data))
+    )
     # If the only values generated are nans, then that means no counters were
     # active, which would fail the test. Use math.isnan to short circuit around
     # the zero division error.
