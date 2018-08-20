@@ -11,6 +11,14 @@ from svl.data import (
 
 import pytest
 
+from hypothesis import given
+from hypothesis.strategies import (
+    lists,
+    fixed_dictionaries,
+    floats,
+    datetimes
+)
+
 
 @pytest.fixture()
 def data():
@@ -540,3 +548,29 @@ def test_construct_data(data):
     constructed_data_answer = construct_data(svl_plots, data)
 
     assert constructed_data_truth == constructed_data_answer
+
+
+@given(
+    # Generated test data is lists of dictionaries. There's no point in testing
+    # the empty case because the function won't be called.
+    generated_data=lists(
+        elements=fixed_dictionaries({
+            "date": datetimes(),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+)
+def test_append_properties(generated_data):
+    """ Tests that the append function produces a dict with the correct
+        fields, and that the lengths of the fields are the same.
+    """
+    appender = append("date", "temperature")
+
+    result = None
+    for datum in generated_data:
+        result = appender(datum)
+
+    assert "date" in result
+    assert "temperature" in result
+    assert len(result.keys()) == 2
+    assert len(result["date"]) == len(result["temperature"])
