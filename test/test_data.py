@@ -17,7 +17,8 @@ from hypothesis.strategies import (
     lists,
     fixed_dictionaries,
     floats,
-    datetimes
+    datetimes,
+    sampled_from
 )
 
 
@@ -606,3 +607,35 @@ def test_mean_properties(generated_data):
     assert math.isnan(accumulator["avg"]) or (
         accumulator["avg"] == (accumulator["sum"] / accumulator["count"])
     )
+
+
+@given(
+    generated_data=lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+)
+def test_aggregate_properties_min(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values.
+    """
+    aggregator = aggregate("classification", "temperature", "MIN")
+    accumulator = None
+
+    classifications = set()
+
+    for datum in generated_data:
+        if not math.isnan(datum["temperature"]):
+            classifications.add(datum["classification"])
+
+        accumulator = aggregator(datum)
+
+        # Check that the accumulator is always less than or equal to the new
+        # data point.
+        if not math.isnan(datum["temperature"]):
+            assert accumulator[datum["classification"]] <= datum["temperature"]
+
+    for classification in classifications:
+        assert classification in accumulator

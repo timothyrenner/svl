@@ -80,6 +80,15 @@ def aggregate(group_field, agg_field, agg_func):
     aggregated_values = {}
 
     def _aggregate(datum):
+
+        # If the datum on the agg field is nan, we can't aggregate, so ignore
+        # it.
+        if (
+            isinstance(datum[agg_field], float) and
+            math.isnan(datum[agg_field])
+        ):
+            return aggregated_values
+
         if datum[group_field] not in aggregated_values:
             aggregated_values[datum[group_field]] = AGG_INITS[agg_func]()
 
