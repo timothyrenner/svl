@@ -9,3 +9,4 @@ data/
 visualization.html
 .idea/
 .coverage
+.hypothesis/

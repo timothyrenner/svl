@@ -1,5 +1,6 @@
 * Grammar
 ** TODO Color should not take aggs.
+** TODO Change "COLOR" to something different in the syntax.
 ** TODO Add a bucket directive that can be attached and applied as a mapper.
 ** TODO Enforce aggregation OR some mappable transformation between x and y.
 
