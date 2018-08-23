@@ -33,7 +33,7 @@
             var plot_{{ plot.row_start }}_{{ plot.column_start }} = 
                 Plotly.newPlot(
                     "{{ plot.row_start }}_{{ plot.column_start }}",
-                    {{ plot.data | tojson }}
+                    {{ plot.plotly | tojson }}
                 );
             {% endfor %}
         </script>
