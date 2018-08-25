@@ -20,6 +20,7 @@ from hypothesis.strategies import (
     datetimes,
     sampled_from
 )
+from toolz import get
 
 
 @pytest.fixture()
@@ -617,25 +618,57 @@ def test_mean_properties(generated_data):
         })
     ).filter(lambda x: len(x) > 0)
 )
-def test_aggregate_properties_min(generated_data):
+def test_aggregate_properties_count(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
-        fields and values.
+        fields and values, and ensures that each iteration produces a count
+        that's one greater than the last for that field.
     """
-    aggregator = aggregate("classification", "temperature", "MIN")
-    accumulator = None
+    aggregator = aggregate("classification", "classification", "COUNT")
+    accumulator = {}
 
     classifications = set()
 
     for datum in generated_data:
-        if not math.isnan(datum["temperature"]):
-            classifications.add(datum["classification"])
-
+        current_value = get(datum["classification"], accumulator, 0)
         accumulator = aggregator(datum)
+
+        classifications.add(datum["classification"])
+        assert (accumulator[datum["classification"]] - current_value) == 1
+
+    assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+)
+def test_aggregate_properties_min(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration produces a
+        dict with the temperature value lower than or equal to the data point.
+    """
+    aggregator = aggregate("classification", "temperature", "MIN")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        # But we don't need to check the rest.
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
 
         # Check that the accumulator is always less than or equal to the new
         # data point.
-        if not math.isnan(datum["temperature"]):
-            assert accumulator[datum["classification"]] <= datum["temperature"]
+        assert accumulator[datum["classification"]] <= datum["temperature"]
 
-    for classification in classifications:
-        assert classification in accumulator
+    assert len(classifications ^ set(accumulator.keys())) == 0
