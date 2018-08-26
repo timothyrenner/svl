@@ -649,7 +649,7 @@ def test_aggregate_properties_count(generated_data):
 def test_aggregate_properties_min(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
         fields and values, and ensures that each iteration produces a
-        dict with the temperature value lower than or equal to the data point.
+        dict with the value lower than or equal to the data point.
     """
     aggregator = aggregate("classification", "temperature", "MIN")
     accumulator = {}
@@ -671,4 +671,40 @@ def test_aggregate_properties_min(generated_data):
         # data point.
         assert accumulator[datum["classification"]] <= datum["temperature"]
 
+    assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+)
+def test_aggregate_properties_max(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration produces a dict with
+        the aggregated value higher than or equal to the data point.
+    """
+    aggregator = aggregate("classification", "temperature", "MAX")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
+
+        # Check that the accumulator is always greater than or equal to the new
+        # data point.
+        assert accumulator[datum["classification"]] >= datum["temperature"]
+
+    # Check that the accumulator accumulated the correct group field values.
     assert len(classifications ^ set(accumulator.keys())) == 0
