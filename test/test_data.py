@@ -45,7 +45,8 @@ def generate_data():
     return lists(
         fixed_dictionaries({
             "classification": sampled_from(["A", "B", "C"]),
-            "temperature": floats()
+            "temperature": floats(),
+            "date": datetimes()
         })
     ).filter(lambda x: len(x) > 0)
 
@@ -567,12 +568,7 @@ def test_construct_data(data):
 @given(
     # Generated test data is lists of dictionaries. There's no point in testing
     # the empty case because the function won't be called.
-    generated_data=lists(
-        elements=fixed_dictionaries({
-            "date": datetimes(),
-            "temperature": floats()
-        })
-    ).filter(lambda x: len(x) > 0)
+    generated_data=generate_data()
 )
 def test_append_properties(generated_data):
     """ Tests that the append function produces a dict with the correct
@@ -622,12 +618,7 @@ def test_mean_properties(generated_data):
 
 
 @given(
-    generated_data=lists(
-        fixed_dictionaries({
-            "classification": sampled_from(["A", "B", "C"]),
-            "temperature": floats()
-        })
-    ).filter(lambda x: len(x) > 0)
+    generated_data=generate_data()
 )
 def test_aggregate_properties_count(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
@@ -650,12 +641,7 @@ def test_aggregate_properties_count(generated_data):
 
 
 @given(
-    generated_data=lists(
-        fixed_dictionaries({
-            "classification": sampled_from(["A", "B", "C"]),
-            "temperature": floats()
-        })
-    ).filter(lambda x: len(x) > 0)
+    generated_data=generate_data()
 )
 def test_aggregate_properties_min(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
@@ -686,12 +672,7 @@ def test_aggregate_properties_min(generated_data):
 
 
 @given(
-    generated_data=lists(
-        fixed_dictionaries({
-            "classification": sampled_from(["A", "B", "C"]),
-            "temperature": floats()
-        })
-    ).filter(lambda x: len(x) > 0)
+    generated_data=generate_data()
 )
 def test_aggregate_properties_max(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
@@ -722,12 +703,7 @@ def test_aggregate_properties_max(generated_data):
 
 
 @given(
-    generated_data=lists(
-        fixed_dictionaries({
-            "classification": sampled_from(["A", "B", "C"]),
-            "temperature": floats()
-        })
-    ).filter(lambda x: len(x) > 0)
+    generated_data=generate_data()
 )
 def test_aggregate_properties_mean(generated_data):
     """ Tests that the aggregate function produces a dict with the correct
