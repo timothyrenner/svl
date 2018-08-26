@@ -20,7 +20,7 @@ from hypothesis.strategies import (
     datetimes,
     sampled_from
 )
-from toolz import get
+from toolz import get, get_in
 
 
 @pytest.fixture()
@@ -708,3 +708,47 @@ def test_aggregate_properties_max(generated_data):
 
     # Check that the accumulator accumulated the correct group field values.
     assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+)
+def test_aggregate_properties_mean(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration increments the total
+        count in the accumulator.
+    """
+    aggregator = aggregate("classification", "temperature", "AVG")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        current_count = get_in(
+            [datum["classification"], "count"],
+            accumulator,
+            0
+        )
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
+
+        # Check that the accumulator is always incrementing the counter.
+        new_count = get_in(
+            [datum["classification"], "count"],
+            accumulator,
+            0
+        )
+
+        assert (new_count - current_count) == 1
