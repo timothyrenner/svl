@@ -46,6 +46,9 @@ def append(*fields):
 
 
 def _mean(a, x):
+    if math.isnan(x):
+        return a
+
     a["sum"] += x
     a["count"] += 1
     a["avg"] = a["sum"] / a["count"]
@@ -68,7 +71,7 @@ AGG_INITS = {
     "COUNT": lambda: 0,
     "MIN": lambda: math.inf,
     "MAX": lambda: -math.inf,
-    "AVG": lambda: {"sum": 0, "count": 0}
+    "AVG": lambda: {"sum": 0, "count": 0, "avg": math.nan}
 }
 
 
@@ -77,6 +80,15 @@ def aggregate(group_field, agg_field, agg_func):
     aggregated_values = {}
 
     def _aggregate(datum):
+
+        # If the datum on the agg field is nan, we can't aggregate, so ignore
+        # it.
+        if (
+            isinstance(datum[agg_field], float) and
+            math.isnan(datum[agg_field])
+        ):
+            return aggregated_values
+
         if datum[group_field] not in aggregated_values:
             aggregated_values[datum[group_field]] = AGG_INITS[agg_func]()
 
