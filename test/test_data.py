@@ -39,6 +39,17 @@ def data():
     ]
 
 
+def generate_data():
+    """ Creates the strategy for generating data via hypothesis.
+    """
+    return lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats()
+        })
+    ).filter(lambda x: len(x) > 0)
+
+
 def test_convert_datetime():
     """ Tests that the convert_datetime function returns the correct value.
     """
@@ -752,3 +763,27 @@ def test_aggregate_properties_mean(generated_data):
         )
 
         assert (new_count - current_count) == 1
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_color_properties(generated_data):
+    """ Tests that the color function returns a dict with the correct fields
+        that applies the accumulator appropriately.
+    """
+
+    def transformer():
+        return append("temperature")
+
+    color_aggregator = color("classification", transformer)
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+        accumulator = color_aggregator(datum)
+
+        classifications.add(datum["classification"])
+
+    assert len(classifications ^ set(accumulator.keys())) == 0
