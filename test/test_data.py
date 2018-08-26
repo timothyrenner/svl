@@ -10,6 +10,17 @@ from svl.data import (
 )
 
 import pytest
+import math
+
+from hypothesis import given
+from hypothesis.strategies import (
+    lists,
+    fixed_dictionaries,
+    floats,
+    datetimes,
+    sampled_from
+)
+from toolz import get, get_in
 
 
 @pytest.fixture()
@@ -26,6 +37,18 @@ def data():
         {"date": "2017-04-24", "classification": "A", "temperature": 75},
         {"date": "2017-06-12", "classification": "B", "temperature": 100}
     ]
+
+
+def generate_data():
+    """ Creates the strategy for generating data via hypothesis.
+    """
+    return lists(
+        fixed_dictionaries({
+            "classification": sampled_from(["A", "B", "C"]),
+            "temperature": floats(),
+            "date": datetimes()
+        })
+    ).filter(lambda x: len(x) > 0)
 
 
 def test_convert_datetime():
@@ -540,3 +563,203 @@ def test_construct_data(data):
     constructed_data_answer = construct_data(svl_plots, data)
 
     assert constructed_data_truth == constructed_data_answer
+
+
+@given(
+    # Generated test data is lists of dictionaries. There's no point in testing
+    # the empty case because the function won't be called.
+    generated_data=generate_data()
+)
+def test_append_properties(generated_data):
+    """ Tests that the append function produces a dict with the correct
+        fields, and that the lengths of the fields are the same.
+    """
+    appender = append("date", "temperature")
+
+    result = None
+    for datum in generated_data:
+        result = appender(datum)
+
+    assert "date" in result
+    assert "temperature" in result
+    assert len(result.keys()) == 2
+    assert len(result["date"]) == len(result["temperature"])
+
+
+@given(
+    # This function will not be called on empty lists.
+    generated_data=lists(floats()).filter(lambda x: len(x) > 0)
+)
+def test_mean_properties(generated_data):
+    """ Tests that the _mean function produces a dict with the correct fields
+        with counts greater than zero and the correct calculated average.
+    """
+    accumulator = {
+        "sum": 0,
+        "count": 0,
+        "avg": math.nan
+    }
+
+    for datum in generated_data:
+        accumulator = _mean(accumulator, datum)
+
+    assert "sum" in accumulator
+    assert "count" in accumulator
+    assert len(accumulator.keys()) == 3
+    assert accumulator["count"] == len(
+        list(filter(lambda x: not math.isnan(x), generated_data))
+    )
+    # If the only values generated are nans, then that means no counters were
+    # active, which would fail the test. Use math.isnan to short circuit around
+    # the zero division error.
+    assert math.isnan(accumulator["avg"]) or (
+        accumulator["avg"] == (accumulator["sum"] / accumulator["count"])
+    )
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_aggregate_properties_count(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration produces a count
+        that's one greater than the last for that field.
+    """
+    aggregator = aggregate("classification", "classification", "COUNT")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+        current_value = get(datum["classification"], accumulator, 0)
+        accumulator = aggregator(datum)
+
+        classifications.add(datum["classification"])
+        assert (accumulator[datum["classification"]] - current_value) == 1
+
+    assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_aggregate_properties_min(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration produces a
+        dict with the value lower than or equal to the data point.
+    """
+    aggregator = aggregate("classification", "temperature", "MIN")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        # But we don't need to check the rest.
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
+
+        # Check that the accumulator is always less than or equal to the new
+        # data point.
+        assert accumulator[datum["classification"]] <= datum["temperature"]
+
+    assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_aggregate_properties_max(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration produces a dict with
+        the aggregated value higher than or equal to the data point.
+    """
+    aggregator = aggregate("classification", "temperature", "MAX")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
+
+        # Check that the accumulator is always greater than or equal to the new
+        # data point.
+        assert accumulator[datum["classification"]] >= datum["temperature"]
+
+    # Check that the accumulator accumulated the correct group field values.
+    assert len(classifications ^ set(accumulator.keys())) == 0
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_aggregate_properties_mean(generated_data):
+    """ Tests that the aggregate function produces a dict with the correct
+        fields and values, and ensures that each iteration increments the total
+        count in the accumulator.
+    """
+    aggregator = aggregate("classification", "temperature", "AVG")
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+
+        current_count = get_in(
+            [datum["classification"], "count"],
+            accumulator,
+            0
+        )
+
+        # We should be able to handle NaNs.
+        accumulator = aggregator(datum)
+
+        if math.isnan(datum["temperature"]):
+            continue
+
+        classifications.add(datum["classification"])
+
+        # Check that the accumulator is always incrementing the counter.
+        new_count = get_in(
+            [datum["classification"], "count"],
+            accumulator,
+            0
+        )
+
+        assert (new_count - current_count) == 1
+
+
+@given(
+    generated_data=generate_data()
+)
+def test_color_properties(generated_data):
+    """ Tests that the color function returns a dict with the correct fields
+        that applies the accumulator appropriately.
+    """
+
+    def transformer():
+        return append("temperature")
+
+    color_aggregator = color("classification", transformer)
+    accumulator = {}
+
+    classifications = set()
+
+    for datum in generated_data:
+        accumulator = color_aggregator(datum)
+
+        classifications.add(datum["classification"])
+
+    assert len(classifications ^ set(accumulator.keys())) == 0
