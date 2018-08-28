@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8"/>
         <title>SVL Plots</title>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <style>
@@ -12,7 +12,7 @@
             }
 
             {% for plot in plots %}
-            .{{ plot.row_start }}_{{ plot.column_start }} {
+            #{{ plot.row_start }}_{{ plot.column_start }} {
                 grid-column-start: {{ plot.column_start }};
                 grid-column-end: {{ plot.column_end }};
                 grid-row-start: {{ plot.row_start }};
@@ -24,7 +24,7 @@
     <body>
         <div class="container">
             {% for plot in plots %}
-            <div class="{{ plot.row_start }}_{{ plot.column_start }}">
+            <div id="{{ plot.row_start }}_{{ plot.column_start }}">
             </div>
             {% endfor %}
         </div>
