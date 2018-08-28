@@ -65,11 +65,14 @@ def shift_node_position(
     return merge(
         node,
         {
-            "row_start": row_stretch * node["row_start"] + row_shift,
-            "row_end": row_stretch * node["row_end"] + row_shift,
-            "column_start":
-                column_stretch * node["column_start"] + column_shift,
-            "column_end": column_stretch * node["column_end"] + column_shift
+            "row_start": int(row_stretch * node["row_start"] + row_shift),
+            "row_end": int(row_stretch * node["row_end"] + row_shift),
+            "column_start": int(
+                column_stretch * node["column_start"] + column_shift
+            ),
+            "column_end": int(
+                column_stretch * node["column_end"] + column_shift
+            )
         }
     )
 
