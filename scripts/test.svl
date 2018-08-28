@@ -1,26 +1,8 @@
 DATASETS 
     bigfoot "data/bigfoot_sightings.csv"
 
-LINE bigfoot 
-    X date BY YEAR 
-    Y COUNT
-    COLOR classification
-
-BAR bigfoot 
-    X classification 
-    Y COUNT
-
 HISTOGRAM bigfoot 
     temperature_mid STEP 5.0
 
 HISTOGRAM bigfoot 
     humidity BINS 25
-
-BOXPLOT bigfoot 
-    X classification 
-    Y temperature_mid
-
-SCATTER bigfoot 
-    X latitude 
-    Y temperature_mid
-    COLOR classification
