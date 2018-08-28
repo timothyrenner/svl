@@ -6,6 +6,6 @@ install:
   - pip install -r test_requirements.txt
   - pip install -e .
 script:
-  - pytest test/ --cov=svl/
+  - pytest test/ --cov-config=.coveragerc --cov=svl/
 after_success:
   - coveralls
