@@ -1,5 +1,5 @@
 DATASETS
-    bigfoot "test/test_datasets/bigfoot_sightings.csv"
+    bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
 
 HISTOGRAM bigfoot
     temperature_mid BINS 25
