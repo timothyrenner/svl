@@ -49,6 +49,35 @@ def _extract_trace_data(svl_field_x, svl_field_y, data):
     return {"x": x, "y": y}
 
 
+def _extract_all_traces(svl_plot, data):
+    """ Extracts the traces for the SVL plot from the SVL data.
+
+        Parameters
+        ---------
+        svl_plot : dict
+            The SVL plot.
+
+        data : dict
+            The SVL data.
+
+        Returns
+        -------
+        list
+            A list of {"x": [ .. ], "y": [ .. ]} style dictionaries to be used
+            as traces in plotly plots.
+    """
+    svl_field_x = svl_plot["x"]
+    svl_field_y = svl_plot["y"]
+
+    if "color" not in svl_plot:
+        return [_extract_trace_data(svl_field_x, svl_field_y, data)]
+    else:
+        return [
+            _extract_trace_data(svl_field_x, svl_field_y, data[color])
+            for color in sorted(data.keys())  # TODO: Eliminate sorted.
+        ]
+
+
 def plotly_histogram(svl_plot, data):
     """ Transforms an svl plot and dataset into a plotly dict.
 

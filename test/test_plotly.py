@@ -2,6 +2,7 @@ import pytest
 
 from svl.plotly.plotly import (
     _extract_trace_data,
+    _extract_all_traces,
     plotly_histogram,
     plotly_template,
     plotly_template_vars
@@ -30,6 +31,25 @@ def agged_data():
         "2018-08-01T00:00:00Z": 98,
         "2018-09-01T00:00:00Z": 94,
         "2018-10-01T00:00:00Z": 89
+    }
+
+
+@pytest.fixture
+def color_agged_data():
+    """ A fixture for data that's been split by classification and aggregated
+        by date.
+    """
+    return {
+        "A": {
+            "2018-08-01T00:00:00Z": 98,
+            "2018-09-01T00:00:00Z": 94,
+            "2018-10-01T00:00:00Z": 89
+        },
+        "B": {
+            "2018-08-01T00:00:00Z": 99,
+            "2018-09-01T00:00:00Z": 92,
+            "2018-10-01T00:00:00Z": 87
+        }
     }
 
 
@@ -112,6 +132,76 @@ def test_extract_trace_data_agg_y(agged_data):
     }
 
     answer = _extract_trace_data(svl_field_x, svl_field_y, agged_data)
+
+    assert truth == answer
+
+
+def test_extract_all_traces_no_color(agged_data):
+    """ Tests that the _extract_all_traces function returns the correct value
+        when the plot has no color specifier.
+    """
+    svl_plot = {
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        }
+    }
+
+    truth = [{
+        "x": [
+            "2018-08-01T00:00:00Z",
+            "2018-09-01T00:00:00Z",
+            "2018-10-01T00:00:00Z"
+        ],
+        "y": [98, 94, 89]
+    }]
+
+    answer = _extract_all_traces(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_extract_all_traces_color(color_agged_data):
+    """ Tests that the _extract_all_traces function returns the correct value
+        when the plot has a color specifier.
+    """
+    svl_plot = {
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    truth = [
+        {
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-09-01T00:00:00Z",
+                "2018-10-01T00:00:00Z"
+            ],
+            "y": [98, 94, 89]
+        }, {
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-09-01T00:00:00Z",
+                "2018-10-01T00:00:00Z"
+            ],
+            "y": [99, 92, 87]
+        }
+    ]
+
+    answer = _extract_all_traces(svl_plot, color_agged_data)
 
     assert truth == answer
 
