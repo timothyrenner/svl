@@ -4,6 +4,51 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 listpluck = compose(list, pluck)
 
 
+def _extract_trace_data(svl_field_x, svl_field_y, data):
+    """ Extracts the data required for the x and y fields from the SVL data
+        and converts them into an {"x": [ .. ], "y": [ .. ]} dict for
+        plotly.
+
+        Parameters
+        ----------
+        svl_field_x : dict
+            The SVL specifier for the x field.
+        svl_field_y : dict
+            The SVL specifier for the y field.
+        data : dict
+            The SVL data.
+
+        Returns
+        -------
+        dict
+            A dictionary with an "x" and "y" field that maps to a list, ready
+            to be put into a plotly trace.
+    """
+    x = []
+    y = []
+
+    if "agg" in svl_field_x:
+        # If there's an agg in x, then the dataset's a dict with y as the
+        # keys and x as the values.
+        # TODO: Might want to ditch the sort and use an OrderedDict as the
+        # data container.
+        for group_val in sorted(data.keys()):
+            x.append(data[group_val])
+            y.append(group_val)
+    elif "agg" in svl_field_y:
+        # If there's an agg in y, then the dataset's a dict with x as the keys
+        # and y as the values.
+        for group_val in sorted(data.keys()):
+            x.append(group_val)
+            y.append(data[group_val])
+    else:
+        # If there's an agg in neither then this is simpler.
+        x = data[svl_field_x["field"]]
+        y = data[svl_field_y["field"]]
+
+    return {"x": x, "y": y}
+
+
 def plotly_histogram(svl_plot, data):
     """ Transforms an svl plot and dataset into a plotly dict.
 
@@ -27,9 +72,7 @@ def plotly_histogram(svl_plot, data):
     }
 
     if "step" in svl_plot:
-        # Set the bins - note this might require another pass over the dataset
-        # if the start / end args are required. If that's the case it might be
-        # possible to add it to the aggregator in data.py.
+        # Set the bin size.
         bins = {"xbins": {"size": svl_plot["step"]}}
     elif "bins" in svl_plot:
         # Set the number of bins.
