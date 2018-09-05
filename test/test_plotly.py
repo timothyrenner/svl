@@ -5,6 +5,7 @@ from svl.plotly.plotly import (
     _extract_all_traces,
     plotly_histogram,
     plotly_bar,
+    plotly_line,
     plotly_template,
     plotly_template_vars
 )
@@ -301,6 +302,37 @@ def test_plotly_bar(agged_data):
     }]
 
     answer = plotly_bar(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_plotly_line(agged_data):
+    """ Tests that the plotly_line function returns the correct value.
+    """
+
+    svl_plot = {
+        "type": "line",
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        }
+    }
+
+    truth = [{
+        "mode": "lines+markers",
+        "x": [
+            "2018-08-01T00:00:00Z",
+            "2018-09-01T00:00:00Z",
+            "2018-10-01T00:00:00Z"
+        ],
+        "y": [98, 94, 89]
+    }]
+
+    answer = plotly_line(svl_plot, agged_data)
 
     assert truth == answer
 

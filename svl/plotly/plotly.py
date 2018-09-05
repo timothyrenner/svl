@@ -139,7 +139,28 @@ def plotly_bar(svl_plot, data):
 
 
 def plotly_line(svl_plot, data):
-    pass  # TODO: Implement.
+    """ Creates a plotly line chart dict from the SVL plot and data specs.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        data : dict
+            The SVL data specifier.
+
+        Returns
+        -------
+        list
+            A list of plotly traces.
+    """
+
+    plot_type = {"mode": "lines+markers"}
+
+    return [
+        merge(plot_type, trace)
+        for trace in _extract_all_traces(svl_plot, data)
+    ]
 
 
 def plotly_scatter(svl_plot, data):
