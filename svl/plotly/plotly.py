@@ -79,7 +79,7 @@ def _extract_all_traces(svl_plot, data):
 
 
 def plotly_histogram(svl_plot, data):
-    """ Transforms an svl plot and dataset into a plotly dict.
+    """ Transforms an svl plot and dataset into a plotly histogram dict.
 
         Parameters
         ----------
@@ -91,7 +91,7 @@ def plotly_histogram(svl_plot, data):
 
         Returns
         -------
-        dict
+        list
             A plotly histogram of the dataset.
     """
 
@@ -114,7 +114,28 @@ def plotly_histogram(svl_plot, data):
 
 
 def plotly_bar(svl_plot, data):
-    pass  # TODO: Implement.
+    """ Creates a plotly bar chart dict from the SVL plot and data specs.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        data : dict
+            The SVL data specifier.
+
+        Returns
+        -------
+        list
+            A list of plotly traces.
+    """
+
+    plot_type = {"type": "bar"}
+
+    return [
+        merge(plot_type, trace)
+        for trace in _extract_all_traces(svl_plot, data)
+    ]
 
 
 def plotly_line(svl_plot, data):

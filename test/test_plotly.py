@@ -4,6 +4,7 @@ from svl.plotly.plotly import (
     _extract_trace_data,
     _extract_all_traces,
     plotly_histogram,
+    plotly_bar,
     plotly_template,
     plotly_template_vars
 )
@@ -269,6 +270,37 @@ def test_plotly_histogram_bins(appended_data):
     }]
 
     answer = plotly_histogram(svl_plot, appended_data)
+
+    assert truth == answer
+
+
+def test_plotly_bar(agged_data):
+    """ Tests that the plotly_bar function returns the correct value.
+    """
+
+    svl_plot = {
+        "type": "bar",
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "agg": "MAX",
+            "field": "temperature"
+        }
+    }
+
+    truth = [{
+        "type": "bar",
+        "x": [
+            "2018-08-01T00:00:00Z",
+            "2018-09-01T00:00:00Z",
+            "2018-10-01T00:00:00Z"
+        ],
+        "y": [98, 94, 89]
+    }]
+
+    answer = plotly_bar(svl_plot, agged_data)
 
     assert truth == answer
 
