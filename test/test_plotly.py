@@ -6,6 +6,7 @@ from svl.plotly.plotly import (
     plotly_histogram,
     plotly_bar,
     plotly_line,
+    plotly_scatter,
     plotly_template,
     plotly_template_vars
 )
@@ -324,6 +325,7 @@ def test_plotly_line(agged_data):
 
     truth = [{
         "mode": "lines+markers",
+        "type": "scatter",
         "x": [
             "2018-08-01T00:00:00Z",
             "2018-09-01T00:00:00Z",
@@ -333,6 +335,36 @@ def test_plotly_line(agged_data):
     }]
 
     answer = plotly_line(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_plotly_scatter(appended_data):
+    """ Tests that the plotly_scatter function returns the correct value.
+    """
+    svl_plot = {
+        "type": "scatter",
+        "x": {
+            "field": "date",
+            "temporal": "DAY"
+        },
+        "y": {
+            "field": "temperature"
+        }
+    }
+
+    truth = [{
+        "mode": "markers",
+        "type": "scatter",
+        "x": [
+            "2018-08-01T00:00:00Z",
+            "2018-08-08T00:00:00Z",
+            "2018-08-15T00:00:00Z"
+        ],
+        "y": [98, 102, 94]
+    }]
+
+    answer = plotly_scatter(svl_plot, appended_data)
 
     assert truth == answer
 

@@ -79,7 +79,7 @@ def _extract_all_traces(svl_plot, data):
 
 
 def plotly_histogram(svl_plot, data):
-    """ Transforms an svl plot and dataset into a plotly histogram dict.
+    """ Transforms an svl plot and dataset into a plotly histogram.
 
         Parameters
         ----------
@@ -114,7 +114,7 @@ def plotly_histogram(svl_plot, data):
 
 
 def plotly_bar(svl_plot, data):
-    """ Creates a plotly bar chart dict from the SVL plot and data specs.
+    """ Creates a plotly bar chart from the SVL plot and data specs.
 
         Parameters
         ----------
@@ -139,7 +139,7 @@ def plotly_bar(svl_plot, data):
 
 
 def plotly_line(svl_plot, data):
-    """ Creates a plotly line chart dict from the SVL plot and data specs.
+    """ Creates a plotly line chart from the SVL plot and data specs.
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ def plotly_line(svl_plot, data):
             A list of plotly traces.
     """
 
-    plot_type = {"mode": "lines+markers"}
+    plot_type = {"mode": "lines+markers", "type": "scatter"}
 
     return [
         merge(plot_type, trace)
@@ -164,7 +164,28 @@ def plotly_line(svl_plot, data):
 
 
 def plotly_scatter(svl_plot, data):
-    pass  # TODO: Implement.
+    """ Creates a plotly scatter chart dict from the SVL plot and data specs.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        data : dict
+            The SVL data specifier.
+
+        Returns
+        -------
+        list
+            A list of plotly traces.
+    """
+
+    plot_type = {"mode": "markers", "type": "scatter"}
+
+    return [
+        merge(plot_type, trace)
+        for trace in _extract_all_traces(svl_plot, data)
+    ]
 
 
 def plotly_boxplot(svl_plot, data):
