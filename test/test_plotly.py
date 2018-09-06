@@ -244,11 +244,14 @@ def test_plotly_histogram_auto(appended_data):
         "field": "temperature"
     }
 
-    truth = [{
-        "type": "histogram",
-        "x": [98, 102, 94],
-        "autobinx": True
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "type": "histogram",
+            "x": [98, 102, 94],
+            "autobinx": True
+        }]
+    }
 
     answer = plotly_histogram(svl_plot, appended_data)
 
@@ -266,13 +269,16 @@ def test_plotly_histogram_step(appended_data):
         "step": 5
     }
 
-    truth = [{
-        "type": "histogram",
-        "x": [98, 102, 94],
-        "xbins": {
-            "size": 5
-        }
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "type": "histogram",
+            "x": [98, 102, 94],
+            "xbins": {
+                "size": 5
+            }
+        }]
+    }
 
     answer = plotly_histogram(svl_plot, appended_data)
 
@@ -290,11 +296,14 @@ def test_plotly_histogram_bins(appended_data):
         "bins": 25
     }
 
-    truth = [{
-        "type": "histogram",
-        "x": [98, 102, 94],
-        "nbinsx": 25
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "type": "histogram",
+            "x": [98, 102, 94],
+            "nbinsx": 25
+        }]
+    }
 
     answer = plotly_histogram(svl_plot, appended_data)
 
@@ -317,17 +326,71 @@ def test_plotly_bar(agged_data):
         }
     }
 
-    truth = [{
-        "type": "bar",
-        "x": [
-            "2018-08-01T00:00:00Z",
-            "2018-09-01T00:00:00Z",
-            "2018-10-01T00:00:00Z"
-        ],
-        "y": [98, 94, 89]
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "type": "bar",
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-09-01T00:00:00Z",
+                "2018-10-01T00:00:00Z"
+            ],
+            "y": [98, 94, 89]
+        }]
+    }
 
     answer = plotly_bar(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_plotly_bar_color(color_agged_data):
+    """ Tests that the plotly_bar function returns the correct value when the
+        data is split by a color field.
+    """
+    svl_plot = {
+        "type": "bar",
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    truth = {
+        "layout": {
+            "barmode": "group"
+        },
+        "data": [
+            {
+                "type": "bar",
+                "name": "A",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z"
+                ],
+                "y": [98, 94, 89]
+            }, {
+                "type": "bar",
+                "name": "B",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z"
+                ],
+                "y": [99, 92, 87]
+            }
+        ]
+    }
+
+    answer = plotly_bar(svl_plot, color_agged_data)
 
     assert truth == answer
 
@@ -348,18 +411,72 @@ def test_plotly_line(agged_data):
         }
     }
 
-    truth = [{
-        "mode": "lines+markers",
-        "type": "scatter",
-        "x": [
-            "2018-08-01T00:00:00Z",
-            "2018-09-01T00:00:00Z",
-            "2018-10-01T00:00:00Z"
-        ],
-        "y": [98, 94, 89]
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "mode": "lines+markers",
+            "type": "scatter",
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-09-01T00:00:00Z",
+                "2018-10-01T00:00:00Z"
+            ],
+            "y": [98, 94, 89]
+        }]
+    }
 
     answer = plotly_line(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_plotly_line_color(color_agged_data):
+    """ Tests that the plotly_line function returns the correct value when
+        the dataset contains a color split.
+    """
+    svl_plot = {
+        "type": "line",
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    truth = {
+        "layout": {},
+        "data": [
+            {
+                "type": "scatter",
+                "mode": "lines+markers",
+                "name": "A",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z"
+                ],
+                "y": [98, 94, 89]
+            }, {
+                "type": "scatter",
+                "mode": "lines+markers",
+                "name": "B",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z"
+                ],
+                "y": [99, 92, 87]
+            }
+        ]
+    }
+
+    answer = plotly_line(svl_plot, color_agged_data)
 
     assert truth == answer
 
@@ -378,18 +495,71 @@ def test_plotly_scatter(appended_data):
         }
     }
 
-    truth = [{
-        "mode": "markers",
-        "type": "scatter",
-        "x": [
-            "2018-08-01T00:00:00Z",
-            "2018-08-08T00:00:00Z",
-            "2018-08-15T00:00:00Z"
-        ],
-        "y": [98, 102, 94]
-    }]
+    truth = {
+        "layout": {},
+        "data": [{
+            "mode": "markers",
+            "type": "scatter",
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-08-08T00:00:00Z",
+                "2018-08-15T00:00:00Z"
+            ],
+            "y": [98, 102, 94]
+        }]
+    }
 
     answer = plotly_scatter(svl_plot, appended_data)
+
+    assert truth == answer
+
+
+def test_plotly_scatter_color(color_appended_data):
+    """ Tests that the plotly_scatter function returns the correct value when
+        there's a color split.
+    """
+    svl_plot = {
+        "type": "scatter",
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    truth = {
+        "data": [
+            {
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z"
+                ],
+                "y": [98, 99, 94],
+                "name": "A",
+                "type": "scatter",
+                "mode": "markers"
+            }, {
+                "x": [
+                    "2018-09-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z"
+                ],
+                "y": [93, 92, 89],
+                "name": "B",
+                "type": "scatter",
+                "mode": "markers"
+            }
+        ],
+        "layout": {}
+    }
+
+    answer = plotly_scatter(svl_plot, color_appended_data)
 
     assert truth == answer
 
@@ -410,6 +580,7 @@ def test_plotly_boxplot(appended_data):
 
     truth = {
         "data": [{
+            "type": "boxplot",
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-08-08T00:00:00Z",
@@ -453,7 +624,8 @@ def test_plotly_boxplot_color(color_appended_data):
                     "2018-09-01T00:00:00Z"
                 ],
                 "y": [98, 99, 94],
-                "name": "A"
+                "name": "A",
+                "type": "boxplot"
             }, {
                 "x": [
                     "2018-09-01T00:00:00Z",
@@ -461,7 +633,8 @@ def test_plotly_boxplot_color(color_appended_data):
                     "2018-10-01T00:00:00Z"
                 ],
                 "y": [93, 92, 89],
-                "name": "B"
+                "name": "B",
+                "type": "boxplot"
             }
         ],
         "layout": {
@@ -516,31 +689,40 @@ def test_plotly_template_vars(appended_data):
                 "row_end": 2,
                 "column_start": 1,
                 "column_end": 3,
-                "plotly": [{
-                    "type": "histogram",
-                    "x": [98, 102, 94],
-                    "nbinsx": 25
-                }]
+                "plotly": {
+                    "layout": {},
+                    "data": [{
+                        "type": "histogram",
+                        "x": [98, 102, 94],
+                        "nbinsx": 25
+                    }]
+                }
             }, {
                 "row_start": 2,
                 "row_end": 3,
                 "column_start": 1,
                 "column_end": 2,
-                "plotly": [{
+                "plotly": {
+                    "layout": {},
+                    "data": [{
                         "type": "histogram",
                         "x": [98, 102, 94],
                         "nbinsx": 15
-                }]
+                    }],
+                }
             }, {
                 "row_start": 2,
                 "row_end": 3,
                 "column_start": 2,
                 "column_end": 3,
-                "plotly": [{
-                    "type": "histogram",
-                    "x": [98, 102, 94],
-                    "nbinsx": 10
-                }]
+                "plotly": {
+                    "layout": {},
+                    "data": [{
+                        "type": "histogram",
+                        "x": [98, 102, 94],
+                        "nbinsx": 10
+                    }]
+                }
             }
         ]
     }

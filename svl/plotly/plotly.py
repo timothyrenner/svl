@@ -91,14 +91,15 @@ def plotly_histogram(svl_plot, data):
 
         Returns
         -------
-        list
-            A plotly histogram of the dataset.
+        dict
+            A plotly dict defining the histogram.
     """
 
     trace = {
         "type": "histogram",
         "x": data[svl_plot["field"]]
     }
+    layout = {}
 
     if "step" in svl_plot:
         # Set the bin size.
@@ -110,8 +111,10 @@ def plotly_histogram(svl_plot, data):
         # Activate autobins.
         bins = {"autobinx": True}
 
-    # TODO: Add names to color plot plus layout.
-    return [merge(trace, bins)]
+    return {
+        "layout": layout,
+        "data": [merge(trace, bins)]
+    }
 
 
 def plotly_bar(svl_plot, data):
@@ -127,17 +130,31 @@ def plotly_bar(svl_plot, data):
 
         Returns
         -------
-        list
-            A list of plotly traces.
+        dict
+            The dictionary defining the plotly plot.
     """
 
     plot_type = {"type": "bar"}
+    layout = {}
+    raw_traces = _extract_all_traces(svl_plot, data)
 
-    # TODO: Add names to color plots plus layout.
-    return [
-        merge(plot_type, trace)
-        for trace in _extract_all_traces(svl_plot, data)
-    ]
+    if "color" in svl_plot:
+        layout = {"barmode": "group"}
+        traces = [
+            merge(plot_type, {"name": color}, trace)
+            # NOTE: Danger!! Implicit coupling to order here.
+            for color, trace in zip(sorted(data.keys()), raw_traces)
+        ]
+    else:
+        traces = [
+            merge(plot_type, trace)
+            for trace in raw_traces
+        ]
+
+    return {
+        "layout": layout,
+        "data": traces
+    }
 
 
 def plotly_line(svl_plot, data):
@@ -153,17 +170,31 @@ def plotly_line(svl_plot, data):
 
         Returns
         -------
-        list
-            A list of plotly traces.
+        dict
+            The dictionary defining the plotly plot.
     """
 
     plot_type = {"mode": "lines+markers", "type": "scatter"}
 
-    # TODO: Add names to color plots plus layout.
-    return [
-        merge(plot_type, trace)
-        for trace in _extract_all_traces(svl_plot, data)
-    ]
+    layout = {}
+    raw_traces = _extract_all_traces(svl_plot, data)
+
+    if "color" in svl_plot:
+        traces = [
+            merge(plot_type, {"name": color}, trace)
+            # NOTE: Danger!! Implicit coupling to order here.
+            for color, trace in zip(sorted(data.keys()), raw_traces)
+        ]
+    else:
+        traces = [
+            merge(plot_type, trace)
+            for trace in raw_traces
+        ]
+
+    return {
+        "layout": layout,
+        "data": traces
+    }
 
 
 def plotly_scatter(svl_plot, data):
@@ -179,17 +210,30 @@ def plotly_scatter(svl_plot, data):
 
         Returns
         -------
-        list
-            A list of plotly traces.
+        dict
+            The dictionary defining the plotly plot.
     """
 
     plot_type = {"mode": "markers", "type": "scatter"}
+    layout = {}
+    raw_traces = _extract_all_traces(svl_plot, data)
 
-    # TODO: Add names to color plots, plus layout.
-    return [
-        merge(plot_type, trace)
-        for trace in _extract_all_traces(svl_plot, data)
-    ]
+    if "color" in svl_plot:
+        traces = [
+            merge(plot_type, {"name": color}, trace)
+            # NOTE: Danger!! Implicit coupling to order here.
+            for color, trace in zip(sorted(data.keys()), raw_traces)
+        ]
+    else:
+        traces = [
+            merge(plot_type, trace)
+            for trace in raw_traces
+        ]
+
+    return {
+        "layout": layout,
+        "data": traces
+    }
 
 
 def plotly_boxplot(svl_plot, data):
@@ -211,16 +255,20 @@ def plotly_boxplot(svl_plot, data):
     """
     layout = {}
     raw_traces = _extract_all_traces(svl_plot, data)
-    traces = raw_traces
 
     # If there's a "color" element to this plot, adjust the layout and
     # attach names to the traces.
     if "color" in svl_plot:
         layout = {"boxmode": "group"}
         traces = [
-            merge({"name": color}, trace)
+            merge({"name": color, "type": "boxplot"}, trace)
             # NOTE: DANGER!! Implicit coupling to order here!!!
             for color, trace in zip(sorted(data.keys()), raw_traces)
+        ]
+    else:
+        traces = [
+            merge({"type": "boxplot"}, trace)
+            for trace in raw_traces
         ]
 
     return {
