@@ -14,8 +14,8 @@
 
 * Plotly
 ** TODO Implement scatter plot.
-** TODO Implement box plot.
-** DONE Implement histogram.
+** DONE Implement box plot.
+** TODO Implement histogram.
 ** TODO Implement bar plot.
 ** TODO Implement line chart.
 ** DONE Create jinja template for plots.

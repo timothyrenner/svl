@@ -110,6 +110,7 @@ def plotly_histogram(svl_plot, data):
         # Activate autobins.
         bins = {"autobinx": True}
 
+    # TODO: Add names to color plot plus layout.
     return [merge(trace, bins)]
 
 
@@ -132,6 +133,7 @@ def plotly_bar(svl_plot, data):
 
     plot_type = {"type": "bar"}
 
+    # TODO: Add names to color plots plus layout.
     return [
         merge(plot_type, trace)
         for trace in _extract_all_traces(svl_plot, data)
@@ -157,6 +159,7 @@ def plotly_line(svl_plot, data):
 
     plot_type = {"mode": "lines+markers", "type": "scatter"}
 
+    # TODO: Add names to color plots plus layout.
     return [
         merge(plot_type, trace)
         for trace in _extract_all_traces(svl_plot, data)
@@ -182,6 +185,7 @@ def plotly_scatter(svl_plot, data):
 
     plot_type = {"mode": "markers", "type": "scatter"}
 
+    # TODO: Add names to color plots, plus layout.
     return [
         merge(plot_type, trace)
         for trace in _extract_all_traces(svl_plot, data)
@@ -189,7 +193,40 @@ def plotly_scatter(svl_plot, data):
 
 
 def plotly_boxplot(svl_plot, data):
-    pass  # TODO: Implement.
+    """ Creates a plotly boxplot chart dict from the SVL plot and data specs.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        data : dict
+            The SVL data specifier.
+
+        Returns
+        -------
+        dict
+            A {layout: ..., data: [ ... ] } dictionary defining the plotly
+            chart.
+    """
+    layout = {}
+    raw_traces = _extract_all_traces(svl_plot, data)
+    traces = raw_traces
+
+    # If there's a "color" element to this plot, adjust the layout and
+    # attach names to the traces.
+    if "color" in svl_plot:
+        layout = {"boxmode": "group"}
+        traces = [
+            merge({"name": color}, trace)
+            # NOTE: DANGER!! Implicit coupling to order here!!!
+            for color, trace in zip(sorted(data.keys()), raw_traces)
+        ]
+
+    return {
+        "data": traces,
+        "layout": layout
+    }
 
 
 PLOTLY_PLOTS = {
