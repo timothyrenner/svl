@@ -8,7 +8,11 @@ def _convert_datetime(dt, snap):
     """ Takes a string, converts to a MayaDT object, snaps it, then returns
         an ISO string for plotly to format appropriately.
     """
-    return maya.parse(dt).snap(snap).iso8601()
+    # TODO: Test case for this.
+    if dt:
+        return maya.parse(dt).snap(snap).iso8601()
+    else:
+        return None
 
 
 TEMPORAL_CONVERTERS = {

@@ -65,6 +65,21 @@ def test_convert_datetime():
     assert truth == answer
 
 
+def test_convert_datetime_empty():
+    """ Tests that the convert_datetime function returns the correct value
+        when the input is empty.
+    """
+
+    dt = None
+    snap = "@day"
+
+    truth = None
+
+    answer = _convert_datetime(dt, snap=snap)
+
+    assert truth == answer
+
+
 def test_transform(data):
     """ Tests that the transform function returns the correct value.
     """
