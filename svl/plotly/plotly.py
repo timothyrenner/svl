@@ -307,15 +307,17 @@ def plotly_template_vars(svl_plots, datas):
             contain (respectively) the number of grid rows, the number of grid
             columns, and the plotly plots.
     """
-    num_rows = max(listpluck("row_end", svl_plots)) - 1
-    num_columns = max(listpluck("column_end", svl_plots)) - 1
+    num_rows = max(listpluck("row_end", svl_plots))
+    num_columns = max(listpluck("column_end", svl_plots))
 
     plots = [
         {
-            "row_start": plot["row_start"],
-            "row_end": plot["row_end"],
-            "column_start": plot["column_start"],
-            "column_end": plot["column_end"],
+            # CSS grids are 1-indexed, but the layout is zero indexed in the
+            # svl layout module.
+            "row_start": plot["row_start"] + 1,
+            "row_end": plot["row_end"] + 1,
+            "column_start": plot["column_start"] + 1,
+            "column_end": plot["column_end"] + 1,
             "plotly": PLOTLY_PLOTS[plot["type"]](plot, data)
         } for plot, data in zip(svl_plots, datas)
     ]

@@ -652,26 +652,26 @@ def test_plotly_template_vars(appended_data):
     """
     svl_plots = [
         {
-            "row_start": 1,
-            "row_end": 2,
-            "column_start": 1,
-            "column_end": 3,
+            "row_start": 0,
+            "row_end": 1,
+            "column_start": 0,
+            "column_end": 2,
             "type": "histogram",
             "field": "temperature",
             "bins": 25
         }, {
-            "row_start": 2,
-            "row_end": 3,
-            "column_start": 1,
-            "column_end": 2,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 0,
+            "column_end": 1,
             "type": "histogram",
             "field": "temperature",
             "bins": 15
         }, {
-            "row_start": 2,
-            "row_end": 3,
-            "column_start": 2,
-            "column_end": 3,
+            "row_start": 1,
+            "row_end": 2,
+            "column_start": 1,
+            "column_end": 2,
             "type": "histogram",
             "field": "temperature",
             "bins": 10
