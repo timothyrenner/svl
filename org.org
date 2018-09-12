@@ -14,11 +14,11 @@
 ** DONE Add property tests for data.py.
 
 * Plotly
-** TODO Implement scatter plot.
+** DONE Implement scatter plot.
 ** DONE Implement box plot.
-** TODO Implement histogram.
-** TODO Implement bar plot.
-** TODO Implement line chart.
+** DONE Implement histogram.
+** DONE Implement bar plot.
+** DONE Implement line chart.
 ** DONE Create jinja template for plots.
 ** DONE Write function to render templates. 
 
