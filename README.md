@@ -1,4 +1,4 @@
-# SVL: A ~Stupid~ Simple Grammar for Data Visualizations
+# SVL: A Simple Grammar for Data Visualizations
 
 [![Build Status](https://travis-ci.org/timothyrenner/svl.svg?branch=master)](https://travis-ci.org/timothyrenner/svl)
 
