@@ -65,6 +65,21 @@ def test_convert_datetime():
     assert truth == answer
 
 
+def test_convert_datetime_empty():
+    """ Tests that the convert_datetime function returns the correct value
+        when the input is empty.
+    """
+
+    dt = None
+    snap = "@day"
+
+    truth = None
+
+    answer = _convert_datetime(dt, snap=snap)
+
+    assert truth == answer
+
+
 def test_transform(data):
     """ Tests that the transform function returns the correct value.
     """
@@ -202,6 +217,42 @@ def test_aggregate_avg(data):
             "avg": 50
         }
     }
+
+
+def test_aggregate_nan_agg_field():
+    """ Tests that the aggregate function returns the correct value when the
+        aggregated field is NaN.
+    """
+
+    datum = {"classification": "A", "temperature": math.nan}
+
+    aggregator = aggregate("classification", "temperature", "MAX")
+
+    assert aggregator(datum) == {}
+
+
+def test_aggregate_none_agg_field():
+    """ Tests that the aggregate function returns the correct value when the
+        aggregated field is None.
+    """
+
+    datum = {"classification": "A", "temperature": None}
+
+    aggregator = aggregate("classification", "temperature", "MAX")
+
+    assert aggregator(datum) == {}
+
+
+def test_aggregate_none_group_field():
+    """ Tests that the aggregate function returns the correct value when the
+        group field is None.
+    """
+
+    datum = {"classification": None, "temperature": 98.6}
+
+    aggregator = aggregate("classification", "temperature", "MAX")
+
+    assert aggregator(datum) == {"null": 98.6}
 
 
 def test_color(data):
@@ -739,6 +790,9 @@ def test_aggregate_properties_mean(generated_data):
         )
 
         assert (new_count - current_count) == 1
+
+    # Check that the accumulator accumulated the correct group field values.
+    assert len(classifications ^ set(accumulator.keys())) == 0
 
 
 @given(

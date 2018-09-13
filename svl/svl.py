@@ -35,7 +35,6 @@ class SVLTransformer(lark.Transformer):
         }
 
     def chart(self, items):
-        print(items)
         return merge(*items)
 
     def mark2d(self, items):

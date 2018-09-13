@@ -10,7 +10,7 @@ def test_line_chart():
         bigfoot "data/bigfoot_sightings.csv"
     LINE bigfoot
         X date BY YEAR
-        Y COUNT
+        Y COUNT date
         COLOR classification
     """
 
@@ -26,7 +26,8 @@ def test_line_chart():
                 "temporal": "YEAR"
             },
             "y": {
-                "agg": "COUNT"
+                "agg": "COUNT",
+                "field": "date"
             },
             "color": {
                 "field": "classification"
@@ -47,7 +48,7 @@ def test_bar_chart():
         bigfoot "data/bigfoot_sightings.csv"
     BAR bigfoot
         X classification
-        Y COUNT
+        Y COUNT classification
     """
 
     parsed_svl_truth = {
@@ -61,7 +62,8 @@ def test_bar_chart():
                 "field": "classification"
             },
             "y": {
-                "agg": "COUNT"
+                "agg": "COUNT",
+                "field": "classification"
             }
         }]
     }
@@ -206,7 +208,7 @@ def test_concat():
             Y temperature_mid
         BAR bigfoot
             X classification
-            Y COUNT
+            Y COUNT classification
     )
     """
 
@@ -225,7 +227,7 @@ def test_concat():
                     "data": "bigfoot",
                     "type": "bar",
                     "x": {"field": "classification"},
-                    "y": {"agg": "COUNT"}
+                    "y": {"agg": "COUNT", "field": "classification"}
                 }
             ]
         }]
@@ -250,7 +252,7 @@ def test_implicit_vcat():
             Y temperature_mid
         BAR bigfoot
             X classification
-            Y COUNT
+            Y COUNT classification
     )
     """
 
@@ -269,7 +271,7 @@ def test_implicit_vcat():
                     "data": "bigfoot",
                     "type": "bar",
                     "x": {"field": "classification"},
-                    "y": {"agg": "COUNT"}
+                    "y": {"agg": "COUNT", "field": "classification"}
                 }
             ]
         }]
