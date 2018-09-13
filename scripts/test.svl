@@ -7,9 +7,15 @@ LINE bigfoot
     COLOR classification
 
 CONCAT(
-    HISTOGRAM bigfoot 
-        temperature_mid STEP 5.0
-
-    HISTOGRAM bigfoot 
-        humidity BINS 25
+    BAR bigfoot
+        X classification
+        Y COUNT temperature_mid
+    
+    HISTOGRAM bigfoot
+        temperature_mid
+        BINS 25
 )
+
+SCATTER bigfoot
+    X latitude
+    Y temperature_mid

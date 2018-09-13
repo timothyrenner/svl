@@ -7,8 +7,8 @@
         <style>
             .container {
                 display: grid;
-                grid-template-columns: repeat({{ num_columns }}, {{ 100 / num_columns }}%);
-                grid-template-rows: repeat({{ num_rows }}, {{ 100 / num_rows }}%);
+                grid-template-columns: repeat({{ num_columns }}, {{ 100 / num_columns }}vw);
+                grid-template-rows: repeat({{ num_rows }}, {{ 100 / num_rows }}vh);
             }
 
             {% for plot in plots %}
@@ -17,7 +17,7 @@
                 grid-column-end: {{ plot.column_end }};
                 grid-row-start: {{ plot.row_start }};
                 grid-row-end: {{ plot.row_end }};
-            };
+            }
             {% endfor %}
         </style>
     </head>

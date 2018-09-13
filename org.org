@@ -6,26 +6,11 @@
 ** TODO Histogram should take a split field.
 
 * Data
-** DONE Complete test coverage of plot_to_reducer.
-** DONE Complete test coverage for data.py.
-** DONE Change agg initializers to be zero-arg functions instead of values.
-** DONE Change the _mean function to mutate the dictionary for better perf.
-** DONE Refactor tests to use a fixture for the test data.
-** DONE Add property tests for data.py.
 
 * Plotly
-** DONE Implement scatter plot.
-** DONE Implement box plot.
-** DONE Implement histogram.
-** DONE Implement bar plot.
-** DONE Implement line chart.
-** DONE Create jinja template for plots.
-** DONE Write function to render templates. 
+** TODO Bug when using average for aggregation - type error I think.
+** TODO Boxplots are borked hard.
 
 * Command Line Tool
-** DONE Wire plotly backend to the command line interface.
-** DONE Add integration tests with a sample dataset.
 
 * CI/CD
-** DONE Add code coverage to the pytest command.
-** DONE Set up coveralls.
