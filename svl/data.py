@@ -8,7 +8,6 @@ def _convert_datetime(dt, snap):
     """ Takes a string, converts to a MayaDT object, snaps it, then returns
         an ISO string for plotly to format appropriately.
     """
-    # TODO: Test case for this.
     if dt:
         return maya.parse(dt).snap(snap).iso8601()
     else:
@@ -92,6 +91,15 @@ def aggregate(group_field, agg_field, agg_func):
             math.isnan(datum[agg_field])
         ):
             return aggregated_values
+
+        # If the datum on the agg field is None, we can't aggregate, so ignore
+        # it.
+        if datum[agg_field] is None:
+            return aggregated_values
+
+        # If the datum on the group field is None, replace the value with null.
+        if datum[group_field] is None:
+            datum[group_field] = "null"
 
         if datum[group_field] not in aggregated_values:
             aggregated_values[datum[group_field]] = AGG_INITS[agg_func]()
