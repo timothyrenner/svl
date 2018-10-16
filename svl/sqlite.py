@@ -1,3 +1,11 @@
+try:
+    import pandas as pd
+    PANDAS = True
+except ImportError:
+    PANDAS = False
+
+import sqlite3
+
 from toolz import get_in
 
 TEMPORAL_CONVERTERS = {
@@ -8,6 +16,20 @@ TEMPORAL_CONVERTERS = {
     "MINUTE": "STRFTIME('%Y-%m-%DT%H:%M', ?)",
     "SECOND": "STRFTIME('%Y-%m-%DT%H:%M:%S', ?)"
 }
+
+
+def _csv_to_sqlite_pandas(svl_plot):
+    conn = sqlite3.connect(":memory:")
+    for table_name, csv_filename in svl_plot["datasets"].items():
+        pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
+    return conn
+
+
+def csv_to_sqlite(svl_plot):
+    if PANDAS:
+        return _csv_to_sqlite_pandas(svl_plot)
+    else:
+        raise NotImplementedError("Haven't implement non-pandas csv->sqlite.")
 
 
 def svl_to_sql(svl_plot):

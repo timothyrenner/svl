@@ -4,7 +4,7 @@ python:
   - "3.6"
 install:
   - pip install -r test_requirements.txt
-  - pip install -e .
+  - pip install -e .[pandas]
 script:
   - pytest test/ --cov-config=.coveragerc --cov=svl/
 after_success:

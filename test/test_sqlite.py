@@ -1,4 +1,43 @@
-from svl.sqlite import svl_to_sql
+import pytest
+import os
+import pandas as pd
+
+from pandas.testing import assert_frame_equal
+
+from svl.sqlite import (
+    _csv_to_sqlite_pandas,
+    svl_to_sql
+)
+
+
+@pytest.fixture()
+def test_file():
+    current_dir = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+    test_file = os.path.join(
+        current_dir,
+        "test_datasets",
+        "bigfoot_sightings.csv"
+    )
+    return test_file
+
+
+def test_csv_to_sqlite_pandas(test_file):
+    """ Tests that the _csv_to_sqlite_pandas function loads the database with
+        the correct values.
+    """
+    svl_plot = {
+        "datasets": {
+            "bigfoot": test_file
+        }
+    }
+
+    truth = pd.read_csv(test_file)
+    conn = _csv_to_sqlite_pandas(svl_plot)
+    answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
+
+    assert_frame_equal(truth, answer)
 
 
 def test_svl_to_sql():
