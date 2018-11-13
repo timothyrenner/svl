@@ -33,7 +33,20 @@ def csv_to_sqlite(svl_plot):
 
 
 def svl_to_sql(svl_plot):
-    # TODO: Definitely docstring this.
+    """ Takes an SVL plot specification and produces a SQL query to retrieve
+        the data.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        Returns
+        -------
+        str, list
+            The query and a list of values to inject into the query string.
+
+    """
     # Step 1: Process the selects.
 
     select_variables = []
