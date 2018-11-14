@@ -6,7 +6,8 @@ from pandas.testing import assert_frame_equal
 
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
-    svl_to_sql
+    svl_to_sql,
+    get_svl_data
 )
 
 
@@ -23,18 +24,28 @@ def test_file():
     return test_file
 
 
+@pytest.fixture()
+def test_conn(test_file):
+    # Obviously don't need the whole plot just the bit about the file.
+    test_svl_datasets = {
+        "bigfoot": test_file
+    }
+
+    conn = _csv_to_sqlite_pandas(test_svl_datasets)
+    yield conn
+    conn.close()
+
+
 def test_csv_to_sqlite_pandas(test_file):
     """ Tests that the _csv_to_sqlite_pandas function loads the database with
         the correct values.
     """
-    svl_plot = {
-        "datasets": {
-            "bigfoot": test_file
-        }
+    svl_datasets = {
+        "bigfoot": test_file
     }
 
     truth = pd.read_csv(test_file)
-    conn = _csv_to_sqlite_pandas(svl_plot)
+    conn = _csv_to_sqlite_pandas(svl_datasets)
     answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
 
     assert_frame_equal(truth, answer)
@@ -54,14 +65,11 @@ def test_svl_to_sql():
         }
     }
 
-    truth_query = "SELECT ? AS x, ? AS y FROM ?"
+    truth_query = "SELECT latitude AS x, temperature_mid AS y FROM bigfoot"
 
-    truth_variables = ["latitude", "temperature_mid", "bigfoot"]
-
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_agg_x():
@@ -79,18 +87,12 @@ def test_svl_to_sql_agg_x():
         }
     }
 
-    truth_query = "SELECT ? AS x, MAX(?) AS y FROM ? GROUP BY ?"
-    truth_variables = [
-        "classification",
-        "temperature",
-        "bigfoot",
-        "classification"
-    ]
+    truth_query = "SELECT classification AS x, MAX(temperature) AS y " \
+        "FROM bigfoot GROUP BY classification"
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_agg_y():
@@ -108,18 +110,12 @@ def test_svl_to_sql_agg_y():
         }
     }
 
-    truth_query = "SELECT AVG(?) AS x, ? AS y FROM ? GROUP BY ?"
-    truth_variables = [
-        "temperature",
-        "classification",
-        "bigfoot",
-        "classification"
-    ]
+    truth_query = "SELECT AVG(temperature) AS x, classification AS y " \
+        "FROM bigfoot GROUP BY classification"
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_count():
@@ -136,18 +132,12 @@ def test_svl_to_sql_count():
         }
     }
 
-    truth_query = "SELECT ? AS x, COUNT(?) AS y FROM ? GROUP BY ?"
-    truth_variables = [
-        "classification",
-        "*",
-        "bigfoot",
-        "classification"
-    ]
+    truth_query = "SELECT classification AS x, COUNT(*) AS y "\
+        "FROM bigfoot GROUP BY classification"
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_temporal():
@@ -165,17 +155,12 @@ def test_svl_to_sql_temporal():
         }
     }
 
-    truth_query = "SELECT STRFTIME('%Y', ?) AS x, ? AS y FROM ?"
-    truth_variables = [
-        "date",
-        "temperature",
-        "bigfoot"
-    ]
+    truth_query = "SELECT STRFTIME('%Y', date) AS x, temperature AS y "\
+        "FROM bigfoot"
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_temporal_agg():
@@ -194,20 +179,13 @@ def test_svl_to_sql_temporal_agg():
     }
 
     truth_query = (
-        "SELECT STRFTIME('%Y', ?) AS x, COUNT(?) AS y FROM ? "
-        "GROUP BY STRFTIME('%Y', ?)"
+        "SELECT STRFTIME('%Y', date) AS x, COUNT(*) AS y FROM bigfoot "
+        "GROUP BY STRFTIME('%Y', date)"
     )
-    truth_variables = [
-        "date",
-        "*",
-        "bigfoot",
-        "date"
-    ]
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_color():
@@ -227,18 +205,12 @@ def test_svl_to_sql_color():
         }
     }
 
-    truth_query = "SELECT ? AS x, ? AS y, ? AS color FROM ?"
-    truth_variables = [
-        "date",
-        "temperature",
-        "classification",
-        "bigfoot"
-    ]
+    truth_query = "SELECT date AS x, temperature AS y, "\
+        "classification AS color FROM bigfoot"
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
 
 
 def test_svl_to_sql_color_agg():
@@ -261,19 +233,57 @@ def test_svl_to_sql_color_agg():
     }
 
     truth_query = (
-        "SELECT STRFTIME('%Y', ?) AS x, MAX(?) AS y, ? AS color FROM ? "
-        "GROUP BY STRFTIME('%Y', ?), ?"
+        "SELECT STRFTIME('%Y', date) AS x, MAX(temperature) AS y, "
+        "classification AS color FROM bigfoot "
+        "GROUP BY STRFTIME('%Y', date), classification"
     )
-    truth_variables = [
-        "date",
-        "temperature",
-        "classification",
-        "bigfoot",
-        "date",
-        "classification"
-    ]
 
-    answer_query, answer_variables = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql(svl_plot)
 
     assert truth_query == answer_query
-    assert truth_variables == answer_variables
+
+
+def test_get_svl_data(test_conn):
+    """ Tests that the get_svl_data function returns the correct value. """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "agg": "COUNT"
+        }
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+
+    assert "x" in answer
+    assert "y" in answer
+    assert len(answer["x"]) == len(answer["y"])
+
+
+def test_get_svl_data_color(test_conn):
+    """ Tests that the get_svl_data function returns the correct value when
+        there's a color field.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "agg": "COUNT"
+        },
+        "color": {
+            "field": "classification"
+        }
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+    for color in ["Class A", "Class B"]:
+        assert color in answer
+        assert "x" in answer[color]
+        assert "y" in answer[color]
+        assert len(answer[color]["x"]) == len(answer[color]["y"])
