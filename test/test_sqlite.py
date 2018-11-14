@@ -54,7 +54,7 @@ def test_svl_to_sql():
         }
     }
 
-    truth_query = "SELECT ?, ? FROM ?"
+    truth_query = "SELECT ? AS x, ? AS y FROM ?"
 
     truth_variables = ["latitude", "temperature_mid", "bigfoot"]
 
@@ -79,11 +79,10 @@ def test_svl_to_sql_agg_x():
         }
     }
 
-    truth_query = "SELECT ?, MAX(?) AS ? FROM ? GROUP BY ?"
+    truth_query = "SELECT ? AS x, MAX(?) AS y FROM ? GROUP BY ?"
     truth_variables = [
         "classification",
         "temperature",
-        "max_temperature",
         "bigfoot",
         "classification"
     ]
@@ -109,10 +108,9 @@ def test_svl_to_sql_agg_y():
         }
     }
 
-    truth_query = "SELECT AVG(?) AS ?, ? FROM ? GROUP BY ?"
+    truth_query = "SELECT AVG(?) AS x, ? AS y FROM ? GROUP BY ?"
     truth_variables = [
         "temperature",
-        "avg_temperature",
         "classification",
         "bigfoot",
         "classification"
@@ -138,11 +136,10 @@ def test_svl_to_sql_count():
         }
     }
 
-    truth_query = "SELECT ?, COUNT(?) AS ? FROM ? GROUP BY ?"
+    truth_query = "SELECT ? AS x, COUNT(?) AS y FROM ? GROUP BY ?"
     truth_variables = [
         "classification",
         "*",
-        "count_points",
         "bigfoot",
         "classification"
     ]
@@ -168,9 +165,8 @@ def test_svl_to_sql_temporal():
         }
     }
 
-    truth_query = "SELECT STRFTIME('%Y', ?) AS ?, ? FROM ?"
+    truth_query = "SELECT STRFTIME('%Y', ?) AS x, ? AS y FROM ?"
     truth_variables = [
-        "date",
         "date",
         "temperature",
         "bigfoot"
@@ -198,14 +194,12 @@ def test_svl_to_sql_temporal_agg():
     }
 
     truth_query = (
-        "SELECT STRFTIME('%Y', ?) AS ?, COUNT(?) AS ? FROM ? "
+        "SELECT STRFTIME('%Y', ?) AS x, COUNT(?) AS y FROM ? "
         "GROUP BY STRFTIME('%Y', ?)"
     )
     truth_variables = [
         "date",
-        "date",
         "*",
-        "count_points",
         "bigfoot",
         "date"
     ]
@@ -233,7 +227,7 @@ def test_svl_to_sql_color():
         }
     }
 
-    truth_query = "SELECT ?, ?, ? FROM ?"
+    truth_query = "SELECT ? AS x, ? AS y, ? AS color FROM ?"
     truth_variables = [
         "date",
         "temperature",
@@ -267,14 +261,12 @@ def test_svl_to_sql_color_agg():
     }
 
     truth_query = (
-        "SELECT STRFTIME('%Y', ?) AS ?, MAX(?) AS ?, ? FROM ? "
+        "SELECT STRFTIME('%Y', ?) AS x, MAX(?) AS y, ? AS color FROM ? "
         "GROUP BY STRFTIME('%Y', ?), ?"
     )
     truth_variables = [
         "date",
-        "date",
         "temperature",
-        "max_temperature",
         "classification",
         "bigfoot",
         "date",

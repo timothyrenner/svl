@@ -63,27 +63,19 @@ def svl_to_sql(svl_plot):
         select_variables.append(get_in([axis, "field"], svl_plot, "*"))
 
         if "temporal" in svl_plot[axis]:
-            select_fields.append("{} AS ?".format(
-                TEMPORAL_CONVERTERS[svl_plot[axis]["temporal"]]
+            select_fields.append("{} AS {}".format(
+                TEMPORAL_CONVERTERS[svl_plot[axis]["temporal"]],
+                axis
             ))
-            # This one needs an extra variable, but we know there's a field
-            # present this time.
-            select_variables.append(svl_plot[axis]["field"])
         elif "agg" in svl_plot[axis]:
             # NOTE: Color axis will not take aggregations. This needs to be
             # implemented though.
-            select_fields.append("{}(?) AS ?".format(
-                svl_plot[axis]["agg"]
+            select_fields.append("{}(?) AS {}".format(
+                svl_plot[axis]["agg"],
+                axis
             ))
-            # This one needs an extra variable.
-            select_variables.append(
-                "_".join([
-                    svl_plot[axis]["agg"].lower(),
-                    get_in([axis, "field"], svl_plot, "points")
-                ])
-            )
         else:
-            select_fields.append("?")
+            select_fields.append("? AS {}".format(axis))
 
     # Step 2: Process the aggregations.
     group_variables = []
@@ -124,3 +116,34 @@ def svl_to_sql(svl_plot):
         )
 
     return query, (select_variables + [svl_plot["data"]] + group_variables)
+
+
+def get_svl_data(svl_plot, conn):
+    # Step 1: Create the query.
+    query, variables = svl_to_sql(svl_plot)
+
+    # Step 2: Execute the query and retrieve the results.
+    conn.row_factory = sqlite3.Row
+    conn.execute(query, variables)
+    # If this doesn't fit into memory we're hosed downstream anyway, so assume
+    # it does :).
+    data_list = conn.fetchall()
+
+    # Step 3: Convert the resulting list of sqlite rows into SVL data
+    # structures.
+    # NOTE: For now this structure corresponds directly to plotly's
+    # traces, but since it's internal we can change it to something more
+    # general later.
+    if "color" not in data_list[0]:
+        svl_data = {"x": [], "y": []}
+        for row in data_list:
+            svl_data["x"].append(row["x"])
+            svl_data["y"].append(row["y"])
+    else:
+        svl_data = {}
+        for row in data_list:
+            if row["color"] not in svl_data:
+                svl_data[row["color"]] = {"x": [], "y": []}
+            svl_data[row["color"]]["x"].append(row["x"])
+            svl_data[row["color"]]["y"].append(row["y"])
+    return svl_data
