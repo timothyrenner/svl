@@ -12,7 +12,7 @@ hcat: "CONCAT" "(" chart+ ")"
 
 chart: (mark2d data dimensions) | (mark1d data mark1d_opts?) | vcat | hcat
 
-mark2d: SCATTER | LINE | BAR | BOXPLOT
+mark2d: SCATTER | LINE | BAR
 
 data: CNAME
 
@@ -54,8 +54,6 @@ BAR: "BAR"
 LINE: "LINE"
 
 HISTOGRAM: "HISTOGRAM"
-
-BOXPLOT: "BOXPLOT"
 
 COUNT: "COUNT"
 
