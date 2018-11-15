@@ -185,53 +185,11 @@ def plotly_scatter(svl_plot, data):
     }
 
 
-def plotly_boxplot(svl_plot, data):
-    """ Creates a plotly boxplot chart dict from the SVL plot and data specs.
-
-        Parameters
-        ----------
-        svl_plot : dict
-            The SVL plot specifier.
-
-        data : dict
-            The SVL data specifier.
-
-        Returns
-        -------
-        dict
-            A {layout: ..., data: [ ... ] } dictionary defining the plotly
-            chart.
-    """
-    layout = {}
-    raw_traces = _extract_all_traces(svl_plot, data)
-
-    # If there's a "color" element to this plot, adjust the layout and
-    # attach names to the traces.
-    if "color" in svl_plot:
-        layout = {"boxmode": "group"}
-        traces = [
-            merge({"name": color, "type": "boxplot"}, trace)
-            # NOTE: DANGER!! Implicit coupling to order here!!!
-            for color, trace in zip(sorted(data.keys()), raw_traces)
-        ]
-    else:
-        traces = [
-            merge({"type": "boxplot"}, trace)
-            for trace in raw_traces
-        ]
-
-    return {
-        "data": traces,
-        "layout": layout
-    }
-
-
 PLOTLY_PLOTS = {
     "histogram": plotly_histogram,
     "bar": plotly_bar,
     "line": plotly_line,
-    "scatter": plotly_scatter,
-    "boxplot": plotly_boxplot
+    "scatter": plotly_scatter
 }
 
 
