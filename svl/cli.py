@@ -1,14 +1,11 @@
 import click
 import svl
-import csv
 import webbrowser
 import os
 
-from toolz import groupby
-
 from svl.layout import tree_to_grid
-from svl.data import construct_data
 from svl.plotly import plotly_template, plotly_template_vars
+from svl.sqlite import csv_to_sqlite, get_svl_data
 
 
 @click.command()
@@ -35,45 +32,18 @@ def cli(svl_source, debug, backend, output_file, no_browser):
 
     svl_spec = svl.parse_svl(svl_string)
 
-    # Produce a dictionary mapping the name of the dataset to an iterator
-    # against that dataset.
-    datasets = {
-        dataset: csv.DictReader(
-            open(svl_spec["datasets"][dataset], "r")
-        )
-        for dataset in svl_spec["datasets"].keys()
-    }
+    # Create a connection to the sqlite database (eventually this will be
+    # abstracted a little better but for now sqlite's all we've got).
+    sqlite_conn = csv_to_sqlite(svl_spec["datasets"])
 
-    # Convert the SVL spec into a list of dictionaries, and group that list
-    # by the "data" field. Produces a dictionary mapping the dataset to a
-    # list of plots attributed to that dataset.
-    svl_plots = groupby("data", tree_to_grid(svl_spec))
-
-    # Need to read the datasets one at a time for each plot it applies to.
-    # Produces a dictionary mapping the dataset to a list of SVL data specs
-    # for each plot attributed to that dataset.
-    svl_plot_datasets = {
-        dataset: construct_data(svl_plots[dataset], datasets[dataset])
-        for dataset in svl_plots.keys()
-    }
-
-    # Now flatten everything into two lists - one for the plots and the other
-    # for the data. There's probably a more "functional" way to do this.
-    svl_plots_flat = []
-    svl_plot_data_flat = []
-    for dataset in svl_plots.keys():
-
-        assert len(svl_plots[dataset]) == len(svl_plot_datasets[dataset])
-
-        for plot, data in zip(svl_plots[dataset], svl_plot_datasets[dataset]):
-            svl_plots_flat.append(plot)
-            svl_plot_data_flat.append(data)
+    svl_plots = [plot for plot in tree_to_grid(svl_spec)]
+    svl_plot_data = [get_svl_data(plot, sqlite_conn) for plot in svl_plots]
 
     # For now, plotly is the only choice.
     if backend == "plotly":
         template_vars = plotly_template_vars(
-            svl_plots_flat,
-            svl_plot_data_flat
+            svl_plots,
+            svl_plot_data
         )
         template = plotly_template()
 

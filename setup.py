@@ -20,5 +20,8 @@ setup(
     ],
     entry_points={
         "console_scripts": ["svl=svl.cli:cli"]
-        }
+    },
+    extras_require={
+        "pandas": ["pandas"]
+    }
 )

@@ -4,51 +4,6 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 listpluck = compose(list, pluck)
 
 
-def _extract_trace_data(svl_field_x, svl_field_y, data):
-    """ Extracts the data required for the x and y fields from the SVL data
-        and converts them into an {"x": [ .. ], "y": [ .. ]} dict for
-        plotly.
-
-        Parameters
-        ----------
-        svl_field_x : dict
-            The SVL specifier for the x field.
-        svl_field_y : dict
-            The SVL specifier for the y field.
-        data : dict
-            The SVL data.
-
-        Returns
-        -------
-        dict
-            A dictionary with an "x" and "y" field that maps to a list, ready
-            to be put into a plotly trace.
-    """
-    x = []
-    y = []
-
-    if "agg" in svl_field_x:
-        # If there's an agg in x, then the dataset's a dict with y as the
-        # keys and x as the values.
-        # TODO: Might want to ditch the sort and use an OrderedDict as the
-        # data container.
-        for group_val in sorted(data.keys()):
-            x.append(data[group_val])
-            y.append(group_val)
-    elif "agg" in svl_field_y:
-        # If there's an agg in y, then the dataset's a dict with x as the keys
-        # and y as the values.
-        for group_val in sorted(data.keys()):
-            x.append(group_val)
-            y.append(data[group_val])
-    else:
-        # If there's an agg in neither then this is simpler.
-        x = data[svl_field_x["field"]]
-        y = data[svl_field_y["field"]]
-
-    return {"x": x, "y": y}
-
-
 def _extract_all_traces(svl_plot, data):
     """ Extracts the traces for the SVL plot from the SVL data.
 
@@ -66,16 +21,10 @@ def _extract_all_traces(svl_plot, data):
             A list of {"x": [ .. ], "y": [ .. ]} style dictionaries to be used
             as traces in plotly plots.
     """
-    svl_field_x = svl_plot["x"]
-    svl_field_y = svl_plot["y"]
-
     if "color" not in svl_plot:
-        return [_extract_trace_data(svl_field_x, svl_field_y, data)]
+        return [data]
     else:
-        return [
-            _extract_trace_data(svl_field_x, svl_field_y, data[color])
-            for color in sorted(data.keys())  # TODO: Eliminate sorted.
-        ]
+        return [data[color] for color in sorted(data.keys())]
 
 
 def plotly_histogram(svl_plot, data):
@@ -97,7 +46,7 @@ def plotly_histogram(svl_plot, data):
 
     trace = {
         "type": "histogram",
-        "x": data[svl_plot["field"]]
+        "x": data["x"]
     }
     layout = {}
 
@@ -297,7 +246,7 @@ def plotly_template_vars(svl_plots, datas):
             the layout module.
         datas : list
             A list of dicts defining the data required for each plot in the
-            format produced by the data module.
+            format produced by the sqlite module.
 
         Returns
         -------
