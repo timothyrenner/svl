@@ -6,7 +6,6 @@ from svl.plotly.plotly import (
     plotly_bar,
     plotly_line,
     plotly_scatter,
-    plotly_boxplot,
     plotly_template,
     plotly_template_vars
 )
@@ -494,89 +493,6 @@ def test_plotly_scatter_color(color_appended_data):
     }
 
     answer = plotly_scatter(svl_plot, color_appended_data)
-
-    assert truth == answer
-
-
-def test_plotly_boxplot(appended_data):
-    """ Tests that the plotly_boxplot function returns the correct value.
-    """
-    svl_plot = {
-        "type": "boxplot",
-        "x": {
-            "field": "date",
-            "temporal": "DAY"
-        },
-        "y": {
-            "field": "temperature"
-        }
-    }
-
-    truth = {
-        "data": [{
-            "type": "boxplot",
-            "x": [
-                "2018-08-01T00:00:00Z",
-                "2018-08-08T00:00:00Z",
-                "2018-08-15T00:00:00Z"
-            ],
-            "y": [98, 102, 94]
-        }],
-        "layout": {}
-    }
-
-    answer = plotly_boxplot(svl_plot, appended_data)
-
-    assert truth == answer
-
-
-def test_plotly_boxplot_color(color_appended_data):
-    """ Tests that the plotly_boxplot function returns the correct value with
-        color aggregated data.
-    """
-
-    svl_plot = {
-        "type": "boxplot",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature"
-        },
-        "color": {
-            "field": "classification"
-        }
-    }
-
-    truth = {
-        "data": [
-            {
-                "x": [
-                    "2018-08-01T00:00:00Z",
-                    "2018-08-01T00:00:00Z",
-                    "2018-09-01T00:00:00Z"
-                ],
-                "y": [98, 99, 94],
-                "name": "A",
-                "type": "boxplot"
-            }, {
-                "x": [
-                    "2018-09-01T00:00:00Z",
-                    "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
-                ],
-                "y": [93, 92, 89],
-                "name": "B",
-                "type": "boxplot"
-            }
-        ],
-        "layout": {
-            "boxmode": "group"
-        }
-    }
-
-    answer = plotly_boxplot(svl_plot, color_appended_data)
 
     assert truth == answer
 

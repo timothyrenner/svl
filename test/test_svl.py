@@ -128,38 +128,6 @@ def test_histogram_bins():
     assert parsed_svl_truth == parsed_svl_answer
 
 
-def test_boxplot():
-    """ Tests that the boxplot type is properly parsed.
-    """
-    svl_string = """
-    DATASETS
-        bigfoot "data/bigfoot_sightings.csv"
-    BOXPLOT bigfoot
-        X classification
-        Y temperature_mid
-    """
-
-    parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "boxplot",
-            "x": {
-                "field": "classification"
-            },
-            "y": {
-                "field": "temperature_mid"
-            }
-        }]
-    }
-
-    parsed_svl_answer = parse_svl(svl_string)
-
-    assert parsed_svl_truth == parsed_svl_answer
-
-
 def test_scatter():
     """ Tests that the scatter type is properly parsed.
     """
