@@ -6,7 +6,7 @@ from pandas.testing import assert_frame_equal
 
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
-    svl_to_sql,
+    svl_to_sql_xy,
     get_svl_data
 )
 
@@ -51,8 +51,8 @@ def test_csv_to_sqlite_pandas(test_file):
     assert_frame_equal(truth, answer)
 
 
-def test_svl_to_sql():
-    """ Tests that the svl_to_sql function returns the correct value when there
+def test_svl_to_sql_xy():
+    """ Tests that the svl_to_sql_xy function returns the correct value when there
         are no aggregations or colors.
     """
     svl_plot = {
@@ -67,13 +67,13 @@ def test_svl_to_sql():
 
     truth_query = "SELECT latitude AS x, temperature_mid AS y FROM bigfoot"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_agg_x():
-    """ Tests that the svl_to_sql function returns the correct value when x is
+def test_svl_to_sql_xy_agg_x():
+    """ Tests that the svl_to_sql_xy function returns the correct value when x is
         aggregated.
     """
     svl_plot = {
@@ -90,13 +90,13 @@ def test_svl_to_sql_agg_x():
     truth_query = "SELECT classification AS x, MAX(temperature) AS y " \
         "FROM bigfoot GROUP BY classification"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_agg_y():
-    """ Tests that the svl_to_sql function returns the correct value when
+def test_svl_to_sql_xy_agg_y():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's an aggregation on y and no aggregation on colors.
     """
     svl_plot = {
@@ -113,13 +113,13 @@ def test_svl_to_sql_agg_y():
     truth_query = "SELECT AVG(temperature) AS x, classification AS y " \
         "FROM bigfoot GROUP BY classification"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_count():
-    """ Tests that the svl_to_sql function returns the correct value when
+def test_svl_to_sql_xy_count():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         one of the aggregations is a count.
     """
     svl_plot = {
@@ -135,13 +135,13 @@ def test_svl_to_sql_count():
     truth_query = "SELECT classification AS x, COUNT(*) AS y "\
         "FROM bigfoot GROUP BY classification"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_temporal():
-    """ Tests that the svl_to_sql function returns the correct value when one
+def test_svl_to_sql_xy_temporal():
+    """ Tests that the svl_to_sql_xy function returns the correct value when one
         of the fields has a temporal transformation.
     """
     svl_plot = {
@@ -158,13 +158,13 @@ def test_svl_to_sql_temporal():
     truth_query = "SELECT STRFTIME('%Y', date) AS x, temperature AS y "\
         "FROM bigfoot"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_temporal_agg():
-    """ Tests that the svl_to_sql function returns the correct value when one
+def test_svl_to_sql_xy_temporal_agg():
+    """ Tests that the svl_to_sql_xy function returns the correct value when one
         field is a temporal transformation and the other is an aggregation.
     """
     svl_plot = {
@@ -183,13 +183,13 @@ def test_svl_to_sql_temporal_agg():
         "GROUP BY STRFTIME('%Y', date)"
     )
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_color():
-    """ Tests that the svl_to_sql function returns the correct value when
+def test_svl_to_sql_xy_color():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's a color field.
     """
     svl_plot = {
@@ -208,13 +208,13 @@ def test_svl_to_sql_color():
     truth_query = "SELECT date AS x, temperature AS y, "\
         "classification AS color FROM bigfoot"
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_color_agg():
-    """ Tests that the svl_to_sql function returns the correct value when
+def test_svl_to_sql_xy_color_agg():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's a color field and an aggregation.
     """
     svl_plot = {
@@ -238,15 +238,16 @@ def test_svl_to_sql_color_agg():
         "GROUP BY STRFTIME('%Y', date), classification"
     )
 
-    answer_query = svl_to_sql(svl_plot)
+    answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_get_svl_data(test_conn):
+def test_get_svl_xy_data(test_conn):
     """ Tests that the get_svl_data function returns the correct value. """
     svl_plot = {
         "data": "bigfoot",
+        "type": "line",
         "x": {
             "field": "date",
             "temporal": "YEAR"
@@ -263,12 +264,13 @@ def test_get_svl_data(test_conn):
     assert len(answer["x"]) == len(answer["y"])
 
 
-def test_get_svl_data_color(test_conn):
+def test_get_svl_xy_data_color(test_conn):
     """ Tests that the get_svl_data function returns the correct value when
         there's a color field.
     """
     svl_plot = {
         "data": "bigfoot",
+        "type": "bar",
         "x": {
             "field": "date",
             "temporal": "YEAR"

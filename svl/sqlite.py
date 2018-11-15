@@ -32,7 +32,14 @@ def csv_to_sqlite(svl_datasets):
         raise NotImplementedError("Haven't implement non-pandas csv->sqlite.")
 
 
-def svl_to_sql(svl_plot):
+def svl_to_sql_hist(svl_plot):
+    return "SELECT {} AS x FROM {}".format(
+        svl_plot["field"],
+        svl_plot["data"]
+    )
+
+
+def svl_to_sql_xy(svl_plot):
     """ Takes an SVL plot specification and produces a SQL query to retrieve
         the data.
 
@@ -117,7 +124,10 @@ def svl_to_sql(svl_plot):
 
 def get_svl_data(svl_plot, conn):
     # Step 1: Create the query.
-    query = svl_to_sql(svl_plot)
+    if svl_plot["type"] in {"line", "scatter", "bar"}:
+        query = svl_to_sql_xy(svl_plot)
+    elif svl_plot["type"] == "histogram":
+        query = svl_to_sql_hist(svl_plot)
 
     # Step 2: Execute the query and retrieve the results.
     conn.row_factory = sqlite3.Row
