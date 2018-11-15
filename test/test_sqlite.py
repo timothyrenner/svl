@@ -7,6 +7,7 @@ from pandas.testing import assert_frame_equal
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
     svl_to_sql_xy,
+    svl_to_sql_hist,
     get_svl_data
 )
 
@@ -51,9 +52,26 @@ def test_csv_to_sqlite_pandas(test_file):
     assert_frame_equal(truth, answer)
 
 
+def test_svl_to_sql_hist():
+    """ Tests that the svl_to_sql_hist function returns the correct value.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "field": "temperature_mid",
+        "bins": 25
+    }
+
+    truth_query = "SELECT temperature_mid AS x FROM bigfoot"
+
+    answer_query = svl_to_sql_hist(svl_plot)
+
+    assert truth_query == answer_query
+
+
 def test_svl_to_sql_xy():
-    """ Tests that the svl_to_sql_xy function returns the correct value when there
-        are no aggregations or colors.
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there are no aggregations or colors.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -243,8 +261,10 @@ def test_svl_to_sql_xy_color_agg():
     assert truth_query == answer_query
 
 
-def test_get_svl_xy_data(test_conn):
-    """ Tests that the get_svl_data function returns the correct value. """
+def test_get_svl_data_xy(test_conn):
+    """ Tests that the get_svl_data function returns the correct value for
+        an xy plot.
+    """
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
@@ -264,9 +284,9 @@ def test_get_svl_xy_data(test_conn):
     assert len(answer["x"]) == len(answer["y"])
 
 
-def test_get_svl_xy_data_color(test_conn):
+def test_get_svl_data_xy_color(test_conn):
     """ Tests that the get_svl_data function returns the correct value when
-        there's a color field.
+        there's a color field for an xy plot.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -289,3 +309,18 @@ def test_get_svl_xy_data_color(test_conn):
         assert "x" in answer[color]
         assert "y" in answer[color]
         assert len(answer[color]["x"]) == len(answer[color]["y"])
+
+
+def test_get_svl_data_histogram(test_conn):
+    """ Tests that the get_svl_data function returns the correct data for
+        histogram plots.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "field": "temperature_mid",
+        "bins": 25
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+    assert "x" in answer

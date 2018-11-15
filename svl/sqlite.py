@@ -143,16 +143,24 @@ def get_svl_data(svl_plot, conn):
     # NOTE: For now this structure corresponds directly to plotly's
     # traces, but since it's internal we can change it to something more
     # general later.
-    if "color" not in data_list[0].keys():
-        svl_data = {"x": [], "y": []}
+    # TODO: There's probably a nice way to abstract the extraction to remove
+    # the branching logic.
+    if svl_plot["type"] in {"line", "scatter", "bar"}:
+        if "color" not in data_list[0].keys():
+            svl_data = {"x": [], "y": []}
+            for row in data_list:
+                svl_data["x"].append(row["x"])
+                svl_data["y"].append(row["y"])
+        else:
+            svl_data = {}
+            for row in data_list:
+                if row["color"] not in svl_data:
+                    svl_data[row["color"]] = {"x": [], "y": []}
+                svl_data[row["color"]]["x"].append(row["x"])
+                svl_data[row["color"]]["y"].append(row["y"])
+    elif svl_plot["type"] == "histogram":
+        # Just one dimension for histograms.
+        svl_data = {"x": []}
         for row in data_list:
             svl_data["x"].append(row["x"])
-            svl_data["y"].append(row["y"])
-    else:
-        svl_data = {}
-        for row in data_list:
-            if row["color"] not in svl_data:
-                svl_data[row["color"]] = {"x": [], "y": []}
-            svl_data[row["color"]]["x"].append(row["x"])
-            svl_data[row["color"]]["y"].append(row["y"])
     return svl_data
