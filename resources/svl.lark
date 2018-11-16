@@ -38,8 +38,7 @@ x: "X" ((aggregation field) | (field temporal?))
 y: "Y" ((aggregation field) | (field temporal?))
 
 // For color temporal is supported irrespective of x and y.
-// TODO: Color should not take aggs.
-color: "COLOR" field? (aggregation? | temporal?)
+color: "COLOR" field? temporal?
 
 field: CNAME
 
