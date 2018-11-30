@@ -11,9 +11,19 @@ CONCAT(
         X classification
         Y COUNT temperature_mid
     
-    HISTOGRAM bigfoot
-        temperature_mid
-        BINS 25
+    (
+        HISTOGRAM bigfoot
+            temperature_mid
+            BINS 25
+    
+        HISTOGRAM bigfoot
+            temperature_mid
+            BINS 25
+        
+        HISTOGRAM bigfoot
+            temperature_mid
+            BINS 25
+    )
 )
 
 SCATTER bigfoot

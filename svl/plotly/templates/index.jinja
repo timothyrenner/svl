@@ -7,8 +7,8 @@
         <style>
             .container {
                 display: grid;
-                grid-template-columns: repeat({{ num_columns }}, {{ 100 / num_columns }}vw);
-                grid-template-rows: repeat({{ num_rows }}, {{ 100 / num_rows }}vh);
+                grid-template-columns: repeat({{ num_columns }}, minmax(300px, {{ 100 / num_columns }}vw));
+                grid-template-rows: repeat({{ num_rows }}, minmax(300px, {{ 100 / num_rows }}vh));
             }
 
             {% for plot in plots %}
