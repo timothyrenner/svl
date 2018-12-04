@@ -206,9 +206,9 @@ def test_svl_to_sql_xy_temporal_agg():
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_xy_color():
+def test_svl_to_sql_xy_split_by():
     """ Tests that the svl_to_sql_xy function returns the correct value when
-        there's a color field.
+        there's a split by field.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -218,22 +218,22 @@ def test_svl_to_sql_xy_color():
         "y": {
             "field": "temperature"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
 
     truth_query = "SELECT date AS x, temperature AS y, "\
-        "classification AS color FROM bigfoot"
+        "classification AS split_by FROM bigfoot"
 
     answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
 
 
-def test_svl_to_sql_xy_color_agg():
+def test_svl_to_sql_xy_split_by_agg():
     """ Tests that the svl_to_sql_xy function returns the correct value when
-        there's a color field and an aggregation.
+        there's a split by field and an aggregation.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -245,14 +245,14 @@ def test_svl_to_sql_xy_color_agg():
             "field": "temperature",
             "agg": "MAX"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
 
     truth_query = (
         "SELECT STRFTIME('%Y', date) AS x, MAX(temperature) AS y, "
-        "classification AS color FROM bigfoot "
+        "classification AS split_by FROM bigfoot "
         "GROUP BY STRFTIME('%Y', date), classification"
     )
 
@@ -284,9 +284,9 @@ def test_get_svl_data_xy(test_conn):
     assert len(answer["x"]) == len(answer["y"])
 
 
-def test_get_svl_data_xy_color(test_conn):
+def test_get_svl_data_xy_split_by(test_conn):
     """ Tests that the get_svl_data function returns the correct value when
-        there's a color field for an xy plot.
+        there's a split by field for an xy plot.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -298,17 +298,17 @@ def test_get_svl_data_xy_color(test_conn):
         "y": {
             "agg": "COUNT"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
 
     answer = get_svl_data(svl_plot, test_conn)
-    for color in ["Class A", "Class B"]:
-        assert color in answer
-        assert "x" in answer[color]
-        assert "y" in answer[color]
-        assert len(answer[color]["x"]) == len(answer[color]["y"])
+    for split_by in ["Class A", "Class B"]:
+        assert split_by in answer
+        assert "x" in answer[split_by]
+        assert "y" in answer[split_by]
+        assert len(answer[split_by]["x"]) == len(answer[split_by]["y"])
 
 
 def test_get_svl_data_histogram(test_conn):
