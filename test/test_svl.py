@@ -11,7 +11,7 @@ def test_line_chart():
     LINE bigfoot
         X date BY YEAR
         Y COUNT date
-        COLOR classification
+        SPLIT BY classification
     """
 
     parsed_svl_truth = {
@@ -29,7 +29,7 @@ def test_line_chart():
                 "agg": "COUNT",
                 "field": "date"
             },
-            "color": {
+            "split_by": {
                 "field": "classification"
             }
         }]
@@ -137,7 +137,7 @@ def test_scatter():
     SCATTER bigfoot
         X latitude
         Y temperature_mid
-        COLOR classification
+        SPLIT BY classification
     """
 
     parsed_svl_truth = {
@@ -153,7 +153,7 @@ def test_scatter():
             "y": {
                 "field": "temperature_mid"
             },
-            "color": {
+            "split_by": {
                 "field": "classification"
             }
         }]
