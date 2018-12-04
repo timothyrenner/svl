@@ -35,8 +35,8 @@ def univariate_appended_data():
 
 
 @pytest.fixture
-def color_appended_data():
-    """ A fixture for data that's split by color and appended.
+def split_by_appended_data():
+    """ A fixture for data that's split by and appended.
     """
     return {
         "A": {
@@ -73,7 +73,7 @@ def agged_data():
 
 
 @pytest.fixture
-def color_agged_data():
+def split_by_agged_data():
     """ A fixture for data that's been split by classification and aggregated
         by date.
     """
@@ -97,9 +97,9 @@ def color_agged_data():
     }
 
 
-def test_extract_all_traces_no_color(agged_data):
+def test_extract_all_traces_no_split_by(agged_data):
     """ Tests that the _extract_all_traces function returns the correct value
-        when the plot has no color specifier.
+        when the plot has no split by specifier.
     """
     svl_plot = {
         "x": {
@@ -126,9 +126,9 @@ def test_extract_all_traces_no_color(agged_data):
     assert truth == answer
 
 
-def test_extract_all_traces_color(color_agged_data):
+def test_extract_all_traces_split_by(split_by_agged_data):
     """ Tests that the _extract_all_traces function returns the correct value
-        when the plot has a color specifier.
+        when the plot has a split by specifier.
     """
     svl_plot = {
         "x": {
@@ -139,7 +139,7 @@ def test_extract_all_traces_color(color_agged_data):
             "field": "temperature",
             "agg": "MAX"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
@@ -162,7 +162,7 @@ def test_extract_all_traces_color(color_agged_data):
         }
     ]
 
-    answer = _extract_all_traces(svl_plot, color_agged_data)
+    answer = _extract_all_traces(svl_plot, split_by_agged_data)
 
     assert truth == answer
 
@@ -277,9 +277,9 @@ def test_plotly_bar(agged_data):
     assert truth == answer
 
 
-def test_plotly_bar_color(color_agged_data):
+def test_plotly_bar_split_by(split_by_agged_data):
     """ Tests that the plotly_bar function returns the correct value when the
-        data is split by a color field.
+        data is split by a split by field.
     """
     svl_plot = {
         "type": "bar",
@@ -291,7 +291,7 @@ def test_plotly_bar_color(color_agged_data):
             "field": "temperature",
             "agg": "MAX"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
@@ -323,7 +323,7 @@ def test_plotly_bar_color(color_agged_data):
         ]
     }
 
-    answer = plotly_bar(svl_plot, color_agged_data)
+    answer = plotly_bar(svl_plot, split_by_agged_data)
 
     assert truth == answer
 
@@ -363,9 +363,9 @@ def test_plotly_line(agged_data):
     assert truth == answer
 
 
-def test_plotly_line_color(color_agged_data):
+def test_plotly_line_split_by(split_by_agged_data):
     """ Tests that the plotly_line function returns the correct value when
-        the dataset contains a color split.
+        the dataset contains a split by.
     """
     svl_plot = {
         "type": "line",
@@ -377,7 +377,7 @@ def test_plotly_line_color(color_agged_data):
             "field": "temperature",
             "agg": "MAX"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
@@ -409,7 +409,7 @@ def test_plotly_line_color(color_agged_data):
         ]
     }
 
-    answer = plotly_line(svl_plot, color_agged_data)
+    answer = plotly_line(svl_plot, split_by_agged_data)
 
     assert truth == answer
 
@@ -447,9 +447,9 @@ def test_plotly_scatter(appended_data):
     assert truth == answer
 
 
-def test_plotly_scatter_color(color_appended_data):
+def test_plotly_scatter_split_by(split_by_appended_data):
     """ Tests that the plotly_scatter function returns the correct value when
-        there's a color split.
+        there's a split by split.
     """
     svl_plot = {
         "type": "scatter",
@@ -460,7 +460,7 @@ def test_plotly_scatter_color(color_appended_data):
         "y": {
             "field": "temperature"
         },
-        "color": {
+        "split_by": {
             "field": "classification"
         }
     }
@@ -492,7 +492,7 @@ def test_plotly_scatter_color(color_appended_data):
         "layout": {}
     }
 
-    answer = plotly_scatter(svl_plot, color_appended_data)
+    answer = plotly_scatter(svl_plot, split_by_appended_data)
 
     assert truth == answer
 

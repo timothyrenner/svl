@@ -21,10 +21,10 @@ def _extract_all_traces(svl_plot, data):
             A list of {"x": [ .. ], "y": [ .. ]} style dictionaries to be used
             as traces in plotly plots.
     """
-    if "color" not in svl_plot:
+    if "split_by" not in svl_plot:
         return [data]
     else:
-        return [data[color] for color in sorted(data.keys())]
+        return [data[split_by] for split_by in sorted(data.keys())]
 
 
 def plotly_histogram(svl_plot, data):
@@ -87,12 +87,12 @@ def plotly_bar(svl_plot, data):
     layout = {}
     raw_traces = _extract_all_traces(svl_plot, data)
 
-    if "color" in svl_plot:
+    if "split_by" in svl_plot:
         layout = {"barmode": "group"}
         traces = [
-            merge(plot_type, {"name": color}, trace)
+            merge(plot_type, {"name": split_by}, trace)
             # NOTE: Danger!! Implicit coupling to order here.
-            for color, trace in zip(sorted(data.keys()), raw_traces)
+            for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
         traces = [
@@ -128,11 +128,11 @@ def plotly_line(svl_plot, data):
     layout = {}
     raw_traces = _extract_all_traces(svl_plot, data)
 
-    if "color" in svl_plot:
+    if "split_by" in svl_plot:
         traces = [
-            merge(plot_type, {"name": color}, trace)
+            merge(plot_type, {"name": split_by}, trace)
             # NOTE: Danger!! Implicit coupling to order here.
-            for color, trace in zip(sorted(data.keys()), raw_traces)
+            for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
         traces = [
@@ -167,11 +167,11 @@ def plotly_scatter(svl_plot, data):
     layout = {}
     raw_traces = _extract_all_traces(svl_plot, data)
 
-    if "color" in svl_plot:
+    if "split_by" in svl_plot:
         traces = [
-            merge(plot_type, {"name": color}, trace)
+            merge(plot_type, {"name": split_by}, trace)
             # NOTE: Danger!! Implicit coupling to order here.
-            for color, trace in zip(sorted(data.keys()), raw_traces)
+            for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
         traces = [
