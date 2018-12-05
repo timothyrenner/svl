@@ -16,9 +16,7 @@ mark2d: SCATTER | LINE | BAR
 
 data: CNAME
 
-// TODO: I don't think color should take aggs, but it can be bucketed.
-// X and Y should be bucketable too.
-dimensions: (x | y | color)+
+dimensions: (x | y | split_by)+
 
 mark1d: HISTOGRAM
 
@@ -30,15 +28,14 @@ bins: "BINS" NUMBER
 
 // This allows for both x and y to have aggregations, which results in
 // order ambiguity (i.e. which aggregation gets applied first?).
-// TODO: Find a way to enforce only one aggregation transformation.
-// x: "X" field? (aggregation? | temporal?)
+// TODO: Find a way to enforce only one aggregation transformation
+// between x and y.
 x: "X" ((aggregation field) | (field temporal?))
 
-// y: "Y" field? (aggregation? | temporal?)
 y: "Y" ((aggregation field) | (field temporal?))
 
-// For color temporal is supported irrespective of x and y.
-color: "COLOR" field? temporal?
+// For split by temporal is supported irrespective of x and y.
+split_by: "SPLIT" "BY" field? temporal?
 
 field: CNAME
 

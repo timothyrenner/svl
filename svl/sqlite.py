@@ -58,7 +58,7 @@ def svl_to_sql_xy(svl_plot):
 
     select_fields = []
 
-    for axis in ["x", "y", "color"]:
+    for axis in ["x", "y", "split_by"]:
 
         # Skip if the axis isn't in the plot.
         if axis not in svl_plot:
@@ -72,8 +72,7 @@ def svl_to_sql_xy(svl_plot):
                 axis
             ))
         elif "agg" in svl_plot[axis]:
-            # NOTE: Color axis will not take aggregations. This needs to be
-            # implemented though.
+            # NOTE: Split by axis will not take aggregations.
             select_fields.append("{}({}) AS {}".format(
                 svl_plot[axis]["agg"],
                 field,
@@ -103,9 +102,9 @@ def svl_to_sql_xy(svl_plot):
     elif group_axis:
         group_fields.append(svl_plot[group_axis]["field"])
 
-    # Only add the color to the group by if there's already a group axis.
-    if group_axis and ("color" in svl_plot):
-        group_fields.append(svl_plot["color"]["field"])
+    # Only add the split by to the group by if there's already a group axis.
+    if group_axis and ("split_by" in svl_plot):
+        group_fields.append(svl_plot["split_by"]["field"])
 
     # Step 3: Build the query.
     query = "SELECT {} FROM {}".format(
@@ -146,7 +145,7 @@ def get_svl_data(svl_plot, conn):
     # TODO: There's probably a nice way to abstract the extraction to remove
     # the branching logic.
     if svl_plot["type"] in {"line", "scatter", "bar"}:
-        if "color" not in data_list[0].keys():
+        if "split_by" not in data_list[0].keys():
             svl_data = {"x": [], "y": []}
             for row in data_list:
                 svl_data["x"].append(row["x"])
@@ -154,10 +153,10 @@ def get_svl_data(svl_plot, conn):
         else:
             svl_data = {}
             for row in data_list:
-                if row["color"] not in svl_data:
-                    svl_data[row["color"]] = {"x": [], "y": []}
-                svl_data[row["color"]]["x"].append(row["x"])
-                svl_data[row["color"]]["y"].append(row["y"])
+                if row["split_by"] not in svl_data:
+                    svl_data[row["split_by"]] = {"x": [], "y": []}
+                svl_data[row["split_by"]]["x"].append(row["x"])
+                svl_data[row["split_by"]]["y"].append(row["y"])
     elif svl_plot["type"] == "histogram":
         # Just one dimension for histograms.
         svl_data = {"x": []}

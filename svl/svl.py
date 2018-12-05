@@ -64,8 +64,8 @@ class SVLTransformer(lark.Transformer):
     def y(self, items):
         return {"y": merge(*items)}
 
-    def color(self, items):
-        return {"color": merge(*items)}
+    def split_by(self, items):
+        return {"split_by": merge(*items)}
 
     def field(self, items):
         return {"field": str(items[0])}

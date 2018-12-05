@@ -4,7 +4,7 @@ DATASETS
 LINE bigfoot
     X date BY YEAR
     Y COUNT date
-    COLOR classification
+    SPLIT BY classification
 
 CONCAT(
     BAR bigfoot
