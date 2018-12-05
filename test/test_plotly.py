@@ -178,7 +178,12 @@ def test_plotly_histogram_auto(univariate_appended_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "temperature",
+            "xaxis": {
+                "title": "temperature"
+            }
+        },
         "data": [{
             "type": "histogram",
             "x": [98, 102, 94],
@@ -203,7 +208,12 @@ def test_plotly_histogram_step(univariate_appended_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "temperature",
+            "xaxis": {
+                "title": "temperature"
+            }
+        },
         "data": [{
             "type": "histogram",
             "x": [98, 102, 94],
@@ -230,7 +240,12 @@ def test_plotly_histogram_bins(univariate_appended_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "temperature",
+            "xaxis": {
+                "title": "temperature"
+            }
+        },
         "data": [{
             "type": "histogram",
             "x": [98, 102, 94],
@@ -540,7 +555,12 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_start": 1,
                 "column_end": 3,
                 "plotly": {
-                    "layout": {},
+                    "layout": {
+                        "title": "temperature",
+                        "xaxis": {
+                            "title": "temperature"
+                        }
+                    },
                     "data": [{
                         "type": "histogram",
                         "x": [98, 102, 94],
@@ -553,7 +573,12 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_start": 1,
                 "column_end": 2,
                 "plotly": {
-                    "layout": {},
+                    "layout": {
+                        "title": "temperature",
+                        "xaxis": {
+                            "title": "temperature"
+                        }
+                    },
                     "data": [{
                         "type": "histogram",
                         "x": [98, 102, 94],
@@ -566,7 +591,12 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_start": 2,
                 "column_end": 3,
                 "plotly": {
-                    "layout": {},
+                    "layout": {
+                        "title": "temperature",
+                        "xaxis": {
+                            "title": "temperature"
+                        }
+                    },
                     "data": [{
                         "type": "histogram",
                         "x": [98, 102, 94],

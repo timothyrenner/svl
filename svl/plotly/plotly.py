@@ -48,7 +48,12 @@ def plotly_histogram(svl_plot, data):
         "type": "histogram",
         "x": data["x"]
     }
-    layout = {}
+    layout = {
+        "title": svl_plot["field"],
+        "xaxis": {
+            "title": svl_plot["field"]
+        }
+    }
 
     if "step" in svl_plot:
         # Set the bin size.
