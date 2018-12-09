@@ -13,7 +13,7 @@ CONCAT(
     
     (
         HISTOGRAM bigfoot
-            temperature_mid
+            temperature_high
             BINS 25
     
         HISTOGRAM bigfoot
@@ -21,11 +21,11 @@ CONCAT(
             BINS 25
         
         HISTOGRAM bigfoot
-            temperature_mid
+            temperature_low
             BINS 25
     )
 )
 
 SCATTER bigfoot
     X latitude
-    Y temperature_mid
+    Y moon_phase
