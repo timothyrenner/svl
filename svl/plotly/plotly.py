@@ -1,4 +1,4 @@
-from toolz import merge, compose, pluck
+from toolz import merge, compose, pluck, get
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 listpluck = compose(list, pluck)
@@ -27,6 +27,55 @@ def _extract_all_traces(svl_plot, data):
         return [data[split_by] for split_by in sorted(data.keys())]
 
 
+def _get_title(svl_plot):
+    """ Gets the title of the plot if present, or provides a reasonable
+        default.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specification.
+
+        Returns
+        -------
+        str
+            The title of the plot.
+    """
+    if "title" in svl_plot:
+        return svl_plot["title"]
+    elif svl_plot["type"] == "histogram":
+        return "{}: {}".format(
+            svl_plot["data"],
+            svl_plot["field"]
+        )
+    else:
+        # xy plot
+        return "{}: {} - {}".format(
+            svl_plot["data"],
+            svl_plot["x"]["field"],
+            svl_plot["y"]["field"]
+        )
+
+
+def _get_axis_label(svl_plot, axis=None):
+    # TODO: Docstring
+    # TODO: unit test
+    if svl_plot["type"] == "histogram":
+        return get("label", svl_plot, svl_plot["field"])
+    elif "label" in svl_plot[axis]:
+        # If a label is provided, use it.
+        return svl_plot[axis]["label"]
+    elif "agg" in svl_plot[axis]:
+        # If there's an aggregation, include it.
+        return "{} ({})".format(
+            svl_plot[axis]["field"],
+            svl_plot[axis]["agg"]
+        )
+    else:
+        # Otherwise just grab the field name.
+        return svl_plot[axis]["field"]
+
+
 def plotly_histogram(svl_plot, data):
     """ Transforms an svl plot and dataset into a plotly histogram.
 
@@ -49,9 +98,9 @@ def plotly_histogram(svl_plot, data):
         "x": data["x"]
     }
     layout = {
-        "title": svl_plot["field"],
+        "title": _get_title(svl_plot),
         "xaxis": {
-            "title": svl_plot["field"]
+            "title": _get_axis_label(svl_plot)
         }
     }
 
@@ -89,11 +138,19 @@ def plotly_bar(svl_plot, data):
     """
 
     plot_type = {"type": "bar"}
-    layout = {}
+    layout = {
+        "title": _get_title(svl_plot),
+        "xaxis": {
+            "title": _get_axis_label(svl_plot, axis="x")
+        },
+        "yaxis": {
+            "title": _get_axis_label(svl_plot, axis="y")
+        }
+    }
     raw_traces = _extract_all_traces(svl_plot, data)
 
     if "split_by" in svl_plot:
-        layout = {"barmode": "group"}
+        layout["barmode"] = "group"
         traces = [
             merge(plot_type, {"name": split_by}, trace)
             # NOTE: Danger!! Implicit coupling to order here.

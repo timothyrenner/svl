@@ -2,6 +2,8 @@ import pytest
 
 from svl.plotly.plotly import (
     _extract_all_traces,
+    _get_title,
+    _get_axis_label,
     plotly_histogram,
     plotly_bar,
     plotly_line,
@@ -167,6 +169,168 @@ def test_extract_all_traces_split_by(split_by_agged_data):
     assert truth == answer
 
 
+def test_get_title_explicit():
+    """ Tests that the _get_title function returns the correct value when the
+        title is explicitly provided.
+    """
+    svl_plot = {
+        "dataset": "bigfoot",
+        "x": {
+            "field": "latitude"
+        },
+        "y": {
+            "field": "temperature_mid"
+        },
+        "title": "Temperature by Latitude",
+        "type": "scatter"
+    }
+
+    truth = "Temperature by Latitude"
+    answer = _get_title(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_title_histogram():
+    """ Tests that the _get_title function returns the correct value for
+        histograms.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "field": "temperature_mid",
+        "type": "histogram"
+    }
+
+    truth = "bigfoot: temperature_mid"
+    answer = _get_title(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_title_xy():
+    """ Tests that the _get_title function returns the correct value for xy
+        plots.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "classification"
+        },
+        "y": {
+            "field": "*",
+            "agg": "COUNT"
+        }
+    }
+
+    truth = "bigfoot: classification - *"
+    answer = _get_title(svl_plot)
+    assert truth == answer
+
+
+def test_get_axis_label():
+    """ Tests that the _get_axis_label function returns the correct value when
+        the label is provided.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "line",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR",
+            "label": "Date"
+        },
+        "y": {
+            "field": "*",
+            "agg": "COUNT",
+            "label": "Number of Sightings"
+        },
+        "title": "Bigfoot Sightings by Year"
+    }
+
+    truth = "Date"
+    answer = _get_axis_label(svl_plot, axis="x")
+
+    assert truth == answer
+
+
+def test_get_axis_label_histogram_with_label():
+    """ Tests that the _get_axis_label function returns the correct value for
+        histogram plots when a label is provided.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "field": "wind_speed",
+        "label": "Wind Speed (MPH)"
+    }
+
+    truth = "Wind Speed (MPH)"
+    answer = _get_axis_label(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_axis_label_histogram():
+    """ Tests that the _get_axis_label function returns the correct value for
+        histogram plots.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "field": "wind_speed"
+    }
+
+    truth = "wind_speed"
+    answer = _get_axis_label(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_axis_label_xy_agg():
+    """ Tests that the _get_axis_label function returns the correct value for
+        xy plots when an aggregation is on the axis.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "line",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "field": "*",
+            "agg": "COUNT"
+        }
+    }
+
+    truth = "* (COUNT)"
+    answer = _get_axis_label(svl_plot, axis="y")
+
+    assert truth == answer
+
+
+def test_get_axis_label_xy_noagg():
+    """ Tests that the _get_axis_label function returns the correct value for
+        xy plots.
+    """
+    svl_plot = {
+        "type": "scatter",
+        "data": "bigfoot",
+        "x": {
+            "field": "latitude"
+        },
+        "y": {
+            "field": "temperature_mid"
+        }
+    }
+
+    truth = "temperature_mid"
+    answer = _get_axis_label(svl_plot, axis="y")
+
+    assert truth == answer
+
+
 def test_plotly_histogram_auto(univariate_appended_data):
     """ Tests that the plotly_histogram function returns the correct value
         when there's no step or bin provided.
@@ -174,12 +338,13 @@ def test_plotly_histogram_auto(univariate_appended_data):
 
     svl_plot = {
         "type": "histogram",
-        "field": "temperature"
+        "field": "temperature",
+        "data": "bigfoot"
     }
 
     truth = {
         "layout": {
-            "title": "temperature",
+            "title": "bigfoot: temperature",
             "xaxis": {
                 "title": "temperature"
             }
@@ -204,12 +369,13 @@ def test_plotly_histogram_step(univariate_appended_data):
     svl_plot = {
         "type": "histogram",
         "field": "temperature",
-        "step": 5
+        "step": 5,
+        "data": "bigfoot"
     }
 
     truth = {
         "layout": {
-            "title": "temperature",
+            "title": "bigfoot: temperature",
             "xaxis": {
                 "title": "temperature"
             }
@@ -236,12 +402,13 @@ def test_plotly_histogram_bins(univariate_appended_data):
     svl_plot = {
         "type": "histogram",
         "field": "temperature",
-        "bins": 25
+        "bins": 25,
+        "data": "bigfoot"
     }
 
     truth = {
         "layout": {
-            "title": "temperature",
+            "title": "bigfoot: temperature",
             "xaxis": {
                 "title": "temperature"
             }
@@ -263,6 +430,7 @@ def test_plotly_bar(agged_data):
     """
 
     svl_plot = {
+        "data": "bigfoot",
         "type": "bar",
         "x": {
             "field": "date",
@@ -275,7 +443,15 @@ def test_plotly_bar(agged_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature (MAX)"
+            }
+        },
         "data": [{
             "type": "bar",
             "x": [
@@ -298,6 +474,7 @@ def test_plotly_bar_split_by(split_by_agged_data):
     """
     svl_plot = {
         "type": "bar",
+        "data": "bigfoot",
         "x": {
             "field": "date",
             "temporal": "MONTH"
@@ -313,7 +490,14 @@ def test_plotly_bar_split_by(split_by_agged_data):
 
     truth = {
         "layout": {
-            "barmode": "group"
+            "barmode": "group",
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature (MAX)"
+            }
         },
         "data": [
             {
@@ -523,7 +707,8 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_end": 2,
             "type": "histogram",
             "field": "temperature",
-            "bins": 25
+            "bins": 25,
+            "data": "bigfoot"
         }, {
             "row_start": 1,
             "row_end": 2,
@@ -531,7 +716,8 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_end": 1,
             "type": "histogram",
             "field": "temperature",
-            "bins": 15
+            "bins": 15,
+            "data": "bigfoot"
         }, {
             "row_start": 1,
             "row_end": 2,
@@ -539,7 +725,8 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_end": 2,
             "type": "histogram",
             "field": "temperature",
-            "bins": 10
+            "bins": 10,
+            "data": "bigfoot"
         }
     ]
 
@@ -556,7 +743,7 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_end": 3,
                 "plotly": {
                     "layout": {
-                        "title": "temperature",
+                        "title": "bigfoot: temperature",
                         "xaxis": {
                             "title": "temperature"
                         }
@@ -574,7 +761,7 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_end": 2,
                 "plotly": {
                     "layout": {
-                        "title": "temperature",
+                        "title": "bigfoot: temperature",
                         "xaxis": {
                             "title": "temperature"
                         }
@@ -592,7 +779,7 @@ def test_plotly_template_vars(univariate_appended_data):
                 "column_end": 3,
                 "plotly": {
                     "layout": {
-                        "title": "temperature",
+                        "title": "bigfoot: temperature",
                         "xaxis": {
                             "title": "temperature"
                         }
