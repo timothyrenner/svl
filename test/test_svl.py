@@ -9,8 +9,9 @@ def test_line_chart():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     LINE bigfoot
-        X date BY YEAR
-        Y COUNT date
+        TITLE "Bigfoot Sightings by Year and Classification"
+        X date BY YEAR LABEL "Year"
+        Y COUNT date LABEL "Number of Sightings"
         SPLIT BY classification
     """
 
@@ -21,13 +22,16 @@ def test_line_chart():
         "vcat": [{
             "type": "line",
             "data": "bigfoot",
+            "title": "Bigfoot Sightings by Year and Classification",
             "x": {
                 "field": "date",
-                "temporal": "YEAR"
+                "temporal": "YEAR",
+                "label": "Year"
             },
             "y": {
                 "agg": "COUNT",
-                "field": "date"
+                "field": "date",
+                "label": "Number of Sightings"
             },
             "split_by": {
                 "field": "classification"
@@ -109,7 +113,8 @@ def test_histogram_bins():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        humidity BINS 25
+        TITLE "Bigfoot Sighting Humidity"
+        humidity BINS 25 LABEL "Humidity"
     """
 
     parsed_svl_truth = {
@@ -117,8 +122,10 @@ def test_histogram_bins():
             "bigfoot": "data/bigfoot_sightings.csv"
         }, "vcat": [{
             "data": "bigfoot",
+            "title": "Bigfoot Sighting Humidity",
             "type": "histogram",
             "field": "humidity",
+            "label": "Humidity",
             "bins": 25
         }]
     }

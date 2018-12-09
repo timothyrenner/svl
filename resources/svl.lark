@@ -10,7 +10,9 @@ vcat: "(" chart+ ")"
 
 hcat: "CONCAT" "(" chart+ ")"
 
-chart: (mark2d data dimensions) | (mark1d data mark1d_opts?) | vcat | hcat
+chart: (mark2d data title? dimensions) | (mark1d data title? mark1d_opts?) | vcat | hcat
+
+title: "TITLE" ESCAPED_STRING
 
 mark2d: SCATTER | LINE | BAR
 
@@ -20,7 +22,7 @@ dimensions: (x | y | split_by)+
 
 mark1d: HISTOGRAM
 
-mark1d_opts: field (step | bins)
+mark1d_opts: field (step | bins) label?
 
 step: "STEP" NUMBER
 
@@ -30,9 +32,11 @@ bins: "BINS" NUMBER
 // order ambiguity (i.e. which aggregation gets applied first?).
 // TODO: Find a way to enforce only one aggregation transformation
 // between x and y.
-x: "X" ((aggregation field) | (field temporal?))
+x: "X" ((aggregation field) | (field temporal?)) label?
 
-y: "Y" ((aggregation field) | (field temporal?))
+y: "Y" ((aggregation field) | (field temporal?)) label?
+
+label: "LABEL" ESCAPED_STRING
 
 // For split by temporal is supported irrespective of x and y.
 split_by: "SPLIT" "BY" field? temporal?

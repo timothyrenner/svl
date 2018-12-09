@@ -37,6 +37,9 @@ class SVLTransformer(lark.Transformer):
     def chart(self, items):
         return merge(*items)
 
+    def title(self, items):
+        return {"title": str(items[0])[1:-1]}
+
     def mark2d(self, items):
         return {"type": str(items[0]).lower()}
 
@@ -48,6 +51,9 @@ class SVLTransformer(lark.Transformer):
 
     def mark1d_opts(self, items):
         return merge(*items)
+
+    def label(self, items):
+        return {"label": str(items[0])[1:-1]}
 
     def bins(self, items):
         return {"bins": int(items[0])}
