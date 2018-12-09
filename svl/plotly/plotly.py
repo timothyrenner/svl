@@ -248,7 +248,15 @@ def plotly_scatter(svl_plot, data):
     """
 
     plot_type = {"mode": "markers", "type": "scatter"}
-    layout = {}
+    layout = {
+        "title": _get_title(svl_plot),
+        "xaxis": {
+            "title": _get_axis_label(svl_plot, axis="x")
+        },
+        "yaxis": {
+            "title": _get_axis_label(svl_plot, axis="y")
+        }
+    }
     raw_traces = _extract_all_traces(svl_plot, data)
 
     if "split_by" in svl_plot:

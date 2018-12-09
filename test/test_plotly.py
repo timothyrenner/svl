@@ -636,6 +636,7 @@ def test_plotly_scatter(appended_data):
     """
     svl_plot = {
         "type": "scatter",
+        "data": "bigfoot",
         "x": {
             "field": "date",
             "temporal": "DAY"
@@ -646,7 +647,15 @@ def test_plotly_scatter(appended_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature"
+            }
+        },
         "data": [{
             "mode": "markers",
             "type": "scatter",
@@ -670,6 +679,7 @@ def test_plotly_scatter_split_by(split_by_appended_data):
     """
     svl_plot = {
         "type": "scatter",
+        "data": "bigfoot",
         "x": {
             "field": "date",
             "temporal": "MONTH"
@@ -706,7 +716,15 @@ def test_plotly_scatter_split_by(split_by_appended_data):
                 "mode": "markers"
             }
         ],
-        "layout": {}
+        "layout": {
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature"
+            }
+        }
     }
 
     answer = plotly_scatter(svl_plot, split_by_appended_data)
