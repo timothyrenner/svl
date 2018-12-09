@@ -2,30 +2,39 @@ DATASETS
     bigfoot "data/bigfoot_sightings.csv"
 
 LINE bigfoot
-    X date BY YEAR
-    Y COUNT date
+    TITLE "Bigfoot Sightings by Year"
+    X date BY YEAR LABEL "Year of Sighting"
+    Y COUNT date LABEL "Number of Sightings"
     SPLIT BY classification
 
 CONCAT(
     BAR bigfoot
-        X classification
-        Y COUNT temperature_mid
+        TITLE "Bigfoot Sightings by Classification"
+        X classification LABEL "Classification"
+        Y COUNT temperature_mid LABEL "Number of Sightings"
     
     (
         HISTOGRAM bigfoot
-            temperature_mid
+            TITLE "Bigfoot Sighting High Temperature"
+            temperature_high
             BINS 25
+            LABEL "Temperature (F)"
     
         HISTOGRAM bigfoot
+            TITLE "Bigfoot Sighting Mid Temperature"
             temperature_mid
             BINS 25
+            LABEL "Temperature (F)"
         
         HISTOGRAM bigfoot
-            temperature_mid
+            TITLE "Bigfoot Sighting Low Temperature"
+            temperature_low
             BINS 25
+            LABEL "Temperature (F)"
     )
 )
 
 SCATTER bigfoot
-    X latitude
-    Y temperature_mid
+    TITLE "Bigfoot Sighting Moon Phase by Latitude"
+    X latitude LABEL "Latitude (deg)"
+    Y moon_phase LABEL "Moon Phase"
