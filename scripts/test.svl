@@ -14,11 +14,19 @@ CONCAT(
         Y COUNT temperature_mid LABEL "Number of Sightings"
     
     (
-        HISTOGRAM bigfoot
-            TITLE "Bigfoot Sighting High Temperature"
-            temperature_high
-            BINS 25
-            LABEL "Temperature (F)"
+        CONCAT(
+            HISTOGRAM bigfoot
+                TITLE "Bigfoot Sighting High Temperature"
+                temperature_high
+                BINS 25
+                LABEL "Temperature (F)"
+
+            HISTOGRAM bigfoot
+                TITLE "Bigfoot Sighting Low Temperature"
+                temperature_low
+                BINS 25
+                LABEL "Temperature (F)"
+        )
     
         HISTOGRAM bigfoot
             TITLE "Bigfoot Sighting Mid Temperature"
@@ -26,11 +34,7 @@ CONCAT(
             BINS 25
             LABEL "Temperature (F)"
         
-        HISTOGRAM bigfoot
-            TITLE "Bigfoot Sighting Low Temperature"
-            temperature_low
-            BINS 25
-            LABEL "Temperature (F)"
+
     )
 )
 
