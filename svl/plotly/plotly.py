@@ -58,8 +58,22 @@ def _get_title(svl_plot):
 
 
 def _get_axis_label(svl_plot, axis=None):
-    # TODO: Docstring
-    # TODO: unit test
+    """ Gets the label of the provided axis if present, or generates a
+        reasonable default.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+        axis : str
+            The axis to get the label for. Default=None (for single axis
+            plots).
+
+        Returns
+        -------
+        str
+            The label for the axis.
+    """
     if svl_plot["type"] == "histogram":
         return get("label", svl_plot, svl_plot["field"])
     elif "label" in svl_plot[axis]:
