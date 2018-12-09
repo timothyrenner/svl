@@ -532,6 +532,7 @@ def test_plotly_line(agged_data):
     """
 
     svl_plot = {
+        "data": "bigfoot",
         "type": "line",
         "x": {
             "field": "date",
@@ -544,7 +545,15 @@ def test_plotly_line(agged_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature (MAX)"
+            }
+        },
         "data": [{
             "mode": "lines+markers",
             "type": "scatter",
@@ -568,6 +577,7 @@ def test_plotly_line_split_by(split_by_agged_data):
     """
     svl_plot = {
         "type": "line",
+        "data": "bigfoot",
         "x": {
             "field": "date",
             "temporal": "MONTH"
@@ -582,7 +592,15 @@ def test_plotly_line_split_by(split_by_agged_data):
     }
 
     truth = {
-        "layout": {},
+        "layout": {
+            "title": "bigfoot: date - temperature",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature (MAX)"
+            }
+        },
         "data": [
             {
                 "type": "scatter",
