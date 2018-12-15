@@ -43,7 +43,7 @@ def _get_title(svl_plot):
     """
     if "title" in svl_plot:
         return svl_plot["title"]
-    elif svl_plot["type"] == "histogram":
+    elif (svl_plot["type"] == "histogram") or (svl_plot["type"] == "pie"):
         return "{}: {}".format(
             svl_plot["data"],
             svl_plot["field"]
@@ -131,6 +131,39 @@ def plotly_histogram(svl_plot, data):
     return {
         "layout": layout,
         "data": [merge(trace, bins)]
+    }
+
+
+def plotly_pie(svl_plot, data):
+    """ Creates a plotly pie chart from the SVL plot and data specs.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        data : dict
+            The SVL data specifier.
+
+        Returns
+        -------
+        dict
+            The dictionary defining the plotly plot.
+    """
+    layout = {
+        "title": _get_title(svl_plot)
+    }
+
+    trace = {
+        "type": "pie",
+        "labels": data["labels"],
+        "values": data["values"],
+        "hole": get("hole", svl_plot, 0)
+    }
+
+    return {
+        "layout": layout,
+        "data": [trace]
     }
 
 
@@ -281,7 +314,8 @@ PLOTLY_PLOTS = {
     "histogram": plotly_histogram,
     "bar": plotly_bar,
     "line": plotly_line,
-    "scatter": plotly_scatter
+    "scatter": plotly_scatter,
+    "pie": plotly_pie
 }
 
 
