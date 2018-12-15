@@ -78,8 +78,10 @@ def test_svl_to_sql_pie():
         "field": "classification",
     }
 
-    truth_query = \
-        "SELECT classification AS label, COUNT(*) AS value FROM bigfoot"
+    truth_query = (
+        "SELECT classification AS label, COUNT(*) AS value FROM bigfoot "
+        "GROUP BY classification"
+    )
 
     answer_query = svl_to_sql_pie(svl_plot)
 

@@ -40,9 +40,10 @@ def svl_to_sql_hist(svl_plot):
 
 
 def svl_to_sql_pie(svl_plot):
-    return "SELECT {} AS label, COUNT(*) AS value FROM {}".format(
+    return "SELECT {} AS label, COUNT(*) AS value FROM {} GROUP BY {}".format(
         svl_plot["field"],
-        svl_plot["data"]
+        svl_plot["data"],
+        svl_plot["field"]
     )
 
 
