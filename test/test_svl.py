@@ -135,6 +135,36 @@ def test_histogram_bins():
     assert parsed_svl_truth == parsed_svl_answer
 
 
+def test_pie():
+    """ Tests that the pie type is properly parsed.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    PIE bigfoot
+        TITLE "Bigfoot Sightings by Classification"
+        classification
+        HOLE 0.3
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "title": "Bigfoot Sightings by Classification",
+            "type": "pie",
+            "field": "classification",
+            "hole": 0.3
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
 def test_scatter():
     """ Tests that the scatter type is properly parsed.
     """

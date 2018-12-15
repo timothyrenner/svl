@@ -10,23 +10,31 @@ vcat: "(" chart+ ")"
 
 hcat: "CONCAT" "(" chart+ ")"
 
-chart: (mark2d data title? dimensions) | (mark1d data title? mark1d_opts?) | vcat | hcat
+chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
+
+xy_chart: markxy data title? dimensions
+
+histogram_chart: "HISTOGRAM" data title? field histogram_opts?
+
+pie_chart: "PIE" data title? field pie_opts?
 
 title: "TITLE" ESCAPED_STRING
 
-mark2d: SCATTER | LINE | BAR
+markxy: SCATTER | LINE | BAR
 
 data: CNAME
 
 dimensions: (x | y | split_by)+
 
-mark1d: HISTOGRAM
+histogram_opts: (step | bins) label?
 
-mark1d_opts: field (step | bins) label?
+pie_opts: hole
 
 step: "STEP" NUMBER
 
 bins: "BINS" NUMBER
+
+hole: "HOLE" NUMBER
 
 // This allows for both x and y to have aggregations, which results in
 // order ambiguity (i.e. which aggregation gets applied first?).
@@ -54,6 +62,8 @@ BAR: "BAR"
 LINE: "LINE"
 
 HISTOGRAM: "HISTOGRAM"
+
+PIE: "PIE"
 
 COUNT: "COUNT"
 

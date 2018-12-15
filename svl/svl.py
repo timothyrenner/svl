@@ -40,16 +40,25 @@ class SVLTransformer(lark.Transformer):
     def title(self, items):
         return {"title": str(items[0])[1:-1]}
 
-    def mark2d(self, items):
-        return {"type": str(items[0]).lower()}
+    def xy_chart(self, items):
+        return merge(*items)
 
-    def mark1d(self, items):
+    def histogram_chart(self, items):
+        return merge({"type": "histogram"}, *items[1:])
+
+    def pie_chart(self, items):
+        return merge({"type": "pie"}, *items[1:])
+
+    def markxy(self, items):
         return {"type": str(items[0]).lower()}
 
     def data(self, items):
         return {"data": str(items[0])}
 
-    def mark1d_opts(self, items):
+    def histogram_opts(self, items):
+        return merge(*items)
+
+    def pie_opts(self, items):
         return merge(*items)
 
     def label(self, items):
@@ -60,6 +69,9 @@ class SVLTransformer(lark.Transformer):
 
     def step(self, items):
         return {"step": float(items[0])}
+
+    def hole(self, items):
+        return {"hole": float(items[0])}
 
     def dimensions(self, items):
         return merge(*items)
