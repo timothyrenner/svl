@@ -8,6 +8,7 @@ from svl.sqlite import (
     _csv_to_sqlite_pandas,
     svl_to_sql_xy,
     svl_to_sql_hist,
+    svl_to_sql_pie,
     get_svl_data
 )
 
@@ -65,6 +66,24 @@ def test_svl_to_sql_hist():
     truth_query = "SELECT temperature_mid AS x FROM bigfoot"
 
     answer_query = svl_to_sql_hist(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_pie():
+    """ Tests that the svl_to_sql_pie function returns the correct value.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "field": "classification",
+    }
+
+    truth_query = (
+        "SELECT classification AS label, COUNT(*) AS value FROM bigfoot "
+        "GROUP BY classification"
+    )
+
+    answer_query = svl_to_sql_pie(svl_plot)
 
     assert truth_query == answer_query
 
@@ -324,3 +343,19 @@ def test_get_svl_data_histogram(test_conn):
 
     answer = get_svl_data(svl_plot, test_conn)
     assert "x" in answer
+
+
+def test_get_svl_data_pie(test_conn):
+    """ Tests that the get_svl_data function returns the correct data for pie
+        plots.
+    """
+    svl_plot = {
+        "type": "pie",
+        "data": "bigfoot",
+        "field": "classification"
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+    assert "labels" in answer
+    assert "values" in answer
+    assert len(answer["labels"]) == len(answer["values"])

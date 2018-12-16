@@ -5,6 +5,7 @@ from svl.plotly.plotly import (
     _get_title,
     _get_axis_label,
     plotly_histogram,
+    plotly_pie,
     plotly_bar,
     plotly_line,
     plotly_scatter,
@@ -33,6 +34,16 @@ def univariate_appended_data():
     """
     return {
         "x": [98, 102, 94]
+    }
+
+
+@pytest.fixture
+def univariate_categorical_data():
+    """ A fixture for univariate categorical data.
+    """
+    return {
+        "labels": ["Class A", "Class B", "Class C"],
+        "values": [10, 5, 1]
     }
 
 
@@ -202,6 +213,22 @@ def test_get_title_histogram():
     }
 
     truth = "bigfoot: temperature_mid"
+    answer = _get_title(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_title_pie():
+    """ Tests that the _get_title function returns the correct value for
+        pie charts.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "field": "classification",
+        "type": "pie"
+    }
+
+    truth = "bigfoot: classification"
     answer = _get_title(svl_plot)
 
     assert truth == answer
@@ -422,6 +449,60 @@ def test_plotly_histogram_bins(univariate_appended_data):
 
     answer = plotly_histogram(svl_plot, univariate_appended_data)
 
+    assert truth == answer
+
+
+def test_plotly_pie(univariate_categorical_data):
+    """ Tests that the plotly_pie function returns the correct value.
+    """
+
+    svl_plot = {
+        "type": "pie",
+        "field": "classification",
+        "data": "bigfoot"
+    }
+
+    truth = {
+        "layout": {
+            "title": "bigfoot: classification"
+        },
+        "data": [{
+            "type": "pie",
+            "labels": ["Class A", "Class B", "Class C"],
+            "values": [10, 5, 1],
+            "hole": 0
+        }]
+    }
+
+    answer = plotly_pie(svl_plot, univariate_categorical_data)
+    assert truth == answer
+
+
+def test_plotly_pie_hole(univariate_categorical_data):
+    """ Tests that the plotly_pie function returns the correct value when a
+        hole value is provided.
+    """
+    svl_plot = {
+        "type": "pie",
+        "field": "classification",
+        "data": "bigfoot",
+        "hole": 0.4,
+        "title": "Bigfoot Sightings by Classification"
+    }
+
+    truth = {
+        "layout": {
+            "title": "Bigfoot Sightings by Classification"
+        },
+        "data": [{
+            "type": "pie",
+            "labels": ["Class A", "Class B", "Class C"],
+            "values": [10, 5, 1],
+            "hole": 0.4
+        }]
+    }
+
+    answer = plotly_pie(svl_plot, univariate_categorical_data)
     assert truth == answer
 
 

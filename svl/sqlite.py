@@ -39,6 +39,14 @@ def svl_to_sql_hist(svl_plot):
     )
 
 
+def svl_to_sql_pie(svl_plot):
+    return "SELECT {} AS label, COUNT(*) AS value FROM {} GROUP BY {}".format(
+        svl_plot["field"],
+        svl_plot["data"],
+        svl_plot["field"]
+    )
+
+
 def svl_to_sql_xy(svl_plot):
     """ Takes an SVL plot specification and produces a SQL query to retrieve
         the data.
@@ -123,10 +131,14 @@ def svl_to_sql_xy(svl_plot):
 
 def get_svl_data(svl_plot, conn):
     # Step 1: Create the query.
+    # NOTE: Kind of annoying to touch this so many times - might be worth
+    # refactoring a little bit so everything's in _one_ if statement.
     if svl_plot["type"] in {"line", "scatter", "bar"}:
         query = svl_to_sql_xy(svl_plot)
     elif svl_plot["type"] == "histogram":
         query = svl_to_sql_hist(svl_plot)
+    elif svl_plot["type"] == "pie":
+        query = svl_to_sql_pie(svl_plot)
 
     # Step 2: Execute the query and retrieve the results.
     conn.row_factory = sqlite3.Row
@@ -162,4 +174,12 @@ def get_svl_data(svl_plot, conn):
         svl_data = {"x": []}
         for row in data_list:
             svl_data["x"].append(row["x"])
+    elif svl_plot["type"] == "pie":
+        svl_data = {
+            "labels": [],
+            "values": []
+        }
+        for row in data_list:
+            svl_data["labels"].append(row["label"])
+            svl_data["values"].append(row["value"])
     return svl_data
