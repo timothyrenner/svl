@@ -12,13 +12,15 @@ hcat: "CONCAT" "(" chart+ ")"
 
 chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 
-xy_chart: markxy data title? dimensions
+xy_chart: markxy data title? dimensions filter?
 
-histogram_chart: "HISTOGRAM" data title? field histogram_opts?
+histogram_chart: "HISTOGRAM" data title? field histogram_opts? filter?
 
-pie_chart: "PIE" data title? field pie_opts?
+pie_chart: "PIE" data title? field pie_opts? filter?
 
 title: "TITLE" ESCAPED_STRING
+
+filter: "FILTER" ESCAPED_STRING
 
 markxy: SCATTER | LINE | BAR
 

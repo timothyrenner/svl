@@ -40,6 +40,9 @@ class SVLTransformer(lark.Transformer):
     def title(self, items):
         return {"title": str(items[0])[1:-1]}
 
+    def filter(self, items):
+        return {"filter": str(items[0])[1:-1]}
+
     def xy_chart(self, items):
         return merge(*items)
 

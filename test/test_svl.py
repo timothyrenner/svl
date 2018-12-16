@@ -13,6 +13,7 @@ def test_line_chart():
         X date BY YEAR LABEL "Year"
         Y COUNT date LABEL "Number of Sightings"
         SPLIT BY classification
+        FILTER "date > '1990-01-01'"
     """
 
     parsed_svl_truth = {
@@ -35,7 +36,8 @@ def test_line_chart():
             },
             "split_by": {
                 "field": "classification"
-            }
+            },
+            "filter": "date > '1990-01-01'"
         }]
     }
 

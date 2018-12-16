@@ -70,6 +70,26 @@ def test_svl_to_sql_hist():
     assert truth_query == answer_query
 
 
+def test_svl_to_sql_hist_filter():
+    """ Tests that the svl_to_sql_hist function returns the correct value when
+        there's a filter.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "field": "temperature_mid",
+        "bins": 25,
+        "filter": "temperature_mid <= 100"
+    }
+
+    truth_query = \
+        "SELECT temperature_mid AS x FROM bigfoot WHERE temperature_mid <= 100"
+
+    answer_query = svl_to_sql_hist(svl_plot)
+
+    assert truth_query == answer_query
+
+
 def test_svl_to_sql_pie():
     """ Tests that the svl_to_sql_pie function returns the correct value.
     """
@@ -88,9 +108,29 @@ def test_svl_to_sql_pie():
     assert truth_query == answer_query
 
 
+def test_svl_to_sql_pie_filter():
+    """ Tests that the svl_to_sql_pie function returns the correct value when
+        a filter has been applied.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "field": "classification",
+        "filter": "date >= '1960-01-01'"
+    }
+
+    truth_query = (
+        "SELECT classification AS label, COUNT(*) AS value FROM bigfoot "
+        "WHERE date >= '1960-01-01' GROUP BY classification"
+    )
+
+    answer_query = svl_to_sql_pie(svl_plot)
+
+    assert truth_query == answer_query
+
+
 def test_svl_to_sql_xy():
     """ Tests that the svl_to_sql_xy function returns the correct value when
-        there are no aggregations or colors.
+        there are no aggregations or split_bys.
     """
     svl_plot = {
         "data": "bigfoot",
@@ -104,6 +144,30 @@ def test_svl_to_sql_xy():
 
     truth_query = "SELECT latitude AS x, temperature_mid AS y FROM bigfoot"
 
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_filter():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there's a filter.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {
+            "field": "latitude"
+        },
+        "y": {
+            "field": "temperature_mid"
+        },
+        "filter": "latitude < 84"
+    }
+
+    truth_query = (
+        "SELECT latitude AS x, temperature_mid AS y FROM bigfoot "
+        "WHERE latitude < 84"
+    )
     answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
