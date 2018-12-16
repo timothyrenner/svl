@@ -6,7 +6,7 @@ LINE bigfoot
     X date BY YEAR LABEL "Year of Sighting"
     Y COUNT date LABEL "Number of Sightings"
     SPLIT BY classification
-    FILTER "date > '1990-01-01'"
+    FILTER "date > '1960-01-01'"
 
 CONCAT(
     (

@@ -33,18 +33,29 @@ def csv_to_sqlite(svl_datasets):
 
 
 def svl_to_sql_hist(svl_plot):
-    return "SELECT {} AS x FROM {}".format(
+    query = "SELECT {} AS x FROM {}".format(
         svl_plot["field"],
         svl_plot["data"]
     )
 
+    if "filter" in svl_plot:
+        query = "{} WHERE {}".format(query, svl_plot["filter"])
+
+    return query
+
 
 def svl_to_sql_pie(svl_plot):
-    return "SELECT {} AS label, COUNT(*) AS value FROM {} GROUP BY {}".format(
+    query = "SELECT {} AS label, COUNT(*) AS value FROM {}".format(
         svl_plot["field"],
-        svl_plot["data"],
-        svl_plot["field"]
+        svl_plot["data"]
     )
+
+    if "filter" in svl_plot:
+        query = "{} WHERE {}".format(query, svl_plot["filter"])
+
+    query = "{} GROUP BY {}".format(query, svl_plot["field"])
+
+    return query
 
 
 def svl_to_sql_xy(svl_plot):
@@ -119,6 +130,9 @@ def svl_to_sql_xy(svl_plot):
         ", ".join(select_fields),
         svl_plot["data"]
     )
+
+    if "filter" in svl_plot:
+        query = "{} WHERE {}".format(query, svl_plot["filter"])
 
     if group_axis:
         query = "{} GROUP BY {}".format(
