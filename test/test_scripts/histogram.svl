@@ -2,4 +2,4 @@ DATASETS
     bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
 
 HISTOGRAM bigfoot
-    temperature_mid BINS 25
+    FIELD temperature_mid BINS 25

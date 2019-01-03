@@ -89,7 +89,14 @@ class SVLTransformer(lark.Transformer):
         return {"split_by": merge(*items)}
 
     def field(self, items):
-        return {"field": str(items[0])}
+        if len(items) == 1:
+            return {"field": str(items[0])}
+        else:
+            print(items)
+            return merge(
+                {"field": str(items[0])},
+                *items[1:]
+            )
 
     def temporal(self, items):
         return {"temporal": str(items[0])}

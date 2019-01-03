@@ -9,10 +9,10 @@ def test_line_chart():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     LINE bigfoot
-        TITLE "Bigfoot Sightings by Year and Classification"
         X date BY YEAR LABEL "Year"
         Y COUNT date LABEL "Number of Sightings"
         SPLIT BY classification
+        TITLE "Bigfoot Sightings by Year and Classification"
         FILTER "date > '1990-01-01'"
     """
 
@@ -87,7 +87,8 @@ def test_histogram_step():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        temperature_mid STEP 5
+        FIELD temperature_mid
+        STEP 5
     """
 
     parsed_svl_truth = {
@@ -116,7 +117,8 @@ def test_histogram_bins():
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
         TITLE "Bigfoot Sighting Humidity"
-        humidity BINS 25 LABEL "Humidity"
+        BINS 25
+        FIELD humidity LABEL "Humidity"
     """
 
     parsed_svl_truth = {
@@ -145,8 +147,8 @@ def test_pie():
         bigfoot "data/bigfoot_sightings.csv"
     PIE bigfoot
         TITLE "Bigfoot Sightings by Classification"
-        classification
         HOLE 0.3
+        FIELD classification
     """
 
     parsed_svl_truth = {

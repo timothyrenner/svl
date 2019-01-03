@@ -12,11 +12,19 @@ hcat: "CONCAT" "(" chart+ ")"
 
 chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 
-xy_chart: markxy data title? dimensions filter?
+// The XX_property directives include the dimensions, so at least that one
+// is required. That will have to be enforced in the compiler though.
+xy_chart: markxy data xy_property+
 
-histogram_chart: "HISTOGRAM" data title? field histogram_opts? filter?
+histogram_chart: "HISTOGRAM" data histogram_property+
 
-pie_chart: "PIE" data title? field pie_opts? filter?
+pie_chart: "PIE" data pie_property+
+
+?xy_property: title | dimensions | filter
+
+?histogram_property: title | field_explicit | histogram_opts | filter
+
+?pie_property: title | field_explicit | pie_opts | filter
 
 title: "TITLE" ESCAPED_STRING
 
@@ -28,7 +36,7 @@ data: CNAME
 
 dimensions: (x | y | split_by)+
 
-histogram_opts: (step | bins) label?
+histogram_opts: step | bins
 
 pie_opts: hole
 
@@ -42,16 +50,20 @@ hole: "HOLE" NUMBER
 // order ambiguity (i.e. which aggregation gets applied first?).
 // TODO: Find a way to enforce only one aggregation transformation
 // between x and y.
-x: "X" ((aggregation field) | (field temporal?)) label?
+x: "X" aggregation? field
 
-y: "Y" ((aggregation field) | (field temporal?)) label?
+y: "Y" aggregation? field
 
 label: "LABEL" ESCAPED_STRING
 
 // For split by temporal is supported irrespective of x and y.
-split_by: "SPLIT" "BY" field? temporal?
+split_by: "SPLIT" "BY" field
 
-field: CNAME
+?field_explicit: "FIELD" field
+
+field: CNAME field_property*
+
+?field_property: temporal | label
 
 aggregation: COUNT | MIN | MAX | AVG
 
