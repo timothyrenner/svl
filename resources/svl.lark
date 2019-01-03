@@ -12,6 +12,8 @@ hcat: "CONCAT" "(" chart+ ")"
 
 chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 
+// The XX_property directives include the dimensions, so at least that one
+// is required. That will have to be enforced in the compiler though.
 xy_chart: markxy data xy_property+
 
 histogram_chart: "HISTOGRAM" data histogram_property+
