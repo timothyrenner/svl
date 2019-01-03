@@ -16,30 +16,27 @@ CONCAT(
             Y COUNT temperature_mid LABEL "Number of Sightings"
         PIE bigfoot
             TITLE "Bigfoot Sightings by Classification"
-            classification
             HOLE 0.3
+            FIELD classification
     )
     
     (
         CONCAT(
             HISTOGRAM bigfoot
                 TITLE "Bigfoot Sighting High Temperature"
-                temperature_high
+                FIELD temperature_high LABEL "Temperature (F)"
                 BINS 25
-                LABEL "Temperature (F)"
 
             HISTOGRAM bigfoot
-                TITLE "Bigfoot Sighting Low Temperature"
-                temperature_low
                 BINS 25
-                LABEL "Temperature (F)"
+                FIELD temperature_low LABEL "Temperature (F)"
+                TITLE "Bigfoot Sighting Low Temperature"
         )
     
         HISTOGRAM bigfoot
-            TITLE "Bigfoot Sighting Mid Temperature"
-            temperature_mid
             BINS 25
-            LABEL "Temperature (F)"
+            TITLE "Bigfoot Sighting Mid Temperature"
+            FIELD temperature_mid LABEL "Temperature (F)"
         
 
     )
