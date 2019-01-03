@@ -19,6 +19,18 @@ TEMPORAL_CONVERTERS = {
 
 
 def _csv_to_sqlite_pandas(svl_datasets):
+    """ Loads SVL datasets from CSV to SQLite using pandas.
+
+        Parameters
+        -----------
+        svl_datasets : dict
+            The SVL dataset definitions.
+
+        Returns
+        -------
+        sqlite3.Connection
+            The connection to the in-memory SQLite database.
+    """
     conn = sqlite3.connect(":memory:")
     for table_name, csv_filename in svl_datasets.items():
         pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
@@ -26,6 +38,20 @@ def _csv_to_sqlite_pandas(svl_datasets):
 
 
 def csv_to_sqlite(svl_datasets):
+    """ Loads SVL datasets from CSV to SQLite.
+
+        Uses pandas if available.
+
+        Parameters
+        ----------
+        svl_datasets : dict
+            The SVL dataset definitions.
+
+        Returns
+        -------
+        sqlite3.Connection
+            The connection to the in-memory SQLite database.
+    """
     if PANDAS:
         return _csv_to_sqlite_pandas(svl_datasets)
     else:
@@ -33,6 +59,18 @@ def csv_to_sqlite(svl_datasets):
 
 
 def svl_to_sql_hist(svl_plot):
+    """ Constructs a SQL query for histogram plots.
+
+        Parameters
+        -----------
+        svl_plot : dict
+            The SVL plot definition.
+
+        Returns
+        -------
+        str
+            The SQL query for the dataset required for the plot.
+    """
     query = "SELECT {} AS x FROM {}".format(
         svl_plot["field"],
         svl_plot["data"]
@@ -45,6 +83,18 @@ def svl_to_sql_hist(svl_plot):
 
 
 def svl_to_sql_pie(svl_plot):
+    """ Constructs a SQL query for pie charts.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot definition.
+
+        Returns
+        -------
+        str
+            The SQL query for the dataset required for the plot.
+    """
     query = "SELECT {} AS label, COUNT(*) AS value FROM {}".format(
         svl_plot["field"],
         svl_plot["data"]
@@ -71,7 +121,6 @@ def svl_to_sql_xy(svl_plot):
         -------
         str
             The query to execute.
-
     """
     # Step 1: Process the selects.
 
@@ -144,6 +193,22 @@ def svl_to_sql_xy(svl_plot):
 
 
 def get_svl_data(svl_plot, conn):
+    """ Obtains the data for the provided SVL plot from the SQLite database.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot definition.
+
+        conn : sqlite3.Connection
+            The SQLite database connection. Must point to the database loaded
+            with the SVL datasets.
+
+        Returns
+        -------
+        dict
+            The dataset required for the plot.
+    """
     # Step 1: Create the query.
     # NOTE: Kind of annoying to touch this so many times - might be worth
     # refactoring a little bit so everything's in _one_ if statement.
