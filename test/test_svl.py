@@ -146,25 +146,31 @@ def test_pie():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     PIE bigfoot
-        TITLE "Bigfoot Sightings by Classification"
+        TITLE "Bigfoot Sightings with Location"
         HOLE 0.3
-        FIELD classification
+        FIELD TRANSFORM "CASE WHEN latitude IS NULL THEN 'no_location'
+            ELSE 'has_location' END"
     """
 
+    transform_truth = """CASE WHEN latitude IS NULL THEN \'no_location\'
+            ELSE \'has_location\' END"""
     parsed_svl_truth = {
         "datasets": {
             "bigfoot": "data/bigfoot_sightings.csv"
         },
         "vcat": [{
             "data": "bigfoot",
-            "title": "Bigfoot Sightings by Classification",
+            "title": "Bigfoot Sightings with Location",
             "type": "pie",
-            "field": "classification",
+            "field": {
+                "transform": transform_truth
+            },
             "hole": 0.3
         }]
     }
 
     parsed_svl_answer = parse_svl(svl_string)
+    print(parsed_svl_answer['vcat'])
 
     assert parsed_svl_truth == parsed_svl_answer
 

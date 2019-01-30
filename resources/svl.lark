@@ -61,13 +61,15 @@ split_by: "SPLIT" "BY" field
 
 ?field_explicit: "FIELD" field
 
-field: CNAME field_property*
+field: transform | (CNAME field_property*)
 
 ?field_property: temporal | label
 
 aggregation: COUNT | MIN | MAX | AVG
 
 temporal: "BY" (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
+
+transform: "TRANSFORM" ESCAPED_STRING
 
 SCATTER: "SCATTER"
 
