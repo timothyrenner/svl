@@ -22,9 +22,9 @@ pie_chart: "PIE" data pie_property+
 
 ?xy_property: title | dimensions | filter
 
-?histogram_property: title | field_explicit | histogram_opts | filter
+?histogram_property: title | axis | histogram_opts | filter
 
-?pie_property: title | field_explicit | pie_opts | filter
+?pie_property: title | axis | pie_opts | filter
 
 title: "TITLE" ESCAPED_STRING
 
@@ -36,9 +36,9 @@ data: CNAME
 
 dimensions: (x | y | split_by)+
 
-histogram_opts: step | bins
+?histogram_opts: step | bins
 
-pie_opts: hole
+?pie_opts: hole
 
 step: "STEP" NUMBER
 
@@ -50,20 +50,22 @@ hole: "HOLE" NUMBER
 // order ambiguity (i.e. which aggregation gets applied first?).
 // TODO: Find a way to enforce only one aggregation transformation
 // between x and y.
-x: "X" aggregation? field
+x: "X" axis_spec axis_modifier*
 
-y: "Y" aggregation? field
+y: "Y" axis_spec axis_modifier*
+
+axis: "AXIS" axis_spec axis_modifier*
+
+?axis_spec: field | transform
+
+?axis_modifier: aggregation | temporal | label
 
 label: "LABEL" ESCAPED_STRING
 
 // For split by temporal is supported irrespective of x and y.
 split_by: "SPLIT" "BY" field
 
-?field_explicit: "FIELD" field
-
-field: transform | (CNAME field_property*)
-
-?field_property: temporal | label
+field: CNAME
 
 aggregation: COUNT | MIN | MAX | AVG
 
