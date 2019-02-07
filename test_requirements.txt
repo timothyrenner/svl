@@ -1,4 +1,4 @@
-pytest==3.3.0
-pytest-cov
+pytest
+pytest-cov==2.5.1
 python-coveralls
 hypothesis
