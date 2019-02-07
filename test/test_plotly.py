@@ -208,7 +208,9 @@ def test_get_title_histogram():
     """
     svl_plot = {
         "data": "bigfoot",
-        "field": "temperature_mid",
+        "axis": {
+            "field": "temperature_mid"
+        },
         "type": "histogram"
     }
 
@@ -224,7 +226,9 @@ def test_get_title_pie():
     """
     svl_plot = {
         "data": "bigfoot",
-        "field": "classification",
+        "axis": {
+            "field": "classification"
+        },
         "type": "pie"
     }
 
@@ -288,7 +292,9 @@ def test_get_axis_label_histogram_with_label():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "field": "wind_speed",
+        "axis": {
+            "field": "wind_speed"
+        },
         "label": "Wind Speed (MPH)"
     }
 
@@ -305,7 +311,9 @@ def test_get_axis_label_histogram():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "field": "wind_speed"
+        "axis": {
+            "field": "wind_speed"
+        }
     }
 
     truth = "wind_speed"
@@ -365,7 +373,9 @@ def test_plotly_histogram_auto(univariate_appended_data):
 
     svl_plot = {
         "type": "histogram",
-        "field": "temperature",
+        "axis": {
+            "field": "temperature"
+        },
         "data": "bigfoot"
     }
 
@@ -395,7 +405,9 @@ def test_plotly_histogram_step(univariate_appended_data):
 
     svl_plot = {
         "type": "histogram",
-        "field": "temperature",
+        "axis": {
+            "field": "temperature"
+        },
         "step": 5,
         "data": "bigfoot"
     }
@@ -428,7 +440,9 @@ def test_plotly_histogram_bins(univariate_appended_data):
 
     svl_plot = {
         "type": "histogram",
-        "field": "temperature",
+        "axis": {
+            "field": "temperature"
+        },
         "bins": 25,
         "data": "bigfoot"
     }
@@ -458,7 +472,9 @@ def test_plotly_pie(univariate_categorical_data):
 
     svl_plot = {
         "type": "pie",
-        "field": "classification",
+        "axis": {
+            "field": "classification"
+        },
         "data": "bigfoot"
     }
 
@@ -484,7 +500,9 @@ def test_plotly_pie_hole(univariate_categorical_data):
     """
     svl_plot = {
         "type": "pie",
-        "field": "classification",
+        "axis": {
+            "field": "classification"
+        },
         "data": "bigfoot",
         "hole": 0.4,
         "title": "Bigfoot Sightings by Classification"
@@ -823,7 +841,9 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 0,
             "column_end": 2,
             "type": "histogram",
-            "field": "temperature",
+            "axis": {
+                "field": "temperature"
+            },
             "bins": 25,
             "data": "bigfoot"
         }, {
@@ -832,7 +852,9 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 0,
             "column_end": 1,
             "type": "histogram",
-            "field": "temperature",
+            "axis": {
+                "field": "temperature"
+            },
             "bins": 15,
             "data": "bigfoot"
         }, {
@@ -841,7 +863,9 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 1,
             "column_end": 2,
             "type": "histogram",
-            "field": "temperature",
+            "axis": {
+                "field": "temperature"
+            },
             "bins": 10,
             "data": "bigfoot"
         }
