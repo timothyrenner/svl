@@ -6,6 +6,7 @@ from pandas.testing import assert_frame_equal
 
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
+    _get_field,
     svl_to_sql_xy,
     svl_to_sql_hist,
     svl_to_sql_pie,
@@ -53,13 +54,60 @@ def test_csv_to_sqlite_pandas(test_file):
     assert_frame_equal(truth, answer)
 
 
+def test_get_field_transform():
+    """ Tests that the _get_field function returns the correct value for an
+        axis with a transform.
+    """
+    svl_axis = {
+        "transform": "temperature_mid + 1"
+    }
+
+    truth = "temperature_mid + 1"
+
+    answer = _get_field(svl_axis)
+
+    assert truth == answer
+
+
+def test_get_field_field():
+    """ Tests that the _get_field function returns the correct value for an
+        axis with a field.
+    """
+    svl_axis = {
+        "field": "temperature_mid"
+    }
+
+    truth = "temperature_mid"
+
+    answer = _get_field(svl_axis)
+
+    assert truth == answer
+
+
+def test_get_field_none():
+    """ Tests that the _get_field function returns the correct value for an
+        axis without a field or transform.
+    """
+    svl_axis = {
+        "agg": "COUNT"
+    }
+
+    truth = "*"
+
+    answer = _get_field(svl_axis)
+
+    assert truth == answer
+
+
 def test_svl_to_sql_hist():
     """ Tests that the svl_to_sql_hist function returns the correct value.
     """
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "field": "temperature_mid",
+        "axis": {
+            "field": "temperature_mid"
+        },
         "bins": 25
     }
 
@@ -77,7 +125,9 @@ def test_svl_to_sql_hist_filter():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "field": "temperature_mid",
+        "axis": {
+            "field": "temperature_mid"
+        },
         "bins": 25,
         "filter": "temperature_mid <= 100"
     }
@@ -95,7 +145,9 @@ def test_svl_to_sql_pie():
     """
     svl_plot = {
         "data": "bigfoot",
-        "field": "classification",
+        "axis": {
+            "field": "classification"
+        }
     }
 
     truth_query = (
@@ -114,7 +166,9 @@ def test_svl_to_sql_pie_filter():
     """
     svl_plot = {
         "data": "bigfoot",
-        "field": "classification",
+        "axis": {
+            "field": "classification"
+        },
         "filter": "date >= '1960-01-01'"
     }
 
@@ -401,7 +455,9 @@ def test_get_svl_data_histogram(test_conn):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "field": "temperature_mid",
+        "axis": {
+            "field": "temperature_mid"
+        },
         "bins": 25
     }
 
@@ -416,7 +472,9 @@ def test_get_svl_data_pie(test_conn):
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "field": "classification"
+        "axis": {
+            "field": "classification"
+        }
     }
 
     answer = get_svl_data(svl_plot, test_conn)
