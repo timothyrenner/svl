@@ -6,8 +6,6 @@ except ImportError:
 
 import sqlite3
 
-from toolz import get
-
 TEMPORAL_CONVERTERS = {
     "YEAR": "STRFTIME('%Y', {})",
     "MONTH": "STRFTIME('%Y-%m', {})",
@@ -35,6 +33,15 @@ def _csv_to_sqlite_pandas(svl_datasets):
     for table_name, csv_filename in svl_datasets.items():
         pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
     return conn
+
+
+def _get_field(svl_axis):
+    if "transform" in svl_axis:
+        return svl_axis["transform"]
+    elif "field" in svl_axis:
+        return svl_axis["field"]
+    else:
+        return "*"
 
 
 def csv_to_sqlite(svl_datasets):
@@ -72,7 +79,7 @@ def svl_to_sql_hist(svl_plot):
             The SQL query for the dataset required for the plot.
     """
     query = "SELECT {} AS x FROM {}".format(
-        svl_plot["field"],
+        _get_field(svl_plot["axis"]),
         svl_plot["data"]
     )
 
@@ -96,14 +103,14 @@ def svl_to_sql_pie(svl_plot):
             The SQL query for the dataset required for the plot.
     """
     query = "SELECT {} AS label, COUNT(*) AS value FROM {}".format(
-        svl_plot["field"],
+        _get_field(svl_plot["axis"]),
         svl_plot["data"]
     )
 
     if "filter" in svl_plot:
         query = "{} WHERE {}".format(query, svl_plot["filter"])
 
-    query = "{} GROUP BY {}".format(query, svl_plot["field"])
+    query = "{} GROUP BY {}".format(query, _get_field(svl_plot["axis"]))
 
     return query
 
@@ -132,7 +139,7 @@ def svl_to_sql_xy(svl_plot):
         if axis not in svl_plot:
             continue
 
-        field = get("field", svl_plot[axis], "*")
+        field = _get_field(svl_plot[axis])
 
         if "temporal" in svl_plot[axis]:
             select_fields.append("{} AS {}".format(
@@ -164,11 +171,11 @@ def svl_to_sql_xy(svl_plot):
         # GROUP BY clause if it's in the main SELECT.
         group_fields.append(
             TEMPORAL_CONVERTERS[svl_plot[group_axis]["temporal"]].format(
-                svl_plot[group_axis]["field"]
+                _get_field(svl_plot[group_axis])
             )
         )
     elif group_axis:
-        group_fields.append(svl_plot[group_axis]["field"])
+        group_fields.append(_get_field(svl_plot[group_axis]))
 
     # Only add the split by to the group by if there's already a group axis.
     if group_axis and ("split_by" in svl_plot):

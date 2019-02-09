@@ -4,7 +4,7 @@ DATASETS
 LINE bigfoot
     TITLE "Bigfoot Sightings by Year"
     X date BY YEAR LABEL "Year of Sighting"
-    Y COUNT date LABEL "Number of Sightings"
+    Y date COUNT LABEL "Number of Sightings"
     SPLIT BY classification
     FILTER "date > '1960-01-01'"
 
@@ -13,30 +13,30 @@ CONCAT(
         BAR bigfoot
             TITLE "Bigfoot Sightings by Classification"
             X classification LABEL "Classification"
-            Y COUNT temperature_mid LABEL "Number of Sightings"
+            Y temperature_mid COUNT LABEL "Number of Sightings"
         PIE bigfoot
-            TITLE "Bigfoot Sightings by Classification"
+            TITLE "Bigfoot Sightings With Location"
             HOLE 0.3
-            FIELD classification
+            AXIS TRANSFORM "CASE WHEN latitude IS NULL THEN 'no_location' ELSE 'has_location' END"
     )
     
     (
         CONCAT(
             HISTOGRAM bigfoot
                 TITLE "Bigfoot Sighting High Temperature"
-                FIELD temperature_high LABEL "Temperature (F)"
+                AXIS temperature_high LABEL "Temperature (F)"
                 BINS 25
 
             HISTOGRAM bigfoot
                 BINS 25
-                FIELD temperature_low LABEL "Temperature (F)"
+                AXIS temperature_low LABEL "Temperature (F)"
                 TITLE "Bigfoot Sighting Low Temperature"
         )
     
         HISTOGRAM bigfoot
             BINS 25
             TITLE "Bigfoot Sighting Mid Temperature"
-            FIELD temperature_mid LABEL "Temperature (F)"
+            AXIS temperature_mid LABEL "Temperature (F)"
         
 
     )

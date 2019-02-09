@@ -1,6 +1,8 @@
 from toolz import merge, compose, pluck, get
 from jinja2 import Environment, PackageLoader, select_autoescape
 
+from svl.sqlite import _get_field
+
 listpluck = compose(list, pluck)
 
 
@@ -46,14 +48,14 @@ def _get_title(svl_plot):
     elif (svl_plot["type"] == "histogram") or (svl_plot["type"] == "pie"):
         return "{}: {}".format(
             svl_plot["data"],
-            svl_plot["field"]
+            _get_field(svl_plot["axis"])
         )
     else:
         # xy plot
         return "{}: {} - {}".format(
             svl_plot["data"],
-            svl_plot["x"]["field"],
-            svl_plot["y"]["field"]
+            _get_field(svl_plot["x"]),
+            _get_field(svl_plot["y"])
         )
 
 
@@ -75,19 +77,19 @@ def _get_axis_label(svl_plot, axis=None):
             The label for the axis.
     """
     if svl_plot["type"] == "histogram":
-        return get("label", svl_plot, svl_plot["field"])
+        return get("label", svl_plot, _get_field(svl_plot["axis"]))
     elif "label" in svl_plot[axis]:
         # If a label is provided, use it.
         return svl_plot[axis]["label"]
     elif "agg" in svl_plot[axis]:
         # If there's an aggregation, include it.
         return "{} ({})".format(
-            svl_plot[axis]["field"],
+            _get_field(svl_plot[axis]),
             svl_plot[axis]["agg"]
         )
     else:
         # Otherwise just grab the field name.
-        return svl_plot[axis]["field"]
+        return _get_field(svl_plot[axis])
 
 
 def plotly_histogram(svl_plot, data):

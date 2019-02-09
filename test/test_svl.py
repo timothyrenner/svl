@@ -10,7 +10,7 @@ def test_line_chart():
         bigfoot "data/bigfoot_sightings.csv"
     LINE bigfoot
         X date BY YEAR LABEL "Year"
-        Y COUNT date LABEL "Number of Sightings"
+        Y date COUNT LABEL "Number of Sightings"
         SPLIT BY classification
         TITLE "Bigfoot Sightings by Year and Classification"
         FILTER "date > '1990-01-01'"
@@ -54,7 +54,7 @@ def test_bar_chart():
         bigfoot "data/bigfoot_sightings.csv"
     BAR bigfoot
         X classification
-        Y COUNT classification
+        Y classification COUNT
     """
 
     parsed_svl_truth = {
@@ -87,7 +87,7 @@ def test_histogram_step():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        FIELD temperature_mid
+        AXIS temperature_mid
         STEP 5
     """
 
@@ -98,7 +98,9 @@ def test_histogram_step():
         "vcat": [{
             "data": "bigfoot",
             "type": "histogram",
-            "field": "temperature_mid",
+            "axis": {
+                "field": "temperature_mid"
+            },
             "step": 5
         }]
     }
@@ -118,7 +120,7 @@ def test_histogram_bins():
     HISTOGRAM bigfoot
         TITLE "Bigfoot Sighting Humidity"
         BINS 25
-        FIELD humidity LABEL "Humidity"
+        AXIS humidity LABEL "Humidity"
     """
 
     parsed_svl_truth = {
@@ -128,8 +130,10 @@ def test_histogram_bins():
             "data": "bigfoot",
             "title": "Bigfoot Sighting Humidity",
             "type": "histogram",
-            "field": "humidity",
-            "label": "Humidity",
+            "axis": {
+                "field": "humidity",
+                "label": "Humidity"
+            },
             "bins": 25
         }]
     }
@@ -146,25 +150,31 @@ def test_pie():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     PIE bigfoot
-        TITLE "Bigfoot Sightings by Classification"
+        TITLE "Bigfoot Sightings with Location"
         HOLE 0.3
-        FIELD classification
+        AXIS TRANSFORM "CASE WHEN latitude IS NULL THEN 'no_location'
+            ELSE 'has_location' END"
     """
 
+    transform_truth = """CASE WHEN latitude IS NULL THEN \'no_location\'
+            ELSE \'has_location\' END"""
     parsed_svl_truth = {
         "datasets": {
             "bigfoot": "data/bigfoot_sightings.csv"
         },
         "vcat": [{
             "data": "bigfoot",
-            "title": "Bigfoot Sightings by Classification",
+            "title": "Bigfoot Sightings with Location",
             "type": "pie",
-            "field": "classification",
+            "axis": {
+                "transform": transform_truth
+            },
             "hole": 0.3
         }]
     }
 
     parsed_svl_answer = parse_svl(svl_string)
+    print(parsed_svl_answer['vcat'])
 
     assert parsed_svl_truth == parsed_svl_answer
 
@@ -217,7 +227,7 @@ def test_concat():
             Y temperature_mid
         BAR bigfoot
             X classification
-            Y COUNT classification
+            Y classification COUNT
     )
     """
 
@@ -261,7 +271,7 @@ def test_implicit_vcat():
             Y temperature_mid
         BAR bigfoot
             X classification
-            Y COUNT classification
+            Y classification COUNT
     )
     """
 

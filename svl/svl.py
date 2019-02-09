@@ -58,12 +58,6 @@ class SVLTransformer(lark.Transformer):
     def data(self, items):
         return {"data": str(items[0])}
 
-    def histogram_opts(self, items):
-        return merge(*items)
-
-    def pie_opts(self, items):
-        return merge(*items)
-
     def label(self, items):
         return {"label": str(items[0])[1:-1]}
 
@@ -85,21 +79,20 @@ class SVLTransformer(lark.Transformer):
     def y(self, items):
         return {"y": merge(*items)}
 
+    def axis(self, items):
+        return {"axis": merge(*items)}
+
     def split_by(self, items):
         return {"split_by": merge(*items)}
 
     def field(self, items):
-        if len(items) == 1:
-            return {"field": str(items[0])}
-        else:
-            print(items)
-            return merge(
-                {"field": str(items[0])},
-                *items[1:]
-            )
+        return {"field": str(items[0])}
 
     def temporal(self, items):
         return {"temporal": str(items[0])}
+
+    def transform(self, items):
+        return {"transform": str(items[0])[1:-1]}
 
     def aggregation(self, items):
         return {"agg": str(items[0])}
