@@ -4,8 +4,10 @@ python:
   - "3.6"
 install:
   - pip install -r test_requirements.txt
-  - pip install -e .[pandas]
+  - pip install -e .
 script:
-  - pytest test/ --cov-config=.coveragerc --cov=svl/
+  - pytest test --cov=svl
+  - flake8 svl
+  - flake8 test
 after_success:
   - coveralls

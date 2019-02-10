@@ -1,9 +1,11 @@
 
 from setuptools import setup, find_packages
+import versioneer
 
 setup(
     name='svl',
-    version='0.1.dev',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(exclude=["scripts/", "data/"]),
     license='MIT',
     author="Tim Renner",
@@ -16,12 +18,10 @@ setup(
         'toolz==0.9.0',
         'lark-parser==0.5.6',
         'Jinja2==2.10',
-        'maya==0.5.0'
+        'maya==0.5.0',
+        'pandas==0.23.4'
     ],
     entry_points={
         "console_scripts": ["svl=svl.cli:cli"]
-    },
-    extras_require={
-        "pandas": ["pandas==0.23.4"]
     }
 )

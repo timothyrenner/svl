@@ -2,3 +2,4 @@ pytest
 pytest-cov==2.5.1
 python-coveralls
 hypothesis
+flake8
