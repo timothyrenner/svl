@@ -15,8 +15,10 @@ CONCAT(
             X classification LABEL "Classification"
             Y temperature_mid COUNT LABEL "Number of Sightings"
         PIE bigfoot
+            -- If we have location, we also have weather. This plot indicates
+            -- how much of our data the weather related plots represent.
             TITLE "Bigfoot Sightings With Location"
-            HOLE 0.3
+            HOLE 0.3 -- because pie charts are evil.
             AXIS TRANSFORM "CASE WHEN latitude IS NULL THEN 'no_location' ELSE 'has_location' END"
     )
     

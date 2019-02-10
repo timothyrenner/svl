@@ -103,9 +103,13 @@ MINUTE: "MINUTE"
 
 SECOND: "SECOND"
 
+// https://github.com/lark-parser/lark/blob/master/examples/lark.lark#L47
+COMMENT: "--" /[^\n]/*
+
 %import common.CNAME
 %import common.ESCAPED_STRING
 %import common.NUMBER
 %import common.WS
 
 %ignore WS
+%ignore COMMENT
