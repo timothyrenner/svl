@@ -315,3 +315,38 @@ def test_implicit_vcat():
     parsed_svl_answer = parse_svl(svl_string)
 
     assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_sql_dataset():
+    """ Tests that SQL-defined datasets are parsed correctly.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot_sightings.csv"
+        recent_bigfoot_sightings SQL
+            "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+    HISTOGRAM recent_bigfoot_sightings
+        AXIS temperature_mid
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "bigfoot_sightings.csv"
+            },
+            "recent_bigfoot_sightings": {
+                "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+            }
+        },
+        "vcat": [{
+            "data": "recent_bigfoot_sightings",
+            "type": "histogram",
+            "axis": {
+                "field": "temperature_mid"
+            }
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
