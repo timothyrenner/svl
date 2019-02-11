@@ -1,7 +1,7 @@
 import lark
 import pkg_resources
 
-from toolz import merge, partition_all
+from toolz import merge
 
 
 class SVLTransformer(lark.Transformer):
@@ -11,14 +11,14 @@ class SVLTransformer(lark.Transformer):
 
     def datasets(self, items):
         return {"datasets": merge(*items)}
-    
+
     def file_dataset(self, items):
         return {
             items[0]: {
                 "file": items[1][1:-1]
             }
         }
-    
+
     def sql_dataset(self, items):
         return {
             items[0]: {
