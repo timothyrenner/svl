@@ -10,13 +10,20 @@ class SVLTransformer(lark.Transformer):
         return merge(*items)
 
     def datasets(self, items):
+        return {"datasets": merge(*items)}
+    
+    def file_dataset(self, items):
         return {
-            "datasets": dict(
-                map(
-                    lambda x: (str(x[0]), x[1][1:-1]),
-                    partition_all(2, items)
-                )
-            )
+            items[0]: {
+                "file": items[1][1:-1]
+            }
+        }
+    
+    def sql_dataset(self, items):
+        return {
+            items[0]: {
+                "sql": items[1][1:-1]
+            }
         }
 
     def charts(self, items):

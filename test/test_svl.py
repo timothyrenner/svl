@@ -18,7 +18,9 @@ def test_line_chart():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "type": "line",
@@ -59,7 +61,9 @@ def test_bar_chart():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -93,7 +97,9 @@ def test_histogram_step():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -125,7 +131,9 @@ def test_histogram_bins():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         }, "vcat": [{
             "data": "bigfoot",
             "title": "Bigfoot Sighting Humidity",
@@ -160,7 +168,9 @@ def test_pie():
             ELSE \'has_location\' END"""
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -193,7 +203,9 @@ def test_scatter():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -233,7 +245,9 @@ def test_concat():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "hcat": [
@@ -277,7 +291,9 @@ def test_implicit_vcat():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "vcat": [
