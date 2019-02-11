@@ -1,12 +1,15 @@
 import pytest
 import os
 import pandas as pd
+import sqlite3
 
 from pandas.testing import assert_frame_equal
 
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
     _get_field,
+    sqlite_table,
+    create_datasets,
     svl_to_sql_xy,
     svl_to_sql_hist,
     svl_to_sql_pie,
@@ -31,10 +34,15 @@ def test_file():
 def test_conn(test_file):
     # Obviously don't need the whole plot just the bit about the file.
     test_svl_datasets = {
-        "bigfoot": test_file
+        "bigfoot": {
+            "file": test_file
+        },
+        "recent_bigfoot": {
+            "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+        }
     }
 
-    conn = _csv_to_sqlite_pandas(test_svl_datasets)
+    conn = create_datasets(test_svl_datasets)
     yield conn
     conn.close()
 
@@ -43,12 +51,12 @@ def test_csv_to_sqlite_pandas(test_file):
     """ Tests that the _csv_to_sqlite_pandas function loads the database with
         the correct values.
     """
-    svl_datasets = {
-        "bigfoot": test_file
-    }
+    csv_filename = test_file
+    table_name = "bigfoot"
+    conn = sqlite3.connect(":memory:")
 
     truth = pd.read_csv(test_file)
-    conn = _csv_to_sqlite_pandas(svl_datasets)
+    _csv_to_sqlite_pandas(csv_filename, table_name, conn)
     answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
 
     assert_frame_equal(truth, answer)
@@ -97,6 +105,55 @@ def test_get_field_none():
     answer = _get_field(svl_axis)
 
     assert truth == answer
+
+
+def test_sqlite_table(test_file):
+    """ Tests that the sqlite_table function executes correctly.
+    """
+    conn = sqlite3.connect(":memory:")
+    _csv_to_sqlite_pandas(test_file, "bigfoot", conn)
+    sqlite_table(
+        "SELECT * FROM bigfoot WHERE date >= '2008-01-01'",
+        "recent_bigfoot",
+        conn
+    )
+
+    truth = pd.read_sql(
+        "SELECT * FROM bigfoot",
+        conn
+    ).query("date >= '2008-01-01'").reset_index(drop=True)
+    answer = pd.read_sql("SELECT * FROM recent_bigfoot", conn)
+
+    assert_frame_equal(truth, answer)
+
+
+def test_create_datasets(test_file):
+    """ Tests that the create_datasets function returns the correct value.
+    """
+    svl_datasets = {
+        "bigfoot": {
+            "file": test_file
+        },
+        "recent_bigfoot": {
+            "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+        }
+    }
+
+    conn = create_datasets(svl_datasets)
+
+    # Assert that the bigfoot dataset is correct.
+    truth_bigfoot = pd.read_csv(test_file)
+    answer_bigfoot = pd.read_sql("SELECT * FROM bigfoot", conn)
+
+    assert_frame_equal(truth_bigfoot, answer_bigfoot)
+
+    # Assert that the recent_bigfoot dataset is correct.
+    truth_recent_bigfoot = truth_bigfoot.query(
+        "date >= '2008-01-01'"
+    ).reset_index(drop=True)
+    answer_recent_bigfoot = pd.read_sql("SELECT * FROM recent_bigfoot", conn)
+
+    assert_frame_equal(truth_recent_bigfoot, answer_recent_bigfoot)
 
 
 def test_svl_to_sql_hist():
