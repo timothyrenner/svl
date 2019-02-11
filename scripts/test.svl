@@ -1,5 +1,7 @@
 DATASETS 
     bigfoot "data/bigfoot_sightings.csv"
+    recent_bigfoot_sightings SQL 
+        "SELECT * FROM bigfoot WHERE date > '2008-01-01'"
 
 LINE bigfoot
     TITLE "Bigfoot Sightings by Year"
@@ -23,14 +25,14 @@ CONCAT(
     (
         CONCAT(
             HISTOGRAM bigfoot
-                TITLE "Bigfoot Sighting High Temperature"
+                TITLE "Bigfoot Sighting High Temp"
                 AXIS temperature_high LABEL "Temperature (F)"
                 BINS 25
 
-            HISTOGRAM bigfoot
+            HISTOGRAM recent_bigfoot_sightings
                 BINS 25
-                AXIS temperature_low LABEL "Temperature (F)"
-                TITLE "Bigfoot Sighting Low Temperature"
+                AXIS temperature_high LABEL "Temperature (F)"
+                TITLE "Bigfoot Sightings High Temp (Recent)"
         )
     
         HISTOGRAM bigfoot
@@ -42,7 +44,7 @@ CONCAT(
     )
 )
 
-SCATTER bigfoot
-    TITLE "Bigfoot Sighting Moon Phase by Latitude"
+SCATTER recent_bigfoot_sightings
+    TITLE "Recent Bigfoot Sighting Moon Phase by Latitude"
     X latitude LABEL "Latitude (deg)"
     Y moon_phase LABEL "Moon Phase"
