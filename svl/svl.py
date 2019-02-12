@@ -96,13 +96,15 @@ class SVLTransformer(lark.Transformer):
         return {"field": str(items[0])}
 
     def temporal(self, items):
-        return {"temporal": str(items[0])}
+        return {"temporal": str(items[0]).upper()}
 
     def transform(self, items):
+        # Don't touch the case of the transforms - that gets passed to SQL
+        # as-is.
         return {"transform": str(items[0])[1:-1]}
 
     def aggregation(self, items):
-        return {"agg": str(items[0])}
+        return {"agg": str(items[0]).upper()}
 
 
 debug_parser = lark.Lark(

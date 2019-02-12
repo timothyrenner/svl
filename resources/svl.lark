@@ -2,7 +2,7 @@
 
 ?visualization: datasets charts
 
-datasets: "DATASETS" dataset+
+datasets: "DATASETS"i dataset+
 
 ?dataset: file_dataset | sql_dataset
 
@@ -14,7 +14,7 @@ charts: chart+
 
 vcat: "(" chart+ ")"
 
-hcat: "CONCAT" "(" chart+ ")"
+hcat: "CONCAT"i "(" chart+ ")"
 
 chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 
@@ -22,9 +22,9 @@ chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 // is required. That will have to be enforced in the compiler though.
 xy_chart: markxy data xy_property+
 
-histogram_chart: "HISTOGRAM" data histogram_property+
+histogram_chart: "HISTOGRAM"i data histogram_property+
 
-pie_chart: "PIE" data pie_property+
+pie_chart: "PIE"i data pie_property+
 
 ?xy_property: title | dimensions | filter
 
@@ -32,9 +32,9 @@ pie_chart: "PIE" data pie_property+
 
 ?pie_property: title | axis | pie_opts | filter
 
-title: "TITLE" ESCAPED_STRING
+title: "TITLE"i ESCAPED_STRING
 
-filter: "FILTER" ESCAPED_STRING
+filter: "FILTER"i ESCAPED_STRING
 
 markxy: SCATTER | LINE | BAR
 
@@ -46,68 +46,71 @@ dimensions: (x | y | split_by)+
 
 ?pie_opts: hole
 
-step: "STEP" NUMBER
+step: "STEP"i NUMBER
 
-bins: "BINS" NUMBER
+bins: "BINS"i NUMBER
 
-hole: "HOLE" NUMBER
+hole: "HOLE"i NUMBER
 
 // This allows for both x and y to have aggregations, which results in
 // order ambiguity (i.e. which aggregation gets applied first?).
 // TODO: Find a way to enforce only one aggregation transformation
 // between x and y.
-x: "X" axis_spec axis_modifier*
+x: "X"i axis_spec axis_modifier*
 
-y: "Y" axis_spec axis_modifier*
+y: "Y"i axis_spec axis_modifier*
 
-axis: "AXIS" axis_spec axis_modifier*
+axis: "AXIS"i axis_spec axis_modifier*
 
 ?axis_spec: field | transform
 
 ?axis_modifier: aggregation | temporal | label
 
-label: "LABEL" ESCAPED_STRING
+label: "LABEL"i ESCAPED_STRING
 
 // For split by temporal is supported irrespective of x and y.
-split_by: "SPLIT" "BY" field
+split_by: "SPLIT"i "BY"i field
 
 field: CNAME
 
 aggregation: COUNT | MIN | MAX | AVG
 
-temporal: "BY" (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
+temporal: "BY"i (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
 
-transform: "TRANSFORM" ESCAPED_STRING
+transform: "TRANSFORM"i ESCAPED_STRING
 
-SCATTER: "SCATTER"
+SCATTER: "SCATTER"i
 
-BAR: "BAR"
+BAR: "BAR"i
 
-LINE: "LINE"
+LINE: "LINE"i
 
-HISTOGRAM: "HISTOGRAM"
+HISTOGRAM: "HISTOGRAM"i
 
-PIE: "PIE"
+PIE: "PIE"i
 
-COUNT: "COUNT"
+COUNT: "COUNT"i
 
-MIN: "MIN"
+MIN: "MIN"i
 
-MAX: "MAX"
+MAX: "MAX"i
 
-AVG: "AVG"
+AVG: "AVG"i
 
-YEAR: "YEAR"
+YEAR: "YEAR"i
 
-MONTH: "MONTH"
+MONTH: "MONTH"i
 
-DAY: "DAY"
+DAY: "DAY"i
 
-HOUR: "HOUR"
+HOUR: "HOUR"i
 
-MINUTE: "MINUTE"
+MINUTE: "MINUTE"i
 
-SECOND: "SECOND"
+SECOND: "SECOND"i
+
+// https://github.com/lark-parser/lark/blob/master/examples/lark.lark#L47
+COMMENT: "--" /[^\n]/*
 
 %import common.CNAME
 %import common.ESCAPED_STRING
@@ -115,3 +118,4 @@ SECOND: "SECOND"
 %import common.WS
 
 %ignore WS
+%ignore COMMENT
