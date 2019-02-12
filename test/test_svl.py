@@ -9,7 +9,7 @@ def test_line_chart():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     LINE bigfoot
-        X date BY YEAR LABEL "Year"
+        X date by year LABEL "Year"
         Y date COUNT LABEL "Number of Sightings"
         SPLIT BY classification
         TITLE "Bigfoot Sightings by Year and Classification"
@@ -205,6 +205,39 @@ def test_scatter():
                 "field": "temperature_mid"
             },
             "split_by": {
+                "field": "classification"
+            }
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_case_insensitivity():
+    """ Tests that language keywords are case insensitive.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    bar bigfoot
+        x classification
+        y classification CoUnT
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "bar",
+            "x": {
+                "field": "classification"
+            },
+            "y": {
+                "agg": "COUNT",
                 "field": "classification"
             }
         }]
