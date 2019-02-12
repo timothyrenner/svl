@@ -245,6 +245,37 @@ def test_case_insensitivity():
 
     parsed_svl_answer = parse_svl(svl_string)
 
+    assert parsed_svl_truth == parsed_svl_answer 
+
+
+def test_comment():
+    """ Tests that comments are ignored.
+    """
+    svl_string = """
+    DATASETS
+        -- Time to go squatchin.
+        bigfoot "data/bigfoot_sightings.csv"
+    HISTOGRAM bigfoot
+        AXIS temperature_mid
+        STEP 5 -- Every five degrees should be granular enough.
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": "data/bigfoot_sightings.csv"
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "histogram",
+            "axis": {
+                "field": "temperature_mid"
+            },
+            "step": 5
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
     assert parsed_svl_truth == parsed_svl_answer
 
 
