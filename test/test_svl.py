@@ -240,7 +240,9 @@ def test_case_insensitivity():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -274,7 +276,9 @@ def test_comment():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
