@@ -245,7 +245,7 @@ def test_case_insensitivity():
 
     parsed_svl_answer = parse_svl(svl_string)
 
-    assert parsed_svl_truth == parsed_svl_answer 
+    assert parsed_svl_truth == parsed_svl_answer
 
 
 def test_comment():
