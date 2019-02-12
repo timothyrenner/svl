@@ -2,7 +2,13 @@
 
 ?visualization: datasets charts
 
-datasets: "DATASETS"i (CNAME ESCAPED_STRING)+
+datasets: "DATASETS"i dataset+
+
+?dataset: file_dataset | sql_dataset
+
+file_dataset: CNAME ESCAPED_STRING
+
+sql_dataset: CNAME "SQL"i ESCAPED_STRING
 
 charts: chart+
 

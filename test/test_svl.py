@@ -18,7 +18,9 @@ def test_line_chart():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "type": "line",
@@ -59,7 +61,9 @@ def test_bar_chart():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -93,7 +97,9 @@ def test_histogram_step():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -125,7 +131,9 @@ def test_histogram_bins():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         }, "vcat": [{
             "data": "bigfoot",
             "title": "Bigfoot Sighting Humidity",
@@ -160,7 +168,9 @@ def test_pie():
             ELSE \'has_location\' END"""
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -193,7 +203,9 @@ def test_scatter():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -228,7 +240,9 @@ def test_case_insensitivity():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -262,7 +276,9 @@ def test_comment():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "data": "bigfoot",
@@ -297,7 +313,9 @@ def test_concat():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "hcat": [
@@ -341,7 +359,9 @@ def test_implicit_vcat():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": "data/bigfoot_sightings.csv"
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
         },
         "vcat": [{
             "vcat": [
@@ -357,6 +377,41 @@ def test_implicit_vcat():
                     "y": {"agg": "COUNT", "field": "classification"}
                 }
             ]
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_sql_dataset():
+    """ Tests that SQL-defined datasets are parsed correctly.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot_sightings.csv"
+        recent_bigfoot_sightings SQL
+            "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+    HISTOGRAM recent_bigfoot_sightings
+        AXIS temperature_mid
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "bigfoot_sightings.csv"
+            },
+            "recent_bigfoot_sightings": {
+                "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
+            }
+        },
+        "vcat": [{
+            "data": "recent_bigfoot_sightings",
+            "type": "histogram",
+            "axis": {
+                "field": "temperature_mid"
+            }
         }]
     }
 

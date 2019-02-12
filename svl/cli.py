@@ -5,7 +5,7 @@ import os
 
 from svl.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
-from svl.sqlite import csv_to_sqlite, get_svl_data
+from svl.sqlite import create_datasets, get_svl_data
 
 
 @click.command()
@@ -34,7 +34,7 @@ def cli(svl_source, debug, backend, output_file, no_browser):
 
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).
-    sqlite_conn = csv_to_sqlite(svl_spec["datasets"])
+    sqlite_conn = create_datasets(svl_spec["datasets"])
 
     svl_plots = [plot for plot in tree_to_grid(svl_spec)]
     svl_plot_data = [get_svl_data(plot, sqlite_conn) for plot in svl_plots]

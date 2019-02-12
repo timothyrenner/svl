@@ -16,23 +16,17 @@ TEMPORAL_CONVERTERS = {
 }
 
 
-def _csv_to_sqlite_pandas(svl_datasets):
-    """ Loads SVL datasets from CSV to SQLite using pandas.
+def _csv_to_sqlite_pandas(csv_filename, table_name, conn):
+    """ Loads an SVL dataset from CSV to SQLite using pandas.
 
         Parameters
         -----------
-        svl_datasets : dict
-            The SVL dataset definitions.
-
-        Returns
-        -------
-        sqlite3.Connection
-            The connection to the in-memory SQLite database.
+        csv_filename : str
+            The name of the CSV file with the data.
+        table_name : str
+            The name of the table to output.
     """
-    conn = sqlite3.connect(":memory:")
-    for table_name, csv_filename in svl_datasets.items():
-        pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
-    return conn
+    pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
 
 
 def _get_field(svl_axis):
@@ -44,25 +38,76 @@ def _get_field(svl_axis):
         return "*"
 
 
-def csv_to_sqlite(svl_datasets):
-    """ Loads SVL datasets from CSV to SQLite.
+def csv_to_sqlite(csv_filename, table_name, conn):
+    """ Loads SVL dataset from CSV to SQLite.
 
         Uses pandas if available.
 
         Parameters
         ----------
+        csv_filename : str
+            The file with the data.
+
+        table_name : str
+            The name of the destination table.
+
+        conn : sqlite3.Connection
+            The connection to the sqlite database.
+
+    """
+    if PANDAS:
+        return _csv_to_sqlite_pandas(csv_filename, table_name, conn)
+    else:
+        raise NotImplementedError("Haven't implement non-pandas csv->sqlite.")
+
+
+def sqlite_table(sql_statement, table_name, conn):
+    """ Creates an SVL dataset from a SQL query.
+
+        Parameters
+        ----------
+        sql_statement : str
+            The SQL query defining the table.
+
+        table_name : str
+            The name of the destination table.
+
+        conn : sqlite3.Connection
+            The connection to the sqlite database.
+    """
+    conn.execute("CREATE TABLE {} AS {};".format(table_name, sql_statement))
+
+
+def create_datasets(svl_datasets):
+    """ Creates the SVL datasets.
+
+        Parameters
+        ----------
         svl_datasets : dict
-            The SVL dataset definitions.
+            The SVL dataset specifier.
 
         Returns
         -------
-        sqlite3.Connection
-            The connection to the in-memory SQLite database.
+        conn : sqlite3.Connection
+            The connection to the sqlite3 database.
     """
-    if PANDAS:
-        return _csv_to_sqlite_pandas(svl_datasets)
-    else:
-        raise NotImplementedError("Haven't implement non-pandas csv->sqlite.")
+    conn = sqlite3.connect(":memory:")
+    files = list(
+        filter(lambda items: "file" in items[1], svl_datasets.items())
+    )
+    queries = list(
+        filter(lambda items: "sql" in items[1], svl_datasets.items())
+    )
+
+    # Do the files first.
+    for table_name, table_spec in files:
+        csv_to_sqlite(table_spec["file"], table_name, conn)
+
+    # Now do the queries.
+    for table_name, table_spec in queries:
+        sqlite_table(table_spec["sql"], table_name, conn)
+
+    return conn
 
 
 def svl_to_sql_hist(svl_plot):
