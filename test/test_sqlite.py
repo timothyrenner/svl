@@ -168,7 +168,7 @@ def test_svl_to_sql_hist():
         "bins": 25
     }
 
-    truth_query = "SELECT temperature_mid AS x FROM bigfoot"
+    truth_query = "SELECT temperature_mid AS axis FROM bigfoot"
 
     answer_query = svl_to_sql_hist(svl_plot)
 
@@ -189,8 +189,36 @@ def test_svl_to_sql_hist_filter():
         "filter": "temperature_mid <= 100"
     }
 
-    truth_query = \
-        "SELECT temperature_mid AS x FROM bigfoot WHERE temperature_mid <= 100"
+    truth_query = (
+        "SELECT temperature_mid AS axis FROM bigfoot "
+        "WHERE temperature_mid <= 100"
+    )
+
+    answer_query = svl_to_sql_hist(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_hist_split_by():
+    """ Tests that the svl_to_sql_hist function returns the correct value when
+        there's a split-by axis.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "axis": {
+            "field": "temperature_mid"
+        },
+        "split_by": {
+            "field": "classification"
+        },
+        "bins": 5
+    }
+
+    truth_query = (
+        "SELECT temperature_mid AS axis, classification AS split_by "
+        "FROM bigfoot"
+    )
 
     answer_query = svl_to_sql_hist(svl_plot)
 
@@ -519,7 +547,28 @@ def test_get_svl_data_histogram(test_conn):
     }
 
     answer = get_svl_data(svl_plot, test_conn)
-    assert "x" in answer
+    assert "axis" in answer
+
+
+def test_get_svl_data_histogram_split_by(test_conn):
+    """ Tests that the get_svl_data function returns the correct data for
+        histogram plots with a split-by axis.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "axis": {
+            "field": "temperature_mid"
+        },
+        "split_by": {
+            "field": "classification"
+        }
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+    for split_by in ["Class A", "Class B"]:
+        assert split_by in answer
+        assert "axis" in answer[split_by]
 
 
 def test_get_svl_data_pie(test_conn):
