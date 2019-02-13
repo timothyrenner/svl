@@ -151,6 +151,42 @@ def test_histogram_bins():
     assert parsed_svl_truth == parsed_svl_answer
 
 
+def test_histogram_split_by():
+    """ Tests that the histogram type is properly parsed.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    HISTOGRAM bigfoot
+        AXIS temperature_mid
+        STEP 5
+        SPLIT BY classification
+    """
+
+    parsed_svl_truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "data/bigfoot_sightings.csv"
+            }
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "histogram",
+            "axis": {
+                "field": "temperature_mid"
+            },
+            "step": 5,
+            "split_by": {
+                "field": "classification"
+            }
+        }]
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
 def test_pie():
     """ Tests that the pie type is properly parsed.
     """
