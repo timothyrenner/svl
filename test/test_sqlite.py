@@ -162,13 +162,13 @@ def test_svl_to_sql_hist():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "axis": {
+        "x": {
             "field": "temperature_mid"
         },
         "bins": 25
     }
 
-    truth_query = "SELECT temperature_mid AS axis FROM bigfoot"
+    truth_query = "SELECT temperature_mid AS x FROM bigfoot"
 
     answer_query = svl_to_sql_hist(svl_plot)
 
@@ -182,7 +182,7 @@ def test_svl_to_sql_hist_filter():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "axis": {
+        "y": {
             "field": "temperature_mid"
         },
         "bins": 25,
@@ -190,7 +190,7 @@ def test_svl_to_sql_hist_filter():
     }
 
     truth_query = (
-        "SELECT temperature_mid AS axis FROM bigfoot "
+        "SELECT temperature_mid AS y FROM bigfoot "
         "WHERE temperature_mid <= 100"
     )
 
@@ -206,7 +206,7 @@ def test_svl_to_sql_hist_split_by():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "axis": {
+        "x": {
             "field": "temperature_mid"
         },
         "split_by": {
@@ -216,7 +216,7 @@ def test_svl_to_sql_hist_split_by():
     }
 
     truth_query = (
-        "SELECT temperature_mid AS axis, classification AS split_by "
+        "SELECT temperature_mid AS x, classification AS split_by "
         "FROM bigfoot"
     )
 
@@ -540,14 +540,14 @@ def test_get_svl_data_histogram(test_conn):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "axis": {
+        "x": {
             "field": "temperature_mid"
         },
         "bins": 25
     }
 
     answer = get_svl_data(svl_plot, test_conn)
-    assert "axis" in answer
+    assert "x" in answer
 
 
 def test_get_svl_data_histogram_split_by(test_conn):
@@ -557,7 +557,7 @@ def test_get_svl_data_histogram_split_by(test_conn):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "axis": {
+        "y": {
             "field": "temperature_mid"
         },
         "split_by": {
@@ -568,7 +568,7 @@ def test_get_svl_data_histogram_split_by(test_conn):
     answer = get_svl_data(svl_plot, test_conn)
     for split_by in ["Class A", "Class B"]:
         assert split_by in answer
-        assert "axis" in answer[split_by]
+        assert "y" in answer[split_by]
 
 
 def test_get_svl_data_pie(test_conn):

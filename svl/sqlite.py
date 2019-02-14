@@ -125,7 +125,7 @@ def svl_to_sql_hist(svl_plot):
     """
     select_fields = []
 
-    for axis in ["axis", "split_by"]:
+    for axis in ["x", "y", "split_by"]:
         # Skip if the axis isn't in the plot.
         if axis not in svl_plot:
             continue
@@ -312,16 +312,18 @@ def get_svl_data(svl_plot, conn):
                 svl_data[row["split_by"]]["y"].append(row["y"])
     elif svl_plot["type"] == "histogram":
         # Just one dimension for histograms.
-        if "split_by" not in data_list[0].keys():
-            svl_data = {"axis": []}
+        # Determine which axis it is.
+        axis = "x" if "x" in svl_plot else "y"
+        if "split_by" not in svl_plot:
+            svl_data = {axis: []}
             for row in data_list:
-                svl_data["axis"].append(row["axis"])
+                svl_data[axis].append(row[axis])
         else:
             svl_data = {}
             for row in data_list:
                 if row["split_by"] not in svl_data:
-                    svl_data[row["split_by"]] = {"axis": []}
-                svl_data[row["split_by"]]["axis"].append(row["axis"])
+                    svl_data[row["split_by"]] = {axis: []}
+                svl_data[row["split_by"]][axis].append(row[axis])
     elif svl_plot["type"] == "pie":
         svl_data = {
             "labels": [],

@@ -91,7 +91,7 @@ def test_histogram_step():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        AXIS temperature_mid
+        X temperature_mid
         STEP 5
     """
 
@@ -104,7 +104,7 @@ def test_histogram_step():
         "vcat": [{
             "data": "bigfoot",
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature_mid"
             },
             "step": 5
@@ -126,7 +126,7 @@ def test_histogram_bins():
     HISTOGRAM bigfoot
         TITLE "Bigfoot Sighting Humidity"
         BINS 25
-        AXIS humidity LABEL "Humidity"
+        Y humidity LABEL "Humidity"
     """
 
     parsed_svl_truth = {
@@ -138,7 +138,7 @@ def test_histogram_bins():
             "data": "bigfoot",
             "title": "Bigfoot Sighting Humidity",
             "type": "histogram",
-            "axis": {
+            "y": {
                 "field": "humidity",
                 "label": "Humidity"
             },
@@ -158,7 +158,7 @@ def test_histogram_split_by():
     DATASETS
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        AXIS temperature_mid
+        X temperature_mid
         STEP 5
         SPLIT BY classification
     """
@@ -172,7 +172,7 @@ def test_histogram_split_by():
         "vcat": [{
             "data": "bigfoot",
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature_mid"
             },
             "step": 5,
@@ -306,7 +306,7 @@ def test_comment():
         -- Time to go squatchin.
         bigfoot "data/bigfoot_sightings.csv"
     HISTOGRAM bigfoot
-        AXIS temperature_mid
+        X temperature_mid
         STEP 5 -- Every five degrees should be granular enough.
     """
 
@@ -319,7 +319,7 @@ def test_comment():
         "vcat": [{
             "data": "bigfoot",
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature_mid"
             },
             "step": 5
@@ -430,7 +430,7 @@ def test_sql_dataset():
         recent_bigfoot_sightings SQL
             "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
     HISTOGRAM recent_bigfoot_sightings
-        AXIS temperature_mid
+        X temperature_mid
     """
 
     parsed_svl_truth = {
@@ -445,7 +445,7 @@ def test_sql_dataset():
         "vcat": [{
             "data": "recent_bigfoot_sightings",
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature_mid"
             }
         }]
