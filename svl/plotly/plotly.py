@@ -112,17 +112,18 @@ def _get_bins(svl_plot):
             The bin specifier that plotly needs. Not necessarily the one it
             deserves.
     """
+    svl_axis = "x" if "x" in svl_plot else "y"
     if "step" in svl_plot:
         # Set the bin size.
-        bin_axis = "xbins" if "x" in svl_plot else "ybins"
+        bin_axis = svl_axis + "bins"
         bins = {bin_axis: {"size": svl_plot["step"]}}
     elif "bins" in svl_plot:
         # Set the number of bins.
-        bin_axis = "nbinsx" if "x" in svl_plot else "nbinsy"
+        bin_axis = "nbins" + svl_axis
         bins = {bin_axis: svl_plot["bins"]}
     else:
         # Activate autobins.
-        bin_axis = "autobinx" if "x" in svl_plot else "autobiny"
+        bin_axis = "autobin" + svl_axis
         bins = {bin_axis: True}
     return bins
 
