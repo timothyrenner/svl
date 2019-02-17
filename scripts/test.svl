@@ -29,13 +29,13 @@ CONCAT(
         CONCAT(
             HISTOGRAM bigfoot
                 TITLE "Bigfoot Sighting High Temp"
-                AXIS temperature_high LABEL "Temperature (F)"
+                X temperature_high LABEL "Temperature (F)"
                 BINS 25
                 SPLIT BY classification
 
             HISTOGRAM recent_bigfoot_sightings
                 BINS 25
-                AXIS temperature_high LABEL "Temperature (F)"
+                X temperature_high LABEL "Temperature (F)"
                 TITLE "Bigfoot Sightings High Temp (Recent)"
                 SPLIT BY classification
         )
@@ -43,7 +43,7 @@ CONCAT(
         HISTOGRAM bigfoot
             BINS 25
             TITLE "Bigfoot Sighting Mid Temperature"
-            AXIS temperature_mid LABEL "Temperature (F)"
+            Y temperature_mid LABEL "Temperature (F)"
             SPLIT BY classification
     )
 )
