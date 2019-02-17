@@ -6,7 +6,7 @@ python:
   - "3.7"
 install:
   - pip install -r test_requirements.txt
-  - pip install -e .
+  - pip install -e .[parquet]
 script:
   - pytest test --cov=svl
   - flake8 svl

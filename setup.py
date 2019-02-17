@@ -21,6 +21,9 @@ setup(
         'maya==0.5.0',
         'pandas==0.23.4'
     ],
+    extras_require={
+        "parquet": ["pyarrow==0.12.0"]
+    },
     entry_points={
         "console_scripts": ["svl=svl.cli:cli"]
     }
