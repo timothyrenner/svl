@@ -28,7 +28,7 @@ pie_chart: "PIE"i data pie_property+
 
 ?xy_property: title | dimensions | filter
 
-?histogram_property: title | axis | histogram_opts | filter
+?histogram_property: title | dimensions | histogram_opts | filter
 
 ?pie_property: title | axis | pie_opts | filter
 

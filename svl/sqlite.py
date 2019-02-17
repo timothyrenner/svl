@@ -123,8 +123,18 @@ def svl_to_sql_hist(svl_plot):
         str
             The SQL query for the dataset required for the plot.
     """
-    query = "SELECT {} AS x FROM {}".format(
-        _get_field(svl_plot["axis"]),
+    select_fields = []
+
+    for axis in ["x", "y", "split_by"]:
+        # Skip if the axis isn't in the plot.
+        if axis not in svl_plot:
+            continue
+
+        field = _get_field(svl_plot[axis])
+        select_fields.append("{} AS {}".format(field, axis))
+
+    query = "SELECT {} FROM {}".format(
+        ", ".join(select_fields),
         svl_plot["data"]
     )
 
@@ -282,11 +292,11 @@ def get_svl_data(svl_plot, conn):
 
     # Step 3: Convert the resulting list of sqlite rows into SVL data
     # structures.
-    # NOTE: For now this structure corresponds directly to plotly's
+    # NOTE: For now this structure corresponds _mostly_ to plotly's
     # traces, but since it's internal we can change it to something more
     # general later.
-    # TODO: There's probably a nice way to abstract the extraction to remove
-    # the branching logic.
+    # TODO There's probably a nice way to abstract the extraction to remove
+    # TODO the branching logic.
     if svl_plot["type"] in {"line", "scatter", "bar"}:
         if "split_by" not in data_list[0].keys():
             svl_data = {"x": [], "y": []}
@@ -302,9 +312,18 @@ def get_svl_data(svl_plot, conn):
                 svl_data[row["split_by"]]["y"].append(row["y"])
     elif svl_plot["type"] == "histogram":
         # Just one dimension for histograms.
-        svl_data = {"x": []}
-        for row in data_list:
-            svl_data["x"].append(row["x"])
+        # Determine which axis it is.
+        axis = "x" if "x" in svl_plot else "y"
+        if "split_by" not in svl_plot:
+            svl_data = {axis: []}
+            for row in data_list:
+                svl_data[axis].append(row[axis])
+        else:
+            svl_data = {}
+            for row in data_list:
+                if row["split_by"] not in svl_data:
+                    svl_data[row["split_by"]] = {axis: []}
+                svl_data[row["split_by"]][axis].append(row[axis])
     elif svl_plot["type"] == "pie":
         svl_data = {
             "labels": [],

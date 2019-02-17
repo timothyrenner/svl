@@ -2,6 +2,7 @@ import pytest
 
 from svl.plotly.plotly import (
     _extract_all_traces,
+    _get_bins,
     _get_title,
     _get_axis_label,
     plotly_histogram,
@@ -29,11 +30,20 @@ def appended_data():
 
 
 @pytest.fixture
-def univariate_appended_data():
+def univariate_appended_data_x():
     """ A fixture for univariate data.
     """
     return {
         "x": [98, 102, 94]
+    }
+
+
+@pytest.fixture
+def univariate_appended_data_y():
+    """ A fixture for univariate data on the y axis.
+    """
+    return {
+        "y": [98, 102, 94]
     }
 
 
@@ -44,6 +54,20 @@ def univariate_categorical_data():
     return {
         "labels": ["Class A", "Class B", "Class C"],
         "values": [10, 5, 1]
+    }
+
+
+@pytest.fixture
+def split_by_univariate_data():
+    """ A fixture for univariate data that's split by.
+    """
+    return {
+        "A": {
+            "y": [98, 99, 94]
+        },
+        "B": {
+            "y": [93, 92, 89]
+        }
     }
 
 
@@ -208,7 +232,7 @@ def test_get_title_histogram():
     """
     svl_plot = {
         "data": "bigfoot",
-        "axis": {
+        "x": {
             "field": "temperature_mid"
         },
         "type": "histogram"
@@ -285,6 +309,118 @@ def test_get_axis_label():
     assert truth == answer
 
 
+def test_get_bins_x():
+    """ Tests that the _get_bins function returns the correct value when there
+        is no bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "x": {
+            "field": "temperature_mid"
+        }
+    }
+
+    truth = {"autobinx": True}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_bins_y():
+    """ Tests that the _get_bins function returns the correct value when there
+        is no bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "y": {
+            "field": "temperature_mid"
+        }
+    }
+
+    truth = {"autobiny": True}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_bins_step_x():
+    """ Tests that the _get_bins function returns the correct value when there
+        is a step bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "x": {
+            "field": "temperature_low"
+        },
+        "step": 5
+    }
+
+    truth = {"xbins": {"size": 5}}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_bins_step_y():
+    """ Tests that the _get_bins function returns the correct value when there
+        is a step bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "y": {
+            "field": "temperature_low"
+        },
+        "step": 5
+    }
+
+    truth = {"ybins": {"size": 5}}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_bins_bins_x():
+    """ Tests that the _get_bins function returns the correct value when there
+        is a "bins" bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "x": {
+            "field": "temperature_mid"
+        },
+        "bins": 50
+    }
+
+    truth = {"nbinsx": 50}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
+def test_get_bins_bins_y():
+    """ Tests that the _get_bins function returns the correct value when there
+        is a "bins" bin specifier.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "x": {
+            "field": "temperature_mid"
+        },
+        "bins": 50
+    }
+
+    truth = {"nbinsx": 50}
+    answer = _get_bins(svl_plot)
+
+    assert truth == answer
+
+
 def test_get_axis_label_histogram_with_label():
     """ Tests that the _get_axis_label function returns the correct value for
         histogram plots when a label is provided.
@@ -292,14 +428,14 @@ def test_get_axis_label_histogram_with_label():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "axis": {
+        "x": {
             "field": "wind_speed"
         },
         "label": "Wind Speed (MPH)"
     }
 
     truth = "Wind Speed (MPH)"
-    answer = _get_axis_label(svl_plot)
+    answer = _get_axis_label(svl_plot, "x")
 
     assert truth == answer
 
@@ -311,13 +447,13 @@ def test_get_axis_label_histogram():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "axis": {
+        "x": {
             "field": "wind_speed"
         }
     }
 
     truth = "wind_speed"
-    answer = _get_axis_label(svl_plot)
+    answer = _get_axis_label(svl_plot, "x")
 
     assert truth == answer
 
@@ -366,14 +502,14 @@ def test_get_axis_label_xy_noagg():
     assert truth == answer
 
 
-def test_plotly_histogram_auto(univariate_appended_data):
+def test_plotly_histogram_x(univariate_appended_data_x):
     """ Tests that the plotly_histogram function returns the correct value
-        when there's no step or bin provided.
+        when the values are on the x axis.
     """
 
     svl_plot = {
         "type": "histogram",
-        "axis": {
+        "x": {
             "field": "temperature"
         },
         "data": "bigfoot"
@@ -393,75 +529,81 @@ def test_plotly_histogram_auto(univariate_appended_data):
         }]
     }
 
-    answer = plotly_histogram(svl_plot, univariate_appended_data)
+    answer = plotly_histogram(svl_plot, univariate_appended_data_x)
 
     assert truth == answer
 
 
-def test_plotly_histogram_step(univariate_appended_data):
-    """ Tests that the plotly_histogram function returns the correct value with
-        a step argument.
+def test_plotly_histogram_y(univariate_appended_data_y):
+    """ Tests that the plotly_histogram function returns the correct value
+        when the values are on the y axis.
     """
 
     svl_plot = {
         "type": "histogram",
-        "axis": {
+        "y": {
             "field": "temperature"
         },
-        "step": 5,
         "data": "bigfoot"
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: temperature",
-            "xaxis": {
+            "yaxis": {
                 "title": "temperature"
             }
         },
         "data": [{
             "type": "histogram",
-            "x": [98, 102, 94],
-            "xbins": {
-                "size": 5
-            }
+            "y": [98, 102, 94],
+            "autobiny": True
         }]
     }
 
-    answer = plotly_histogram(svl_plot, univariate_appended_data)
+    answer = plotly_histogram(svl_plot, univariate_appended_data_y)
 
     assert truth == answer
 
 
-def test_plotly_histogram_bins(univariate_appended_data):
-    """ Tests that the plotly_histogram function returns the correct value with
-        a bins argument.
-    """
-
+def test_plotly_histogram_split_by(split_by_univariate_data):
     svl_plot = {
         "type": "histogram",
-        "axis": {
-            "field": "temperature"
+        "data": "bigfoot",
+        "y": {
+            "field": "temperature_mid"
         },
-        "bins": 25,
-        "data": "bigfoot"
+        "split_by": {
+            "field": "classification"
+        }
     }
 
     truth = {
         "layout": {
-            "title": "bigfoot: temperature",
-            "xaxis": {
-                "title": "temperature"
+            "barmode": "overlay",
+            "title": "bigfoot: temperature_mid",
+            "yaxis": {
+                "title": "temperature_mid"
             }
         },
-        "data": [{
-            "type": "histogram",
-            "x": [98, 102, 94],
-            "nbinsx": 25
-        }]
+        "data": [
+            {
+                "type": "histogram",
+                "name": "A",
+                "y": [98, 99, 94],
+                "autobiny": True,
+                "opacity": 0.6
+            }, {
+                "type": "histogram",
+                "name": "B",
+                "y": [93, 92, 89],
+                "autobiny": True,
+                "opacity": 0.6
+            }
+        ]
     }
 
-    answer = plotly_histogram(svl_plot, univariate_appended_data)
+    answer = plotly_histogram(svl_plot, split_by_univariate_data)
 
     assert truth == answer
 
@@ -831,7 +973,7 @@ def test_plotly_scatter_split_by(split_by_appended_data):
     assert truth == answer
 
 
-def test_plotly_template_vars(univariate_appended_data):
+def test_plotly_template_vars(univariate_appended_data_x):
     """ Tests that the plotly_template_vars function returns the correct value.
     """
     svl_plots = [
@@ -841,7 +983,7 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 0,
             "column_end": 2,
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature"
             },
             "bins": 25,
@@ -852,7 +994,7 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 0,
             "column_end": 1,
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature"
             },
             "bins": 15,
@@ -863,7 +1005,7 @@ def test_plotly_template_vars(univariate_appended_data):
             "column_start": 1,
             "column_end": 2,
             "type": "histogram",
-            "axis": {
+            "x": {
                 "field": "temperature"
             },
             "bins": 10,
@@ -871,7 +1013,7 @@ def test_plotly_template_vars(univariate_appended_data):
         }
     ]
 
-    datas = [univariate_appended_data]*3
+    datas = [univariate_appended_data_x]*3
 
     truth = {
         "num_rows": 2,
