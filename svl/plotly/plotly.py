@@ -158,7 +158,12 @@ def plotly_histogram(svl_plot, data):
     if "split_by" in svl_plot:
         layout["barmode"] = "overlay"
         traces = [
-            merge(plot_type, {"name": split_by}, trace, _get_bins(svl_plot))
+            merge(
+                plot_type,
+                {"name": split_by, "opacity": 0.6},
+                trace,
+                _get_bins(svl_plot)
+            )
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:

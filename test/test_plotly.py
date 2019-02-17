@@ -591,12 +591,14 @@ def test_plotly_histogram_split_by(split_by_univariate_data):
                 "type": "histogram",
                 "name": "A",
                 "y": [98, 99, 94],
-                "autobiny": True
+                "autobiny": True,
+                "opacity": 0.6
             }, {
                 "type": "histogram",
                 "name": "B",
                 "y": [93, 92, 89],
-                "autobiny": True
+                "autobiny": True,
+                "opacity": 0.6
             }
         ]
     }
