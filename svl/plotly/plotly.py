@@ -43,12 +43,19 @@ def _get_title(svl_plot):
         str
             The title of the plot.
     """
+    # TODO: Update unit test for histogram.
     if "title" in svl_plot:
         return svl_plot["title"]
-    elif (svl_plot["type"] == "histogram") or (svl_plot["type"] == "pie"):
+    elif svl_plot["type"] == "pie":
         return "{}: {}".format(
             svl_plot["data"],
             _get_field(svl_plot["axis"])
+        )
+    elif svl_plot["type"] == "histogram":
+        svl_axis = "x" if "x" in svl_plot else "y"
+        return "{}: {}".format(
+            svl_plot["data"],
+            _get_field(svl_plot[svl_axis])
         )
     else:
         # xy plot
@@ -59,7 +66,7 @@ def _get_title(svl_plot):
         )
 
 
-def _get_axis_label(svl_plot, axis=None):
+def _get_axis_label(svl_plot, axis):
     """ Gets the label of the provided axis if present, or generates a
         reasonable default.
 
@@ -77,7 +84,7 @@ def _get_axis_label(svl_plot, axis=None):
             The label for the axis.
     """
     if svl_plot["type"] == "histogram":
-        return get("label", svl_plot, _get_field(svl_plot["axis"]))
+        return get("label", svl_plot, _get_field(svl_plot[axis]))
     elif "label" in svl_plot[axis]:
         # If a label is provided, use it.
         return svl_plot[axis]["label"]
@@ -90,6 +97,34 @@ def _get_axis_label(svl_plot, axis=None):
     else:
         # Otherwise just grab the field name.
         return _get_field(svl_plot[axis])
+
+
+def _get_bins(svl_plot):
+    """ Gets the right bin specifier from the SVL plot.
+
+        Parameters
+        ----------
+        svl_plot : dict
+
+        Returns
+        -------
+        dict
+            The bin specifier that plotly needs. Not necessarily the one it
+            deserves.
+    """
+    if "step" in svl_plot:
+        # Set the bin size.
+        bin_axis = "xbins" if "x" in svl_plot else "ybins"
+        bins = {bin_axis: {"size": svl_plot["step"]}}
+    elif "bins" in svl_plot:
+        # Set the number of bins.
+        bin_axis = "nbinsx" if "x" in svl_plot else "nbinsy"
+        bins = {bin_axis: svl_plot["bins"]}
+    else:
+        # Activate autobins.
+        bin_axis = "autobinx" if "x" in svl_plot else "autobiny"
+        bins = {bin_axis: True}
+    return bins
 
 
 def plotly_histogram(svl_plot, data):
@@ -109,30 +144,32 @@ def plotly_histogram(svl_plot, data):
             A plotly dict defining the histogram.
     """
 
-    trace = {
-        "type": "histogram",
-        "x": data["x"]
-    }
+    plot_type = {"type": "histogram"}
+    svl_axis = "x" if "x" in svl_plot else "y"
+    layout_axis = svl_axis + "axis"
     layout = {
         "title": _get_title(svl_plot),
-        "xaxis": {
-            "title": _get_axis_label(svl_plot)
+        layout_axis: {
+            "title": _get_axis_label(svl_plot, axis=svl_axis)
         }
     }
+    raw_traces = _extract_all_traces(svl_plot, data)
 
-    if "step" in svl_plot:
-        # Set the bin size.
-        bins = {"xbins": {"size": svl_plot["step"]}}
-    elif "bins" in svl_plot:
-        # Set the number of bins.
-        bins = {"nbinsx": svl_plot["bins"]}
+    if "split_by" in svl_plot:
+        layout["barmode"] = "overlay"
+        traces = [
+            merge(plot_type, {"name": split_by}, trace, _get_bins(svl_plot))
+            for split_by, trace in zip(sorted(data.keys()), raw_traces)
+        ]
     else:
-        # Activate autobins.
-        bins = {"autobinx": True}
+        traces = [
+            merge(plot_type, trace, _get_bins(svl_plot))
+            for trace in raw_traces
+        ]
 
     return {
         "layout": layout,
-        "data": [merge(trace, bins)]
+        "data": traces
     }
 
 
@@ -202,7 +239,7 @@ def plotly_bar(svl_plot, data):
         layout["barmode"] = "group"
         traces = [
             merge(plot_type, {"name": split_by}, trace)
-            # NOTE: Danger!! Implicit coupling to order here.
+            # ! Danger!! Implicit coupling to order here.
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
@@ -250,7 +287,7 @@ def plotly_line(svl_plot, data):
     if "split_by" in svl_plot:
         traces = [
             merge(plot_type, {"name": split_by}, trace)
-            # NOTE: Danger!! Implicit coupling to order here.
+            # ! Danger!! Implicit coupling to order here.
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
@@ -297,7 +334,7 @@ def plotly_scatter(svl_plot, data):
     if "split_by" in svl_plot:
         traces = [
             merge(plot_type, {"name": split_by}, trace)
-            # NOTE: Danger!! Implicit coupling to order here.
+            # ! Danger!! Implicit coupling to order here.
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
