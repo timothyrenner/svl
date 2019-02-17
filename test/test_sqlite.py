@@ -7,7 +7,9 @@ from pandas.testing import assert_frame_equal
 
 from svl.sqlite import (
     _csv_to_sqlite_pandas,
+    _parquet_to_sqlite_pandas,
     _get_field,
+    file_to_sqlite,
     sqlite_table,
     create_datasets,
     svl_to_sql_xy,
@@ -18,24 +20,37 @@ from svl.sqlite import (
 
 
 @pytest.fixture()
-def test_file():
+def test_csv_file():
     current_dir = os.path.dirname(
         os.path.abspath(__file__)
     )
-    test_file = os.path.join(
+    test_csv_file = os.path.join(
         current_dir,
         "test_datasets",
         "bigfoot_sightings.csv"
     )
-    return test_file
+    return test_csv_file
 
 
 @pytest.fixture()
-def test_conn(test_file):
+def test_parquet_file():
+    current_dir = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+    test_parquet_file = os.path.join(
+        current_dir,
+        "test_datasets",
+        "bigfoot_sightings.parquet"
+    )
+    return test_parquet_file
+
+
+@pytest.fixture()
+def test_conn(test_csv_file):
     # Obviously don't need the whole plot just the bit about the file.
     test_svl_datasets = {
         "bigfoot": {
-            "file": test_file
+            "file": test_csv_file
         },
         "recent_bigfoot": {
             "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
@@ -47,16 +62,31 @@ def test_conn(test_file):
     conn.close()
 
 
-def test_csv_to_sqlite_pandas(test_file):
+def test_csv_to_sqlite_pandas(test_csv_file):
     """ Tests that the _csv_to_sqlite_pandas function loads the database with
         the correct values.
     """
-    csv_filename = test_file
+    csv_filename = test_csv_file
     table_name = "bigfoot"
     conn = sqlite3.connect(":memory:")
 
-    truth = pd.read_csv(test_file)
+    truth = pd.read_csv(test_csv_file)
     _csv_to_sqlite_pandas(csv_filename, table_name, conn)
+    answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
+
+    assert_frame_equal(truth, answer)
+
+
+def test_parquet_to_sqlite_pandas(test_parquet_file):
+    """ Tests that the _parquet_to_sqlite_pandas function loads the database
+        with the correct values.
+    """
+    parquet_filename = test_parquet_file
+    table_name = "bigfoot"
+    conn = sqlite3.connect(":memory:")
+
+    truth = pd.read_parquet(test_parquet_file)
+    _parquet_to_sqlite_pandas(parquet_filename, table_name, conn)
     answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
 
     assert_frame_equal(truth, answer)
@@ -107,11 +137,41 @@ def test_get_field_none():
     assert truth == answer
 
 
-def test_sqlite_table(test_file):
+def test_file_to_sqlite_csv(test_csv_file):
+    """ Tests that the file_to_sqlite function loads the database with the
+        correct values when the file is a CSV file.
+    """
+    csv_filename = test_csv_file
+    table_name = "bigfoot"
+    conn = sqlite3.connect(":memory:")
+
+    truth = pd.read_csv(test_csv_file)
+    file_to_sqlite(csv_filename, table_name, conn)
+    answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
+
+    assert_frame_equal(truth, answer)
+
+
+def test_file_to_sqlite_parquet(test_parquet_file):
+    """ Tests that the file_to_sqlite function loads the database with the
+        correct values when the file is a parquet file.
+    """
+    parquet_filename = test_parquet_file
+    table_name = "bigfoot"
+    conn = sqlite3.connect(":memory:")
+
+    truth = pd.read_parquet(test_parquet_file)
+    file_to_sqlite(parquet_filename, table_name, conn)
+    answer = pd.read_sql_query("SELECT * FROM bigfoot", conn)
+
+    assert_frame_equal(truth, answer)
+
+
+def test_sqlite_table(test_csv_file):
     """ Tests that the sqlite_table function executes correctly.
     """
     conn = sqlite3.connect(":memory:")
-    _csv_to_sqlite_pandas(test_file, "bigfoot", conn)
+    _csv_to_sqlite_pandas(test_csv_file, "bigfoot", conn)
     sqlite_table(
         "SELECT * FROM bigfoot WHERE date >= '2008-01-01'",
         "recent_bigfoot",
@@ -127,12 +187,12 @@ def test_sqlite_table(test_file):
     assert_frame_equal(truth, answer)
 
 
-def test_create_datasets(test_file):
+def test_create_datasets(test_csv_file):
     """ Tests that the create_datasets function returns the correct value.
     """
     svl_datasets = {
         "bigfoot": {
-            "file": test_file
+            "file": test_csv_file
         },
         "recent_bigfoot": {
             "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
@@ -142,7 +202,7 @@ def test_create_datasets(test_file):
     conn = create_datasets(svl_datasets)
 
     # Assert that the bigfoot dataset is correct.
-    truth_bigfoot = pd.read_csv(test_file)
+    truth_bigfoot = pd.read_csv(test_csv_file)
     answer_bigfoot = pd.read_sql("SELECT * FROM bigfoot", conn)
 
     assert_frame_equal(truth_bigfoot, answer_bigfoot)
