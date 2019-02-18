@@ -454,3 +454,31 @@ def test_sql_dataset():
     parsed_svl_answer = parse_svl(svl_string)
 
     assert parsed_svl_truth == parsed_svl_answer
+
+
+def test_no_datasets():
+    """ Tests that the parse_svl function returns the correct value when
+        there's no DATASETS directive.
+    """
+    svl_string = """
+    HISTOGRAM bigfoot
+        X temperature_mid
+        SPLIT BY classification
+    """
+
+    truth = {
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "histogram",
+            "x": {
+                "field": "temperature_mid"
+            },
+            "split_by": {
+                "field": "classification"
+            }
+        }]
+    }
+
+    answer = parse_svl(svl_string)
+
+    assert truth == answer
