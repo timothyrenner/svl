@@ -467,6 +467,10 @@ def test_no_datasets():
     """
 
     truth = {
+        "datasets": {
+            # A validator would catch this, but from a parsing perspective this
+            # is valid.
+        },
         "vcat": [{
             "data": "bigfoot",
             "type": "histogram",
@@ -480,5 +484,38 @@ def test_no_datasets():
     }
 
     answer = parse_svl(svl_string)
+
+    assert truth == answer
+
+
+def test_with_kwargs():
+    """ Tests that the parse_svl function returns the correct value when the
+        kwargs are used.
+    """
+    svl_string = """
+    HISTOGRAM bigfoot
+        X temperature_mid
+        SPLIT BY classification
+    """
+
+    truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "bigfoot_sightings.csv"
+            }
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "histogram",
+            "x": {
+                "field": "temperature_mid"
+            },
+            "split_by": {
+                "field": "classification"
+            }
+        }]
+    }
+
+    answer = parse_svl(svl_string, bigfoot="bigfoot_sightings.csv")
 
     assert truth == answer
