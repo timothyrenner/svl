@@ -1,0 +1,2 @@
+HISTOGRAM bigfoot
+    X temperature_mid BINS 25

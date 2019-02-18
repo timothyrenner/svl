@@ -4,6 +4,9 @@ import os
 
 from jinja2 import Environment, FileSystemLoader
 
+from svl.cli import _extract_cli_datasets
+
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SVL_SCRIPT_TEMPLATE_DIR = os.path.join(CURRENT_DIR, "test_scripts")
 JINJA_ENV = Environment(loader=FileSystemLoader(SVL_SCRIPT_TEMPLATE_DIR))
@@ -59,6 +62,25 @@ def output_path():
     os.remove(output_path)
 
 
+def test_extract_cli_datasets():
+    """ Tests that the _extract_cli_datasets function returns the correct
+        value.
+    """
+    datasets = (
+        "bigfoot=bigfoot_sightings.csv",
+        "mothman=mothman_sightings.parquet"
+    )
+
+    truth = {
+        "bigfoot": "bigfoot_sightings.csv",
+        "mothman": "mothman_sightings.parquet"
+    }
+
+    answer = _extract_cli_datasets(datasets)
+
+    assert truth == answer
+
+
 def test_histogram_cli_debug(svl_script_template):
     """ Tests that the command line interface works correctly on the test
         dataset for histogram plots when debug is turned on.
@@ -85,6 +107,24 @@ def test_histogram_cli_plotly(svl_script_template, output_path):
     subprocess.run([
         "svl",
         svl_script_template("histogram.svl"),
+        "--output-file", output_path,
+        "--backend", "plotly",
+        "--no-browser"
+    ], check=True)
+
+
+def test_histogram_cli_no_datasets(output_path):
+    """ Tests that the command line interface works correctly on the test
+        dataset for histogram plots when the test dataset is passed in via
+        command line.
+    """
+    subprocess.run([
+        "svl",
+        # NOTE Don't need the template here because there are no templated
+        # parts here.
+        "{}/test_scripts/histogram_no_datasets.svl".format(CURRENT_DIR),
+        "--dataset",
+        "bigfoot={}/test_datasets/bigfoot_sightings.csv".format(CURRENT_DIR),
         "--output-file", output_path,
         "--backend", "plotly",
         "--no-browser"

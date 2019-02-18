@@ -8,6 +8,10 @@ from svl.plotly import plotly_template, plotly_template_vars
 from svl.sqlite import create_datasets, get_svl_data
 
 
+def _extract_cli_datasets(datasets):
+    return dict(map(lambda x: x.split("="), datasets))
+
+
 @click.command()
 @click.argument("svl_source", type=click.File('r'))
 @click.option("--debug", is_flag=True)
@@ -21,16 +25,19 @@ from svl.sqlite import create_datasets, get_svl_data
     type=click.File("w"),
     default="visualization.html"
 )
+@click.option("--dataset", "-d", multiple=True)
 @click.option("--no-browser", is_flag=True)
-def cli(svl_source, debug, backend, output_file, no_browser):
+def cli(svl_source, debug, backend, output_file, dataset, no_browser):
 
     svl_string = svl_source.read()
-
     if debug:
         print(svl.parse_svl(svl_string, debug=True).pretty())
         return
 
-    svl_spec = svl.parse_svl(svl_string)
+    # Extract the datasets from the CLI.
+    cli_datasets = _extract_cli_datasets(dataset)
+
+    svl_spec = svl.parse_svl(svl_string, **cli_datasets)
 
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).

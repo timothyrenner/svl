@@ -1,7 +1,7 @@
 import lark
 import pkg_resources
 
-from toolz import merge
+from toolz import merge, get
 
 
 class SVLTransformer(lark.Transformer):
@@ -119,8 +119,16 @@ parser = lark.Lark(
 )
 
 
-def parse_svl(svl_string, debug=False):
+def parse_svl(svl_string, debug=False, **kwargs):
     if debug:
         return debug_parser.parse(svl_string)
     else:
-        return parser.parse(svl_string)
+        parsed_svl = parser.parse(svl_string)
+        parsed_svl["datasets"] = merge(
+            # Either DATASETS is there or is empty.
+            get("datasets", parsed_svl, {}),
+            # Convert each kwarg into a file dataset spec.
+            {k: {"file": v} for k, v in kwargs.items()}
+        )
+
+        return parsed_svl
