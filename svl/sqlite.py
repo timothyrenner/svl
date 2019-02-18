@@ -29,6 +29,19 @@ def _csv_to_sqlite_pandas(csv_filename, table_name, conn):
     pd.read_csv(csv_filename).to_sql(table_name, conn, index=False)
 
 
+def _parquet_to_sqlite_pandas(parquet_filename, table_name, conn):
+    """ Loads an SVL dataset from parquet to SQLite using pandas.
+
+        Parameters
+        ----------
+        parquet_filename : str
+            The name of the parquet file with the data.
+        table_name : str
+            The name of the table to output.
+    """
+    pd.read_parquet(parquet_filename).to_sql(table_name, conn, index=False)
+
+
 def _get_field(svl_axis):
     if "transform" in svl_axis:
         return svl_axis["transform"]
@@ -38,14 +51,14 @@ def _get_field(svl_axis):
         return "*"
 
 
-def csv_to_sqlite(csv_filename, table_name, conn):
-    """ Loads SVL dataset from CSV to SQLite.
+def file_to_sqlite(filename, table_name, conn):
+    """ Loads SVL dataset from a file to SQLite.
 
         Uses pandas if available.
 
         Parameters
         ----------
-        csv_filename : str
+        filename : str
             The file with the data.
 
         table_name : str
@@ -56,7 +69,10 @@ def csv_to_sqlite(csv_filename, table_name, conn):
 
     """
     if PANDAS:
-        return _csv_to_sqlite_pandas(csv_filename, table_name, conn)
+        if filename.endswith("parquet"):
+            return _parquet_to_sqlite_pandas(filename, table_name, conn)
+        else:
+            return _csv_to_sqlite_pandas(filename, table_name, conn)
     else:
         raise NotImplementedError("Haven't implement non-pandas csv->sqlite.")
 
@@ -101,7 +117,7 @@ def create_datasets(svl_datasets):
 
     # Do the files first.
     for table_name, table_spec in files:
-        csv_to_sqlite(table_spec["file"], table_name, conn)
+        file_to_sqlite(table_spec["file"], table_name, conn)
 
     # Now do the queries.
     for table_name, table_spec in queries:
