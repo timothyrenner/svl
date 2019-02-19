@@ -106,6 +106,9 @@ class SVLTransformer(lark.Transformer):
     def aggregation(self, items):
         return {"agg": str(items[0]).upper()}
 
+    def sort(self, items):
+        return {"sort": str(items[0]).upper()}
+
 
 debug_parser = lark.Lark(
     pkg_resources.resource_string("resources", "svl.lark").decode("utf-8")
