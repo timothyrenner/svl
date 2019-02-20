@@ -18,7 +18,6 @@ setup(
         'toolz==0.9.0',
         'lark-parser==0.5.6',
         'Jinja2==2.10',
-        'maya==0.5.0',
         'pandas==0.23.4'
     ],
     extras_require={
