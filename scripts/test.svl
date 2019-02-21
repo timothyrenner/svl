@@ -15,7 +15,7 @@ CONCAT(
         BAR bigfoot
             TITLE "Bigfoot Sightings by Classification"
             X classification LABEL "Classification"
-            Y temperature_mid COUNT LABEL "Number of Sightings"
+            Y temperature_mid COUNT LABEL "Number of Sightings" SORT ASC
         
         PIE bigfoot
             -- If we have location, we also have weather. This plot indicates
