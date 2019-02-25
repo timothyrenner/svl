@@ -86,6 +86,9 @@ class SVLTransformer(lark.Transformer):
     def y(self, items):
         return {"y": merge(*items)}
 
+    def color_by(self, items):
+        return {"color_by": merge(*items)}
+
     def axis(self, items):
         return {"axis": merge(*items)}
 
@@ -108,6 +111,9 @@ class SVLTransformer(lark.Transformer):
 
     def sort(self, items):
         return {"sort": str(items[0]).upper()}
+
+    def color_scale(self, items):
+        return {"color_scale": str(items[0][1:-1])}
 
 
 debug_parser = lark.Lark(
