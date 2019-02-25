@@ -519,3 +519,40 @@ def test_with_kwargs():
     answer = parse_svl(svl_string, bigfoot="bigfoot_sightings.csv")
 
     assert truth == answer
+
+
+def test_sort():
+    """ Tests that the parse_svl function returns the correct value with a
+        SORT modifier on one axis.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot_sightings.csv"
+    BAR bigfoot
+        X classification SORT ASC
+        Y classification COUNT
+    """
+
+    truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "bigfoot_sightings.csv"
+            }
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "bar",
+            "x": {
+                "field": "classification",
+                "sort": "ASC"
+            },
+            "y": {
+                "field": "classification",
+                "agg": "COUNT"
+            }
+        }]
+    }
+
+    answer = parse_svl(svl_string)
+
+    assert truth == answer

@@ -543,6 +543,97 @@ def test_svl_to_sql_xy_split_by_agg():
     assert truth_query == answer_query
 
 
+def test_svl_to_sql_xy_sort_x():
+    """ Tests that the svl_to_sqlite_xy function returns the correct value when
+        there's a sort clause on x.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "line",
+        "x": {
+            "field": "latitude",
+            "sort": "ASC"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "AVG"
+        }
+    }
+
+    truth_query = (
+        "SELECT latitude AS x, AVG(temperature_mid) AS y "
+        "FROM bigfoot "
+        "GROUP BY latitude "
+        "ORDER BY x ASC"
+    )
+
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_sort_y():
+    """ Tests that the svl_to_sqlite_xy function returns the correct value when
+        there's a sort clause on y.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "classification"
+        },
+        "y": {
+            "agg": "COUNT",
+            "sort": "DESC",
+            "field": "classification"
+        }
+    }
+
+    truth_query = (
+        "SELECT classification AS x, COUNT(classification) AS y "
+        "FROM bigfoot "
+        "GROUP BY classification "
+        "ORDER BY y DESC"
+    )
+
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_sort_split_by():
+    """ Tests that the svl_to_sqlite function returns the correct value when
+        there's a SORT and a SPLIT BY.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "line",
+        "x": {
+            "field": "latitude",
+            "sort": "ASC"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "AVG"
+        },
+        "split_by": {
+            "field": "classification"
+        }
+    }
+
+    truth_query = (
+        "SELECT latitude AS x, AVG(temperature_mid) AS y, "
+        "classification AS split_by "
+        "FROM bigfoot "
+        "GROUP BY latitude, classification "
+        "ORDER BY split_by, x ASC"
+    )
+
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
 def test_get_svl_data_xy(test_conn):
     """ Tests that the get_svl_data function returns the correct value for
         an xy plot.

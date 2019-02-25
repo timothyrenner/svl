@@ -64,7 +64,7 @@ axis: "AXIS"i axis_spec axis_modifier*
 
 ?axis_spec: field | transform
 
-?axis_modifier: aggregation | temporal | label
+?axis_modifier: aggregation | temporal | label | sort
 
 label: "LABEL"i ESCAPED_STRING
 
@@ -78,6 +78,8 @@ aggregation: COUNT | MIN | MAX | AVG
 temporal: "BY"i (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
 
 transform: "TRANSFORM"i ESCAPED_STRING
+
+sort: "SORT"i (ASC | DESC)
 
 SCATTER: "SCATTER"i
 
@@ -108,6 +110,10 @@ HOUR: "HOUR"i
 MINUTE: "MINUTE"i
 
 SECOND: "SECOND"i
+
+ASC: "ASC"i
+
+DESC: "DESC"i
 
 // https://github.com/lark-parser/lark/blob/master/examples/lark.lark#L47
 COMMENT: "--" /[^\n]/*

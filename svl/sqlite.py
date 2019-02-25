@@ -200,6 +200,7 @@ def svl_to_sql_xy(svl_plot):
         str
             The query to execute.
     """
+    # TODO this is a very big function with a lot of redundant conditionals
     # Step 1: Process the selects.
 
     select_fields = []
@@ -248,8 +249,10 @@ def svl_to_sql_xy(svl_plot):
     elif group_axis:
         group_fields.append(_get_field(svl_plot[group_axis]))
 
+    split_by_field = "" if "split_by" not in svl_plot else "split_by"
     # Only add the split by to the group by if there's already a group axis.
-    if group_axis and ("split_by" in svl_plot):
+    # Empty strings are falsey ... I mean Falsey.
+    if group_axis and split_by_field:
         group_fields.append(svl_plot["split_by"]["field"])
 
     # Step 3: Build the query.
@@ -265,6 +268,25 @@ def svl_to_sql_xy(svl_plot):
         query = "{} GROUP BY {}".format(
             query,
             ", ".join(group_fields)
+        )
+
+    # If there's a SPLIT BY and a sort, make sure to sort by the split by
+    # field first, since each SPLIT BY value becomes it's own trace.
+    sort_fields = []
+    if split_by_field:
+        sort_fields.append(split_by_field)
+
+    if "sort" in svl_plot["x"]:
+        query = "{} ORDER BY {} {}".format(
+            query,
+            ", ".join(sort_fields + ["x"]),
+            svl_plot["x"]["sort"]
+        )
+    elif "sort" in svl_plot["y"]:
+        query = "{} ORDER BY {} {}".format(
+            query,
+            ", ".join(sort_fields + ["y"]),
+            svl_plot["y"]["sort"]
         )
 
     return query
