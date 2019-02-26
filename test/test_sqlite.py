@@ -544,7 +544,7 @@ def test_svl_to_sql_xy_split_by_agg():
 
 
 def test_svl_to_sql_xy_sort_x():
-    """ Tests that the svl_to_sqlite_xy function returns the correct value when
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's a sort clause on x.
     """
     svl_plot = {
@@ -573,7 +573,7 @@ def test_svl_to_sql_xy_sort_x():
 
 
 def test_svl_to_sql_xy_sort_y():
-    """ Tests that the svl_to_sqlite_xy function returns the correct value when
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's a sort clause on y.
     """
     svl_plot = {
@@ -602,7 +602,7 @@ def test_svl_to_sql_xy_sort_y():
 
 
 def test_svl_to_sql_xy_sort_split_by():
-    """ Tests that the svl_to_sqlite function returns the correct value when
+    """ Tests that the svl_to_sql_xy function returns the correct value when
         there's a SORT and a SPLIT BY.
     """
     svl_plot = {
@@ -627,6 +627,34 @@ def test_svl_to_sql_xy_sort_split_by():
         "FROM bigfoot "
         "GROUP BY latitude, classification "
         "ORDER BY split_by, x ASC"
+    )
+
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_color_by():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there's a COLOR BY.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "scatter",
+        "x": {
+            "field": "latitude"
+        },
+        "y": {
+            "field": "temperature_mid"
+        },
+        "color_by": {
+            "field": "humidity"
+        }
+    }
+
+    truth_query = (
+        "SELECT latitude AS x, temperature_mid AS y, humidity AS color_by "
+        "FROM bigfoot"
     )
 
     answer_query = svl_to_sql_xy(svl_plot)

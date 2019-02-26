@@ -205,7 +205,7 @@ def svl_to_sql_xy(svl_plot):
 
     select_fields = []
 
-    for axis in ["x", "y", "split_by"]:
+    for axis in ["x", "y", "split_by", "color_by"]:
 
         # Skip if the axis isn't in the plot.
         if axis not in svl_plot:
@@ -254,6 +254,9 @@ def svl_to_sql_xy(svl_plot):
     # Empty strings are falsey ... I mean Falsey.
     if group_axis and split_by_field:
         group_fields.append(svl_plot["split_by"]["field"])
+
+    # NOTE: the color_by field cannot appear in a GROUP BY. If there's an
+    # aggregation on x or y, then there must be an aggregation on color_by.
 
     # Step 3: Build the query.
     query = "SELECT {} FROM {}".format(
