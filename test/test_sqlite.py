@@ -712,6 +712,34 @@ def test_get_svl_data_xy_split_by(test_conn):
         assert len(answer[split_by]["x"]) == len(answer[split_by]["y"])
 
 
+def test_get_svl_data_xy_color_by(test_conn):
+    """ Tests that the get_svl_data function returns the correct data for xy
+        plots that have a color_by axis.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "agg": "COUNT"
+        },
+        "color_by": {
+            "field": "temperature_mid",
+            "agg": "AVG"
+        }
+    }
+    answer = get_svl_data(svl_plot, test_conn)
+
+    assert "x" in answer
+    assert "y" in answer
+    assert "color_by" in answer
+    assert len(answer["x"]) == len(answer["y"])
+    assert len(answer["x"]) == len(answer["color_by"])
+
+
 def test_get_svl_data_histogram(test_conn):
     """ Tests that the get_svl_data function returns the correct data for
         histogram plots.

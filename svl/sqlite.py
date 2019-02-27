@@ -340,10 +340,11 @@ def get_svl_data(svl_plot, conn):
     # TODO the branching logic.
     if svl_plot["type"] in {"line", "scatter", "bar"}:
         if "split_by" not in data_list[0].keys():
-            svl_data = {"x": [], "y": []}
+            svl_data = {k: [] for k in data_list[0].keys()}
             for row in data_list:
-                svl_data["x"].append(row["x"])
-                svl_data["y"].append(row["y"])
+                # ! Yikes - four levels of nesting.
+                for axis in row.keys():
+                    svl_data[axis].append(row[axis])
         else:
             svl_data = {}
             for row in data_list:
