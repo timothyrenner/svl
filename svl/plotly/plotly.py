@@ -1,4 +1,4 @@
-from toolz import merge, compose, pluck, get
+from toolz import merge, compose, pluck, get, dissoc, get_in
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from svl.sqlite import _get_field
@@ -24,7 +24,7 @@ def _extract_all_traces(svl_plot, data):
             as traces in plotly plots.
     """
     if "split_by" not in svl_plot:
-        return [data]
+        return [dissoc(data, "color_by")]
     else:
         return [data[split_by] for split_by in sorted(data.keys())]
 
@@ -43,7 +43,6 @@ def _get_title(svl_plot):
         str
             The title of the plot.
     """
-    # TODO: Update unit test for histogram.
     if "title" in svl_plot:
         return svl_plot["title"]
     elif svl_plot["type"] == "pie":
@@ -126,6 +125,42 @@ def _get_bins(svl_plot):
         bin_axis = "autobin" + svl_axis
         bins = {bin_axis: True}
     return bins
+
+
+def _get_colorspec(svl_plot, data):
+    """ Extracts a markerspec (if applicable) from the SVL plot color axis.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+        data : dict[str, list]
+            The data for the plot. The dict should have "color_by" if there's
+            a color axis for the plot.
+
+        Returns
+        --------
+        dict
+            The marker spec that defines the color axis for the plot.
+    """
+    color = {}
+
+    if "color_by" in svl_plot:
+        color = {
+            "marker": {
+                "color": data["color_by"],
+                "colorbar": {
+                    "title": _get_axis_label(svl_plot, axis="color_by")
+                },
+                "colorscale": get_in(
+                    ["color_by", "color_scale"],
+                    svl_plot,
+                    None
+                )
+            }
+        }
+
+    return color
 
 
 def plotly_histogram(svl_plot, data):
@@ -228,8 +263,8 @@ def plotly_bar(svl_plot, data):
         dict
             The dictionary defining the plotly plot.
     """
-
     plot_type = {"type": "bar"}
+    color = _get_colorspec(svl_plot, data)
     layout = {
         "title": _get_title(svl_plot),
         "xaxis": {
@@ -250,7 +285,7 @@ def plotly_bar(svl_plot, data):
         ]
     else:
         traces = [
-            merge(plot_type, trace)
+            merge(plot_type, color, trace)
             for trace in raw_traces
         ]
 
@@ -278,6 +313,7 @@ def plotly_line(svl_plot, data):
     """
 
     plot_type = {"mode": "lines+markers", "type": "scatter"}
+    color = _get_colorspec(svl_plot, data)
 
     layout = {
         "title": _get_title(svl_plot),
@@ -291,6 +327,7 @@ def plotly_line(svl_plot, data):
     raw_traces = _extract_all_traces(svl_plot, data)
 
     if "split_by" in svl_plot:
+        # If split_by is in the plot, color_by can't be in it.
         traces = [
             merge(plot_type, {"name": split_by}, trace)
             # ! Danger!! Implicit coupling to order here.
@@ -298,7 +335,7 @@ def plotly_line(svl_plot, data):
         ]
     else:
         traces = [
-            merge(plot_type, trace)
+            merge(plot_type, color, trace)
             for trace in raw_traces
         ]
 
@@ -324,8 +361,8 @@ def plotly_scatter(svl_plot, data):
         dict
             The dictionary defining the plotly plot.
     """
-
     plot_type = {"mode": "markers", "type": "scatter"}
+    color = _get_colorspec(svl_plot, data)
     layout = {
         "title": _get_title(svl_plot),
         "xaxis": {
@@ -345,7 +382,7 @@ def plotly_scatter(svl_plot, data):
         ]
     else:
         traces = [
-            merge(plot_type, trace)
+            merge(plot_type, color, trace)
             for trace in raw_traces
         ]
 
