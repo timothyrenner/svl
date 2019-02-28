@@ -137,7 +137,11 @@ def parse_svl(svl_string, debug=False, **kwargs):
         try:
             parsed_svl = parser.parse(svl_string)
         except UnexpectedInput as u:
-            raise SyntaxError(u.get_context(svl_string))
+            raise SyntaxError("{} line:{} column:{}".format(
+                u.get_context(svl_string),
+                u.line,
+                u.column
+            ))
 
         parsed_svl["datasets"] = merge(
             # Either DATASETS is there or is empty.

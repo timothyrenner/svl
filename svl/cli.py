@@ -2,6 +2,7 @@ import click
 import svl
 import webbrowser
 import os
+import sys
 
 from svl.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
@@ -37,7 +38,12 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
     # Extract the datasets from the CLI.
     cli_datasets = _extract_cli_datasets(dataset)
 
-    svl_spec = svl.parse_svl(svl_string, **cli_datasets)
+    try:
+        svl_spec = svl.parse_svl(svl_string, **cli_datasets)
+    except SyntaxError as e:
+        print("Syntax error:")
+        print("{}".format(e))
+        sys.exit(1)
 
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).

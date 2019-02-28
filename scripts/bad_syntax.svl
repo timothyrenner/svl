@@ -1,0 +1,5 @@
+DATASETS
+    bigfoot "data/bigfoot_sightings.csv"
+LINE bigfoot
+    X X date BY YEAR
+    Y report_number COUNT
