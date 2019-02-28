@@ -5,6 +5,7 @@ from svl.plotly.plotly import (
     _get_bins,
     _get_title,
     _get_axis_label,
+    _get_colorspec,
     plotly_histogram,
     plotly_pie,
     plotly_bar,
@@ -134,6 +135,22 @@ def split_by_agged_data():
     }
 
 
+@pytest.fixture()
+def color_by_agged_data():
+    """ A fixture for data that's been colored by temperature and aggregated
+        by date.
+    """
+    return {
+        "x": [
+            "2017-01-01T00:00:00Z",
+            "2018-01-01T00:00:00Z",
+            "2019-01-01T00:00:00Z"
+        ],
+        "y": [99, 98, 99],
+        "color_by": [0.3, 0.2, 0.1]
+    }
+
+
 def test_extract_all_traces_no_split_by(agged_data):
     """ Tests that the _extract_all_traces function returns the correct value
         when the plot has no split by specifier.
@@ -200,6 +217,39 @@ def test_extract_all_traces_split_by(split_by_agged_data):
     ]
 
     answer = _extract_all_traces(svl_plot, split_by_agged_data)
+
+    assert truth == answer
+
+
+def test_extract_all_traces_color_by(color_by_agged_data):
+    """ Tests that the _extract_all_traces function returns the correct value
+        when there's a color_by axis in the svl specifier.
+    """
+    svl_plot = {
+        "x": {
+            "field": "date",
+            "temporal": "MONTH"
+        },
+        "y": {
+            "field": "temperature",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX"
+        }
+    }
+
+    truth = [{
+        "x": [
+            "2017-01-01T00:00:00Z",
+            "2018-01-01T00:00:00Z",
+            "2019-01-01T00:00:00Z"
+        ],
+        "y": [99, 98, 99]
+    }]
+
+    answer = _extract_all_traces(svl_plot, color_by_agged_data)
 
     assert truth == answer
 
@@ -502,6 +552,105 @@ def test_get_axis_label_xy_noagg():
     assert truth == answer
 
 
+def test_get_colorspec_no_color_by(agged_data):
+    """ Tests that the _get_colorspec function returns the correct value when
+        the dataset doesn't have a color spec.
+    """
+
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "date"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        }
+    }
+
+    truth = {}
+
+    answer = _get_colorspec(svl_plot, agged_data)
+
+    assert truth == answer
+
+
+def test_get_colorspec(color_by_agged_data):
+    """ Tests that the _get_colorspec function returns the correct value when
+        the plot and data have a color by axis.
+    """
+    svl_plot = {
+        "dataset": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "date",
+            "temporal": "DAY"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX",
+            "label": "Humidity",
+            "color_scale": "Jet"
+        }
+    }
+
+    truth = {
+        "marker": {
+            "color": [0.3, 0.2, 0.1],
+            "colorbar": {
+                "title": "Humidity"
+            },
+            "colorscale": "Jet"
+        }
+    }
+
+    answer = _get_colorspec(svl_plot, color_by_agged_data)
+
+    assert truth == answer
+
+
+def test_get_colorspec_no_label_no_scale(color_by_agged_data):
+    """ Tests that the _get_colorspec function returns the correct value when
+        there's no color by axis label or color scale.
+    """
+
+    svl_plot = {
+        "dataset": "bigfoot",
+        "type": "bar",
+        "x": {
+            "field": "date",
+            "temporal": "DAY"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX"
+        }
+    }
+
+    truth = {
+        "marker": {
+            "color": [0.3, 0.2, 0.1],
+            "colorbar": {
+                "title": "humidity (MAX)"
+            },
+            "colorscale": None
+        }
+    }
+
+    answer = _get_colorspec(svl_plot, color_by_agged_data)
+
+    assert truth == answer
+
+
 def test_plotly_histogram_x(univariate_appended_data_x):
     """ Tests that the plotly_histogram function returns the correct value
         when the values are on the x axis.
@@ -768,6 +917,62 @@ def test_plotly_bar_split_by(split_by_agged_data):
     assert truth == answer
 
 
+def test_plotly_bar_color_by(color_by_agged_data):
+    """ Tests that the plotly_bar function returns the correct value when
+        there's a color_by axis.
+    """
+    svl_plot = {
+        "type": "bar",
+        "data": "bigfoot",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX"
+        }
+    }
+
+    truth = {
+        "layout": {
+            "title": "bigfoot: date - temperature_mid",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature_mid (MAX)"
+            }
+        },
+        "data": [
+            {
+                "type": "bar",
+                "x": [
+                    "2017-01-01T00:00:00Z",
+                    "2018-01-01T00:00:00Z",
+                    "2019-01-01T00:00:00Z"
+                ],
+                "y": [99, 98, 99],
+                "marker": {
+                    "color": [0.3, 0.2, 0.1],
+                    "colorbar": {
+                        "title": "humidity (MAX)"
+                    },
+                    "colorscale": None
+                }
+            }
+        ]
+    }
+
+    answer = plotly_bar(svl_plot, color_by_agged_data)
+
+    assert truth == answer
+
+
 def test_plotly_line(agged_data):
     """ Tests that the plotly_line function returns the correct value.
     """
@@ -872,6 +1077,63 @@ def test_plotly_line_split_by(split_by_agged_data):
     assert truth == answer
 
 
+def test_plotly_line_color_by(color_by_agged_data):
+    """ Tests that the plotly_line function returns the correct value when
+        there's a color_by axis.
+    """
+    svl_plot = {
+        "type": "line",
+        "data": "bigfoot",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX"
+        }
+    }
+
+    truth = {
+        "layout": {
+            "title": "bigfoot: date - temperature_mid",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature_mid (MAX)"
+            }
+        },
+        "data": [
+            {
+                "type": "scatter",
+                "mode": "lines+markers",
+                "x": [
+                    "2017-01-01T00:00:00Z",
+                    "2018-01-01T00:00:00Z",
+                    "2019-01-01T00:00:00Z"
+                ],
+                "y": [99, 98, 99],
+                "marker": {
+                    "color": [0.3, 0.2, 0.1],
+                    "colorbar": {
+                        "title": "humidity (MAX)"
+                    },
+                    "colorscale": None
+                }
+            }
+        ]
+    }
+
+    answer = plotly_line(svl_plot, color_by_agged_data)
+
+    assert truth == answer
+
+
 def test_plotly_scatter(appended_data):
     """ Tests that the plotly_scatter function returns the correct value.
     """
@@ -969,6 +1231,63 @@ def test_plotly_scatter_split_by(split_by_appended_data):
     }
 
     answer = plotly_scatter(svl_plot, split_by_appended_data)
+
+    assert truth == answer
+
+
+def test_plotly_scatter_color_by(color_by_agged_data):
+    """ Tests that the plotly_scatter function returns the correct value when
+        there's a color_by axis.
+    """
+    svl_plot = {
+        "type": "scatter",
+        "data": "bigfoot",
+        "x": {
+            "field": "date",
+            "temporal": "YEAR"
+        },
+        "y": {
+            "field": "temperature_mid",
+            "agg": "MAX"
+        },
+        "color_by": {
+            "field": "humidity",
+            "agg": "MAX"
+        }
+    }
+
+    truth = {
+        "layout": {
+            "title": "bigfoot: date - temperature_mid",
+            "xaxis": {
+                "title": "date"
+            },
+            "yaxis": {
+                "title": "temperature_mid (MAX)"
+            }
+        },
+        "data": [
+            {
+                "type": "scatter",
+                "mode": "markers",
+                "x": [
+                    "2017-01-01T00:00:00Z",
+                    "2018-01-01T00:00:00Z",
+                    "2019-01-01T00:00:00Z"
+                ],
+                "y": [99, 98, 99],
+                "marker": {
+                    "color": [0.3, 0.2, 0.1],
+                    "colorbar": {
+                        "title": "humidity (MAX)"
+                    },
+                    "colorscale": None
+                }
+            }
+        ]
+    }
+
+    answer = plotly_scatter(svl_plot, color_by_agged_data)
 
     assert truth == answer
 

@@ -55,10 +55,10 @@ class SVLTransformer(lark.Transformer):
         return merge(*items)
 
     def histogram_chart(self, items):
-        return merge({"type": "histogram"}, *items[1:])
+        return merge({"type": "histogram"}, *items)
 
     def pie_chart(self, items):
-        return merge({"type": "pie"}, *items[1:])
+        return merge({"type": "pie"}, *items)
 
     def markxy(self, items):
         return {"type": str(items[0]).lower()}
@@ -87,6 +87,9 @@ class SVLTransformer(lark.Transformer):
     def y(self, items):
         return {"y": merge(*items)}
 
+    def color_by(self, items):
+        return {"color_by": merge(*items)}
+
     def axis(self, items):
         return {"axis": merge(*items)}
 
@@ -109,6 +112,9 @@ class SVLTransformer(lark.Transformer):
 
     def sort(self, items):
         return {"sort": str(items[0]).upper()}
+
+    def color_scale(self, items):
+        return {"color_scale": str(items[0][1:-1])}
 
 
 debug_parser = lark.Lark(
