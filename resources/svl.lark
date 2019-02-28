@@ -40,7 +40,7 @@ markxy: SCATTER | LINE | BAR
 
 data: CNAME
 
-dimensions: (x | y | split_by)+
+dimensions: (x | y | split_by | color_by)+
 
 ?histogram_opts: step | bins
 
@@ -60,15 +60,20 @@ x: "X"i axis_spec axis_modifier*
 
 y: "Y"i axis_spec axis_modifier*
 
+color_by: "COLOR"i "BY"i axis_spec color_axis_modifier*
+
 axis: "AXIS"i axis_spec axis_modifier*
 
 ?axis_spec: field | transform
 
 ?axis_modifier: aggregation | temporal | label | sort
 
+?color_axis_modifier: aggregation | temporal | label | color_scale
+
 label: "LABEL"i ESCAPED_STRING
 
 // For split by temporal is supported irrespective of x and y.
+// DANGER - SPLIT BY DOES NOT CURRENTLY SUPPORT TEMPORALS BUT IT SHOULD.
 split_by: "SPLIT"i "BY"i field
 
 field: CNAME
@@ -80,6 +85,8 @@ temporal: "BY"i (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
 transform: "TRANSFORM"i ESCAPED_STRING
 
 sort: "SORT"i (ASC | DESC)
+
+color_scale: ESCAPED_STRING
 
 SCATTER: "SCATTER"i
 
