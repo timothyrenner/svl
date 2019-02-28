@@ -556,3 +556,47 @@ def test_sort():
     answer = parse_svl(svl_string)
 
     assert truth == answer
+
+
+def test_color_by():
+    """ Tests that the parse_svl function can parse SVL with a COLOR BY.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot_sightings.csv"
+    LINE bigfoot
+        X date BY YEAR
+        Y report_id COUNT LABEL "Number of Sightings"
+        COLOR BY temperature_mid AVG "Jet" LABEL "Average Temperature (F)"
+    """
+
+    truth = {
+        "datasets": {
+            "bigfoot": {
+                "file": "bigfoot_sightings.csv"
+            }
+        },
+        "vcat": [{
+            "data": "bigfoot",
+            "type": "line",
+            "x": {
+                "field": "date",
+                "temporal": "YEAR"
+            },
+            "y": {
+                "field": "report_id",
+                "agg": "COUNT",
+                "label": "Number of Sightings"
+            },
+            "color_by": {
+                "field": "temperature_mid",
+                "agg": "AVG",
+                "color_scale": "Jet",
+                "label": "Average Temperature (F)"
+            }
+        }]
+    }
+
+    answer = parse_svl(svl_string)
+
+    assert truth == answer

@@ -52,3 +52,4 @@ SCATTER recent_bigfoot_sightings
     TITLE "Recent Bigfoot Sighting Moon Phase by Latitude"
     X latitude LABEL "Latitude (deg)"
     Y moon_phase LABEL "Moon Phase"
+    COLOR BY temperature_mid "Viridis" LABEL "Temperature"
