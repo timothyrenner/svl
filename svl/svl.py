@@ -54,10 +54,10 @@ class SVLTransformer(lark.Transformer):
         return merge(*items)
 
     def histogram_chart(self, items):
-        return merge({"type": "histogram"}, *items[1:])
+        return merge({"type": "histogram"}, *items)
 
     def pie_chart(self, items):
-        return merge({"type": "pie"}, *items[1:])
+        return merge({"type": "pie"}, *items)
 
     def markxy(self, items):
         return {"type": str(items[0]).lower()}
