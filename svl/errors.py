@@ -26,6 +26,14 @@ SVL_SYNTAX_ERRORS = {
         # Missing axis field.
         """LINE bigfoot X LABEL "x" Y temperature""",
         # Missing title.
-        """PIE bigfoot AXIS has_location TITLE """
+        """PIE bigfoot AXIS has_location TITLE """,
+        # Missing label value.
+        """HISTOGRAM bigfoot X temperature_mid LABEL""",
+        # Missing bin value.
+        """HISTOGRAM bigfoot Y temperature_mid BINS""",
+        # Missing step value.
+        """HISTOGRAM bigfoot Y humidity STEP"""
+        # TODO Missing split by value.
+        # TODO Missing hole value.
     ]
 }

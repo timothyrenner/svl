@@ -67,3 +67,48 @@ def test_missing_title_value():
 
     with pytest.raises(SvlMissingValue):
         parse_svl(svl_string)
+
+
+def test_missing_label_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing label value.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot.csv"
+    SCATTER bigfoot
+        X date BY YEAR LABEL
+        Y report_number COUNT
+        SPLIT BY classification
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
+
+
+def test_missing_bins_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing bins value.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot.csv"
+    HISTOGRAM bigfoot
+        X humidity BINS LABEL "Humidity"
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
+
+
+def test_missing_step_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing step value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    HISTOGRAM bigfoot STEP X moon_phase
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
