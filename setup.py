@@ -16,7 +16,7 @@ setup(
     install_requires=[
         'click==6.7',
         'toolz==0.9.0',
-        'lark-parser==0.5.6',
+        'lark-parser==0.6.6',
         'Jinja2==2.10',
         'pandas==0.23.4'
     ],
