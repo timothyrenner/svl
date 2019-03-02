@@ -112,3 +112,55 @@ def test_missing_step_value():
 
     with pytest.raises(SvlMissingValue):
         parse_svl(svl_string)
+
+
+def test_missing_transform_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing transform value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    SCATTER bigfoot X latitude Y TRANSFORM
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
+
+
+def test_missing_color_by_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing color by value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    SCATTER bigfoot X latitude Y temperature_mid COLOR BY
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
+
+
+def test_missing_filter_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing filter value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot X date BY YEAR Y report_number COUNT FILTER
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)
+
+
+def test_missing_sort_value():
+    """ Tests that the parse_svl function raises a SvlMissingValue exception
+        when there's a missing sort value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    BAR bigfoot X classification SORT Y classification COUNT
+    """
+
+    with pytest.raises(SvlMissingValue):
+        parse_svl(svl_string)

@@ -32,8 +32,16 @@ SVL_SYNTAX_ERRORS = {
         # Missing bin value.
         """HISTOGRAM bigfoot Y temperature_mid BINS""",
         # Missing step value.
-        """HISTOGRAM bigfoot Y humidity STEP"""
+        """HISTOGRAM bigfoot Y humidity STEP""",
         # TODO Missing split by value.
         # TODO Missing hole value.
+        # Missing TRANSFORM value.
+        """LINE bigfoot X TRANSFORM Y classification COUNT""",
+        # Missing COLOR BY value.
+        """BAR bigfoot X classification Y classification COUNT COLOR BY""",
+        # Missing FILTER value.
+        """PIE bigfoot AXIS has_location FILTER """,
+        # Missing SORT value.
+        """BAR bigfoot X classification Y classification COUNT SORT"""
     ]
 }
