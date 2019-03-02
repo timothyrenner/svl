@@ -130,10 +130,14 @@ SVL_SYNTAX_ERRORS = {
         """BAR bigfoot X classification Y classification COUNT SORT DESCCCCC"""
     ],
     SvlUnsupportedDeclaration: [
-        # TODO BINS on a non-histogram chart.
-        # TODO STEP on a non-histogram chart.
-        # TODO HOLE on a non-pie chart.
-        # TODO Dimension of a pie chart.
-        # TODO COLOR BY on a histogram or pie chart.
+        # BINS on a non-histogram chart.
+        """BAR bigfoot X classification Y classification COUNT BINS 30""",
+        # STEP on a non-histogram chart.
+        """LINE bigfoot X date BY YEAR Y classification COUNT STEP 0.1""",
+        # HOLE on a non-pie chart.
+        """HISTOGRAM bigfoot Y humidity HOLE 0.9""",
+        # Dimension of a pie chart.
+        """PIE bigfoot X latitude"""
+        # ! COLOR BY on a histogram or pie chart.
     ]
 }

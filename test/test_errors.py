@@ -4,7 +4,8 @@ from svl.errors import (
     SvlSyntaxError,
     SvlMissingValue,
     SvlMissingParen,
-    SvlTypeError
+    SvlTypeError,
+    SvlUnsupportedDeclaration
 )
 from svl.svl import parse_svl
 
@@ -459,5 +460,71 @@ def test_invalid_sort():
     LINE bigfoot X date SORT OOPS Y classification COUNT
     """
 
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_bins_on_non_histogram():
+    """ Tests that the parse_svl function raises a SvlUnsupportedDeclaration
+        exception when there's a BINS declaration on a non-histogram chart.
+    """
+    svl_string = """
+    Datasets bigfoot "bigfoot.csv"
+    LINE bigfoot X date BY YEAR Y classification COUNT BINS 40
+    """
+
+    with pytest.raises(SvlUnsupportedDeclaration):
+        parse_svl(svl_string)
+
+
+def test_step_on_non_histogram():
+    """ Tests that the parse_svl function raises a SvlUnsupportedDeclaration
+        exception when there's a STEP declaration on a non-histogram chart.
+    """
+    svl_string = """
+    datasets bigfoot "bigfoot.csv"
+    BAR bigfoot X classification Y classification COUNT STEP 0.1
+    """
+
+    with pytest.raises(SvlUnsupportedDeclaration):
+        parse_svl(svl_string)
+
+
+def test_hole_on_non_pie():
+    """ Tests that the parse_svl function raises a SvlUnsupportedDeclaration
+        exception when there's a HOLE declaration on a non-pie chart.
+    """
+    svl_string = """
+    datasets bigfoot "bigfoot.csv"
+    SCATTER bigfoot X latitude Y temperature_mid HOLE 0.2
+    """
+
+    with pytest.raises(SvlUnsupportedDeclaration):
+        parse_svl(svl_string)
+
+
+def test_dimension_on_pie():
+    """ Tests that the parse_svl function raises a SvlUnsupportedDeclaration
+        exception when there's a dimension declared for a pie chart.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    PIE bigfoot X classification
+    """
+
+    with pytest.raises(SvlUnsupportedDeclaration):
+        parse_svl(svl_string)
+
+
+def test_color_by_on_wrong_chart():
+    """ Tests that the parse_svl function raises a SvlSyntaxError
+        exception when there's a color by declared for a non-xy chart.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    PIE bigfoot AXIS classification COLOR BY humidity
+    """
+
+    # TODO Make this exception more specific if possible.
     with pytest.raises(SvlSyntaxError):
         parse_svl(svl_string)
