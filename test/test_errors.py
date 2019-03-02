@@ -1,6 +1,11 @@
 import pytest
 
-from svl.errors import SvlMissingValue, SvlMissingParen
+from svl.errors import (
+    SvlSyntaxError,
+    SvlMissingValue,
+    SvlMissingParen,
+    SvlTypeError
+)
 from svl.svl import parse_svl
 
 
@@ -225,4 +230,153 @@ def test_missing_close_paren():
     """
 
     with pytest.raises(SvlMissingParen):
+        parse_svl(svl_string)
+
+
+def test_bins_with_non_number():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-number in a BINS declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    HISTOGRAM bigfoot X temperature_mid BINS hi
+    """
+
+    # TODO Make exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_step_with_non_number():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-number in a STEP declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    HISTOGRAM bigfoot STEP "hello there" X temperature_mid
+    """
+
+    # TODO make exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_color_scale_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a COLOR BY declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    SCATTER bigfoot X date BY DAY Y date COUNT COLOR BY humidity MAX 2.1
+    """
+
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_transform_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a TRANSFORM declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    SCATTER bigfoot X TRANSFORM 1.2 Y temperature_mid
+    """
+
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_hole_with_non_number():
+    """ Tests that the parse_svl function raises a SvlTypeError exception
+        when there's a non-number in a HOLE declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    PIE bigfoot HOLE hi AXIS classification
+    """
+
+    with pytest.raises(SvlTypeError):
+        parse_svl(svl_string)
+
+
+def test_filter_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a FILTER declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot
+        X date BY YEAR
+        Y date COUNT
+        FILTER date
+    """
+
+    # TODO Make this exception more specific if possible
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_title_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a TITLE declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot
+        X date BY YEAR
+        TITLE 1
+        Y date COUNT
+        SPLIT BY classification
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_label_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a LABEL declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot
+        Y classification COUNT
+        SPLIT BY classification
+        X date BY YEAR LABEL 1.2
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_dataset_file_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a DATASETS file declaration.
+    """
+    svl_string = """
+    DATASETS bigfoot 3
+    LINE bigfoot X date BY YEAR Y date COUNT
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_dataset_sql_with_non_string():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a non-string in a DATASETS SQL declaration.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot.csv"
+        bigfoot_with_location SQL 3
+    PIE bigfoot_with_location AXIS has_location
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
         parse_svl(svl_string)

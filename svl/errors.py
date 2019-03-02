@@ -75,8 +75,8 @@ SVL_SYNTAX_ERRORS = {
         """HISTOGRAM bigfoot Y temperature_mid BINS""",
         # Missing step value.
         """HISTOGRAM bigfoot Y humidity STEP""",
-        # TODO Missing split by value.
-        # TODO Missing hole value.
+        # ! TODO Missing split by value.
+        # ! TODO Missing hole value.
         # Missing TRANSFORM value.
         """LINE bigfoot X TRANSFORM Y classification COUNT""",
         # Missing COLOR BY value.
@@ -104,34 +104,35 @@ SVL_SYNTAX_ERRORS = {
             LINE bigfoot X date BY YEAR Y report_number COUNT
             HISTOGRAM bigfoot X temperature_mid
         """
-        # TODO Missing close paren on vcat.
+        # ! TODO Missing close paren on vcat.
     ],
     SvlTypeError: [
-        # STEP with non-number
-        # BINS with non-number
         # HOLE with non-number
-        # COLOR SCALE with non-string
-        # TRANSFORM with non-string
-        # FILTER with non-string
-        # TITLE with non-string
-        # LABEL with non-string
-        # DATASET file with non-string
-        # DATASET SQL with non-string
+        """PIE bigfoot AXIS classification HOLE "hi there" """
+        # ! BINS with non-number
+        # ! STEP with non-number
+        # ! COLOR SCALE with non-string
+        # ! TRANSFORM with non-string
+        # ! FILTER with non-string
+        # ! TITLE with non-string
+        # ! LABEL with non-string
+        # ! DATASET file with non-string
+        # ! DATASET SQL with non-string
     ],
     SvlInvalidTimeUnit: [
-        # TEMPORAL with invalid time unit.
+        # TODO TEMPORAL with invalid time unit.
     ],
     SvlInvalidAggregation: [
-        # Aggregation with invalid function.
+        # TODO Aggregation with invalid function.
     ],
     SvlInvalidSort: [
-        # SORT with invalid ASC / DESC.
+        # TODO SORT with invalid ASC / DESC.
     ],
     SvlUnsupportedDeclaration: [
-        # BINS on a non-histogram chart.
-        # STEP on a non-histogram chart.
-        # HOLE on a non-pie chart.
-        # Dimension of a pie chart.
-        # COLOR BY on a histogram or pie chart.
+        # TODO BINS on a non-histogram chart.
+        # TODO STEP on a non-histogram chart.
+        # TODO HOLE on a non-pie chart.
+        # TODO Dimension of a pie chart.
+        # TODO COLOR BY on a histogram or pie chart.
     ]
 }
