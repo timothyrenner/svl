@@ -13,8 +13,14 @@ class SvlMissingValue(SvlSyntaxError):
     label = "Missing value."
 
 
+class SvlMissingParen(SvlSyntaxError):
+    label = "Missing paren."
+
+
 SVL_SYNTAX_ERRORS = {
     SvlMissingValue: [
+        # Missing label.
+        """DATASETS "bigfoot.csv" LINE bigfoot X date Y temperature""",
         # Missing file or SQL specifier.
         "DATASETS bigfoot LINE bigfoot X date Y temperature",
         # Missing dataset specifier for plot.
@@ -43,5 +49,25 @@ SVL_SYNTAX_ERRORS = {
         """PIE bigfoot AXIS has_location FILTER """,
         # Missing SORT value.
         """BAR bigfoot X classification Y classification COUNT SORT"""
+    ],
+    SvlMissingParen: [
+        # Missing open paren on CONCAT.
+        """CONCAT
+                LINE bigfoot X date BY YEAR Y report_number COUNT
+                HISTOGRAM bigfoot X temperature_mid
+            )
+        """,
+        # Missing open paren on vcat.
+        """
+            LINE bigfoot X date BY YEAR Y report_number COUNT
+            HISTOGRAM bigfoot X temperature_mid
+        )
+        """,
+        # Missing close paren on CONCAT.
+        """CONCAT(
+            LINE bigfoot X date BY YEAR Y report_number COUNT
+            HISTOGRAM bigfoot X temperature_mid
+        """
+        # TODO Missing close paren on vcat.
     ]
 }
