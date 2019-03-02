@@ -135,6 +135,31 @@ def test_missing_step_value():
         parse_svl(svl_string)
 
 
+def test_missing_split_by_value():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a missing split by value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    HISTOGRAM bigfoot X temperature_mid SPLIT BY
+    """
+
+    # TODO Get a more specific exception here.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_missing_hole_value():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a missing HOLE value.
+    """
+    svl_string = """PIE bigfoot AXIS classification HOLE"""
+
+    # TODO Get a more specific exception here.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
 def test_missing_transform_value():
     """ Tests that the parse_svl function raises a SvlMissingValue exception
         when there's a missing transform value.
@@ -230,6 +255,21 @@ def test_missing_close_paren():
     """
 
     with pytest.raises(SvlMissingParen):
+        parse_svl(svl_string)
+
+
+def test_missing_close_paren_vcat():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's a missing close paren on a vcat.
+    """
+    svl_string = """
+    (
+        HISTOGRAM bigfoot X temperature_mid
+        HISTOGRAM bigfoot Y temperature_high
+    """
+
+    # TODO Add a more specific exception here.
+    with pytest.raises(SvlSyntaxError):
         parse_svl(svl_string)
 
 

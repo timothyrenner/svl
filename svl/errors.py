@@ -75,8 +75,8 @@ SVL_SYNTAX_ERRORS = {
         """HISTOGRAM bigfoot Y temperature_mid BINS""",
         # Missing step value.
         """HISTOGRAM bigfoot Y humidity STEP""",
-        # ! TODO Missing split by value.
-        # ! TODO Missing hole value.
+        # ! Missing split by value.
+        # ! Missing hole value.
         # Missing TRANSFORM value.
         """LINE bigfoot X TRANSFORM Y classification COUNT""",
         # Missing COLOR BY value.
@@ -104,7 +104,7 @@ SVL_SYNTAX_ERRORS = {
             LINE bigfoot X date BY YEAR Y report_number COUNT
             HISTOGRAM bigfoot X temperature_mid
         """
-        # ! TODO Missing close paren on vcat.
+        # ! Missing close paren on vcat.
     ],
     SvlTypeError: [
         # HOLE with non-number
