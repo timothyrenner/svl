@@ -120,13 +120,14 @@ SVL_SYNTAX_ERRORS = {
         # ! DATASET SQL with non-string
     ],
     SvlInvalidTimeUnit: [
-        # TODO TEMPORAL with invalid time unit.
+        # ! TEMPORAL with invalid time unit.
     ],
     SvlInvalidAggregation: [
-        # TODO Aggregation with invalid function.
+        # ! Aggregation with invalid function.
     ],
     SvlInvalidSort: [
-        # TODO SORT with invalid ASC / DESC.
+        # SORT with invalid ASC / DESC.
+        """BAR bigfoot X classification Y classification COUNT SORT DESCCCCC"""
     ],
     SvlUnsupportedDeclaration: [
         # TODO BINS on a non-histogram chart.

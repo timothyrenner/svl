@@ -420,3 +420,44 @@ def test_dataset_sql_with_non_string():
     # TODO Make this exception more specific if possible.
     with pytest.raises(SvlSyntaxError):
         parse_svl(svl_string)
+
+
+def test_temporal_with_invalid_specifier():
+    """ Tests that the parse_svl function raises a SvlSyntaxError exception
+        when there's an invalid temporal specifier.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot Y temporal BY NOPE X classification COUNT
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_invalid_aggregation():
+    """ Tests that the parse_svl function raises a SvlSyntaxError
+        exception when there's an invalid aggregation function.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+        LINE bigfoot X date BY YEAR Y temperature_mid ARGMIN
+    """
+
+    # TODO Make this exception more specific if possible.
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
+
+
+def test_invalid_sort():
+    """ Tests that the parse_svl function raises a SvlInvalidSort error when
+        there's an invalid SORT argument.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot.csv"
+    LINE bigfoot X date SORT OOPS Y classification COUNT
+    """
+
+    with pytest.raises(SvlSyntaxError):
+        parse_svl(svl_string)
