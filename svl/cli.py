@@ -62,7 +62,7 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
 
     else:
         print("Unable to use backend {} yet.".format(backend))
-        return
+        sys.exit(1)
 
     output_file.write(template.render(**template_vars))
 

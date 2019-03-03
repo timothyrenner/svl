@@ -1,0 +1,5 @@
+DATASETS
+    bigfoot "bigfoot.csv"
+LINE bigfoot
+    X LABEL "Date" -- Missing field.
+    Y classification COUNT
