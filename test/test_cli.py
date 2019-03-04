@@ -129,3 +129,32 @@ def test_histogram_cli_no_datasets(output_path):
         "--backend", "plotly",
         "--no-browser"
     ], check=True)
+
+
+def test_cli_syntax_error():
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when there's a syntax error in the script.
+    """
+    completed = subprocess.run([
+        "svl",
+        "{}/test_scripts/invalid_syntax.svl".format(CURRENT_DIR),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Syntax error" in str(completed.stdout)
+
+
+def test_cli_unsupported_backend(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when the backend selected is unsupported.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("histogram.svl"),
+        "--no-browser",
+        "--backend", "vega"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Unable to use backend vega yet." in str(completed.stdout)

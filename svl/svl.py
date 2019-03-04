@@ -2,6 +2,9 @@ import lark
 import pkg_resources
 
 from toolz import merge, get
+from lark import UnexpectedInput, UnexpectedCharacters
+
+from svl.errors import SVL_SYNTAX_ERRORS, SvlSyntaxError
 
 
 class SVLTransformer(lark.Transformer):
@@ -132,7 +135,23 @@ def parse_svl(svl_string, debug=False, **kwargs):
     if debug:
         return debug_parser.parse(svl_string)
     else:
-        parsed_svl = parser.parse(svl_string)
+
+        try:
+            parsed_svl = parser.parse(svl_string)
+        except (UnexpectedInput, UnexpectedCharacters) as u:
+            exception_class = u.match_examples(
+                parser.parse,
+                SVL_SYNTAX_ERRORS
+            )
+            if not exception_class:
+                raise SvlSyntaxError("{} line:{} column:{}".format(
+                    u.get_context(svl_string), u.line, u.column)
+                )
+            else:
+                raise exception_class(
+                    u.get_context(svl_string), u.line, u.column
+                )
+
         parsed_svl["datasets"] = merge(
             # Either DATASETS is there or is empty.
             get("datasets", parsed_svl, {}),
