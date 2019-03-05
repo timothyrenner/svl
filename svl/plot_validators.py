@@ -1,4 +1,32 @@
+def _validate_xy_plot_has_x_and_y(svl_plot):
+    """ If the plot is an XY plot, validates that it has both X and Y.
+
+        Parameters
+        ----------
+        svl_plot : dict
+            The SVL plot specifier.
+
+        Returns
+        -------
+        Tuple[bool, str]
+            A boolean indicating whether the plot is valid and a message
+            indicating the validation that failed.
+    """
+    ok = True
+    message = "Valid."
+
+    if svl_plot["type"] not in {"scatter", "line", "bar"}:
+        return ok, message
+
+    if ("x" not in svl_plot) or ("y" not in svl_plot):
+        ok = False
+        message = "XY plot does not have X and Y."
+
+    return ok, message
+
+
 PLOT_VALIDATORS = [
+    _validate_xy_plot_has_x_and_y
 ]
 
 
