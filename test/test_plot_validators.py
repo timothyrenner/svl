@@ -1,146 +1,4 @@
-from svl.plot_validators import (
-    _validate_xy_plot_has_x_and_y,
-    _validate_histogram_does_not_have_step_and_bins,
-    validate_plot
-)
-
-
-def test_validate_xy_plot_has_x_and_y_pass():
-    """ Tests that the _validate_xy_plot_has_x_and_y function returns the
-        correct value when the plot passes.
-    """
-    svl_plot = {
-        "data": "dogman",
-        "type": "scatter",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature"
-        }
-    }
-
-    ok, message = _validate_xy_plot_has_x_and_y(svl_plot)
-
-    truth_ok = True
-    truth_message = "Valid."
-
-    assert truth_ok == ok
-    assert truth_message == message
-
-
-def test_validate_xy_plot_has_x_and_y_fail():
-    """ Tests that the _validate_xy_plot_has_x_and_y function returns the
-        correct value when the plot fails.
-    """
-    svl_plot = {
-        "data": "bigfoot",
-        "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        }
-    }
-
-    ok, message = _validate_xy_plot_has_x_and_y(svl_plot)
-
-    truth_ok = False
-    truth_message = "XY plot does not have X and Y."
-
-    assert truth_ok == ok
-    assert truth_message == message
-
-
-def test_validate_xy_plot_has_x_and_y_non_xy_plot():
-    """ Tests that the _validate_xy_plot_has_x_and_y function returns the
-        correct value when the plot is not an XY plot.
-    """
-    svl_plot = {
-        "data": "bigfoot",
-        "type": "histogram",
-        "x": {
-            "field": "wind_speed"
-        }
-    }
-
-    ok, message = _validate_xy_plot_has_x_and_y(svl_plot)
-
-    truth_ok = True
-    truth_message = "Valid."
-
-    assert truth_ok == ok
-    assert truth_message == message
-
-
-def test_validate_histogram_does_not_have_step_and_bins_pass():
-    """ Tests that the _validate_histogram_does_not_have_step_and_bins function
-        returns the correct value when the plot is valid.
-    """
-    svl_plot = {
-        "data": "bigfoot",
-        "type": "histogram",
-        "x": {
-            "field": "humidity"
-        },
-        "bins": 50
-    }
-
-    ok, message = _validate_histogram_does_not_have_step_and_bins(svl_plot)
-
-    truth_ok = True
-    truth_message = "Valid."
-
-    assert truth_ok == ok
-    assert truth_message == message
-
-
-def test_validate_histogram_does_not_have_step_and_bins_fail():
-    """ Tests that the _validate_histogram_does_not_have_step_and_bins function
-        returns the correct value when the plot is not valid.
-    """
-    svl_plot = {
-        "data": "bigfoot",
-        "type": "histogram",
-        "x": {
-            "field": "moon_phase"
-        },
-        "bins": 20,
-        "step": 0.1
-    }
-
-    ok, message = _validate_histogram_does_not_have_step_and_bins(svl_plot)
-
-    truth_ok = False
-    truth_message = "Histogram cannot have STEP and BINS."
-
-    assert truth_ok == ok
-    assert truth_message == message
-
-
-def test_validate_histogram_does_not_have_step_and_bins_non_histogram():
-    """ Tests that the _validate_histogram_does_not_have_step_and_bins function
-        returns the correct value when the plot is not a histogram.
-    """
-    svl_plot = {
-        "data": "bigfoot",
-        "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "date",
-            "agg": "COUNT"
-        }
-    }
-
-    ok, message = _validate_histogram_does_not_have_step_and_bins(svl_plot)
-
-    truth_ok = True
-    truth_message = "Valid."
-
-    assert truth_ok == ok
-    assert truth_message == message
+from svl.plot_validators import validate_plot
 
 
 def test_validate_plot_pass():
@@ -164,7 +22,7 @@ def test_validate_plot_pass():
     assert truth_message == message
 
 
-def test_validate_plot_fail():
+def test_validate_plot_xy_must_have_x_and_y():
     """ Tests that the validate_plot function returns the correct value when
         the plot fails.
     """
@@ -180,6 +38,29 @@ def test_validate_plot_fail():
 
     truth_ok = False
     truth_message = "XY plot does not have X and Y."
+
+    assert truth_ok == ok
+    assert truth_message == message
+
+
+def test_validate_plot_histogram_cannot_have_step_and_bins():
+    """ Tests that the validate_plot function returns the correct value when
+        the plot is a histogram that has a STEP and BINS declaration.
+    """
+    svl_plot = {
+        "type": "histogram",
+        "data": "bigfoot",
+        "x": {
+            "field": "wind_speed"
+        },
+        "step": 10,
+        "bins": 100
+    }
+
+    ok, message = validate_plot(svl_plot)
+
+    truth_ok = False
+    truth_message = "Histogram cannot have STEP and BINS."
 
     assert truth_ok == ok
     assert truth_message == message
