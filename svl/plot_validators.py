@@ -62,6 +62,44 @@ PLOT_VALIDATORS = [
         {"pie"},
         lambda x: (get("hole", x, 0.0) < 0) or (get("hole", x, 0.0) > 1),
         "HOLE must be between zero and one."
+    ),
+    (
+        {"histogram"},
+        lambda x: get("step", x, 1) <= 0,
+        "STEP must be greater than zero."
+    ),
+    (
+        {"histogram"},
+        lambda x: get("bins", x, 1) <= 0,
+        "BINS must be greater than zero."
+    ),
+    (
+        {"histogram", "pie"},
+        lambda x: "color_by" in x,
+        "Histograms and pie charts cannot have COLOR BY."
+    ),
+    (
+        {"pie"},
+        lambda x: "split_by" in x,
+        "Pie charts cannot have SPLIT BY."
+    ),
+    (
+        {"line", "scatter", "bar"},
+        lambda x: ("split_by" in x) and ("color_by" in x),
+        "Cannot have COLOR BY and SPLIT BY on same plot."
+    ),
+    (
+        {"line", "scatter", "bar"},
+        lambda x: (
+            # If we don't include this it can throw exceptions for other
+            # validators.
+            ("x" in x) and ("y" in x)
+        ) and (
+            ("agg" in x["x"]) or ("agg" in x["y"])
+        ) and (
+            ("color_by" in x) and ("agg" not in x["color_by"])
+        ),
+        "If there's an aggregation on X or Y, COLOR BY must also aggregate."
     )
 ]
 
