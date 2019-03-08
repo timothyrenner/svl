@@ -7,6 +7,7 @@ import sys
 from svl.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
 from svl.sqlite import create_datasets, get_svl_data
+from svl.plot_validators import validate_plot
 
 
 def _extract_cli_datasets(datasets):
@@ -50,6 +51,15 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
     sqlite_conn = create_datasets(svl_spec["datasets"])
 
     svl_plots = [plot for plot in tree_to_grid(svl_spec)]
+
+    for plot in svl_plots:
+        ok, msg = validate_plot(plot)
+        # TODO it would be nice to identify which plot failed.
+        if not ok:
+            print("Plot error:")
+            print(msg)
+            sys.exit(1)
+
     svl_plot_data = [get_svl_data(plot, sqlite_conn) for plot in svl_plots]
 
     # For now, plotly is the only choice.

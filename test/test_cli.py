@@ -142,7 +142,7 @@ def test_cli_syntax_error():
     ], check=False, stdout=subprocess.PIPE)
 
     assert completed.returncode == 1
-    assert "Syntax error" in str(completed.stdout)
+    assert "Syntax error" in completed.stdout.decode("ascii")
 
 
 def test_cli_unsupported_backend(svl_script_template):
@@ -157,4 +157,24 @@ def test_cli_unsupported_backend(svl_script_template):
     ], check=False, stdout=subprocess.PIPE)
 
     assert completed.returncode == 1
-    assert "Unable to use backend vega yet." in str(completed.stdout)
+    assert "Unable to use backend vega yet." in \
+        completed.stdout.decode("ascii")
+
+
+def test_cli_invalid_plot(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when the plot is invalid.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_plot.svl"),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    print(str(completed.stdout))
+
+    assert completed.returncode == 1
+    assert "\n".join([
+        "Plot error:",
+        "XY plot does not have X and Y."
+    ]) in completed.stdout.decode("ascii")
