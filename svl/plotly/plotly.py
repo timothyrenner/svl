@@ -82,9 +82,7 @@ def _get_axis_label(svl_plot, axis):
         str
             The label for the axis.
     """
-    if svl_plot["type"] == "histogram":
-        return get("label", svl_plot, _get_field(svl_plot[axis]))
-    elif "label" in svl_plot[axis]:
+    if "label" in svl_plot[axis]:
         # If a label is provided, use it.
         return svl_plot[axis]["label"]
     elif "agg" in svl_plot[axis]:

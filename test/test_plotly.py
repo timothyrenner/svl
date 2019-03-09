@@ -479,9 +479,9 @@ def test_get_axis_label_histogram_with_label():
         "type": "histogram",
         "data": "bigfoot",
         "x": {
-            "field": "wind_speed"
+            "field": "wind_speed",
+            "label": "Wind Speed (MPH)"
         },
-        "label": "Wind Speed (MPH)"
     }
 
     truth = "Wind Speed (MPH)"
