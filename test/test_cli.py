@@ -131,6 +131,24 @@ def test_histogram_cli_no_datasets(output_path):
     ], check=True)
 
 
+def test_cli_dataset_arg_error():
+    """ Tests that the command line interface returns the correct error when
+        the --dataset argument is malformed.
+    """
+    completed = subprocess.run([
+        "svl",
+        "{}/test_scripts/histogram_no_datasets.svl".format(CURRENT_DIR),
+        "--dataset",
+        "bigfoot={}/test_datasets/bigfoot_sightings.csv".format(CURRENT_DIR),
+        "--dataset",
+        "ufos==not/a/real/path",
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "--dataset arg" in completed.stdout.decode("ascii")
+
+
 def test_cli_syntax_error():
     """ Tests that the command line interface correctly exits 1 with the proper
         error message when there's a syntax error in the script.

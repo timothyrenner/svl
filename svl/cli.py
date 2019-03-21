@@ -36,6 +36,12 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
         print(svl.parse_svl(svl_string, debug=True).pretty())
         return
 
+    # Validate that the dataset args are in the correct form.
+    for cds in dataset:
+        if len(cds.split("=")) != 2:
+            print("--dataset arg {} needs to be name=path".format(cds))
+            sys.exit(1)
+
     # Extract the datasets from the CLI.
     cli_datasets = _extract_cli_datasets(dataset)
 
