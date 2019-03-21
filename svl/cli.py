@@ -4,6 +4,8 @@ import webbrowser
 import os
 import sys
 
+from toolz import valfilter
+
 from svl.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
 from svl.sqlite import create_datasets, get_svl_data
@@ -57,6 +59,11 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
         if ("file" in dataset) and (not os.path.exists(dataset["file"])):
             print("Dataset error: {} does not exist.".format(dataset["file"]))
             sys.exit(1)
+
+    # The datasets must contain at least one file.
+    if len(list(valfilter(lambda x: "file" in x, svl_spec["datasets"]))) == 0:
+        print("Datasets needs at least one file.")
+        sys.exit(1)
 
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).

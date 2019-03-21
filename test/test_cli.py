@@ -215,3 +215,18 @@ def test_cli_dataset_missing_file():
 
     assert completed.returncode == 1
     assert "Dataset error:" in completed.stdout.decode("ascii")
+
+
+def test_cli_dataset_no_files():
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has no file datasets.
+    """
+    completed = subprocess.run([
+        "svl",
+        "{}/test_scripts/invalid_datasets.svl".format(CURRENT_DIR),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Datasets needs at least one file." \
+        in completed.stdout.decode("ascii")

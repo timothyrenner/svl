@@ -1,0 +1,8 @@
+DATASETS
+    bigfoot_locations SQL "SELECT latitude, longitude FROM bigfoot"
+
+HISTOGRAM bigfoot
+    X latitude
+
+HISTOGRAM bigfoot
+    X longitude
