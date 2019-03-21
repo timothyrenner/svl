@@ -196,3 +196,22 @@ def test_cli_invalid_plot(svl_script_template):
         "Plot error:",
         "XY plot does not have X and Y."
     ]) in completed.stdout.decode("ascii")
+
+
+def test_cli_dataset_missing_file():
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a dataset has an invalid file path.
+    """
+    completed = subprocess.run([
+        "svl",
+        "{}/test_scripts/histogram_no_datasets.svl".format(CURRENT_DIR),
+        "--dataset",
+        "bigfoot={}/test_datasets/bigfoot_sightings.csv".format(CURRENT_DIR),
+        "--dataset",
+        # This dataset does not exist.
+        "ufos={}/test_datasets/ufo_sightings.csv".format(CURRENT_DIR),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Dataset error:" in completed.stdout.decode("ascii")

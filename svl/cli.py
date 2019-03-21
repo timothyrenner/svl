@@ -52,6 +52,12 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
         print("{}".format(e))
         sys.exit(1)
 
+    # Validate that all of the files in the svl_spec["datasets"] exist.
+    for _, dataset in svl_spec["datasets"].items():
+        if ("file" in dataset) and (not os.path.exists(dataset["file"])):
+            print("Dataset error: {} does not exist.".format(dataset["file"]))
+            sys.exit(1)
+
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).
     sqlite_conn = create_datasets(svl_spec["datasets"])
