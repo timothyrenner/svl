@@ -230,3 +230,17 @@ def test_cli_dataset_no_files():
     assert completed.returncode == 1
     assert "Datasets needs at least one file." \
         in completed.stdout.decode("ascii")
+
+
+def test_cli_invalid_plot_dataset(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has a plot with an invalid dataset.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_plot_dataset.svl"),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "is not in provided datasets" in completed.stdout.decode("ascii")

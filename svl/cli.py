@@ -65,11 +65,21 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
         print("Datasets needs at least one file.")
         sys.exit(1)
 
+    svl_plots = [plot for plot in tree_to_grid(svl_spec)]
+
+    # Validate that each plot points to a dataset.
+    for plot in svl_plots:
+        if plot["data"] not in svl_spec["datasets"]:
+            existing_datasets = ", ".join(list(svl_spec["datasets"].keys()))
+            print("Dataset {} is not in provided datasets {}.".format(
+                plot["data"],
+                existing_datasets
+            ))
+            sys.exit(1)
+
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).
     sqlite_conn = create_datasets(svl_spec["datasets"])
-
-    svl_plots = [plot for plot in tree_to_grid(svl_spec)]
 
     for plot in svl_plots:
         ok, msg = validate_plot(plot)
