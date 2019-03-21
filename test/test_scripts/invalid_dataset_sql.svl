@@ -1,0 +1,6 @@
+DATASETS
+    bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
+    wrong SQL "SELET latitude, longitude FORM bigfoot"
+
+HISTOGRAM bigfoot
+    X humidity STEP 0.1

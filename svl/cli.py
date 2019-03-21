@@ -3,6 +3,7 @@ import svl
 import webbrowser
 import os
 import sys
+import sqlite3
 
 from toolz import valfilter
 
@@ -79,7 +80,11 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
 
     # Create a connection to the sqlite database (eventually this will be
     # abstracted a little better but for now sqlite's all we've got).
-    sqlite_conn = create_datasets(svl_spec["datasets"])
+    try:
+        sqlite_conn = create_datasets(svl_spec["datasets"])
+    except sqlite3.DatabaseError as e:
+        print("Error loading data: {}.".format(e))
+        sys.exit(1)
 
     for plot in svl_plots:
         ok, msg = validate_plot(plot)
@@ -89,7 +94,11 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
             print(msg)
             sys.exit(1)
 
-    svl_plot_data = [get_svl_data(plot, sqlite_conn) for plot in svl_plots]
+    try:
+        svl_plot_data = [get_svl_data(plot, sqlite_conn) for plot in svl_plots]
+    except sqlite3.DatabaseError as e:
+        print("Error processing plot data: {}.".format(e))
+        sys.exit(1)
 
     # For now, plotly is the only choice.
     if backend == "plotly":

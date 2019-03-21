@@ -244,3 +244,61 @@ def test_cli_invalid_plot_dataset(svl_script_template):
 
     assert completed.returncode == 1
     assert "is not in provided datasets" in completed.stdout.decode("ascii")
+
+
+def test_cli_missing_field(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has a plot with an invalid field.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_plot_field.svl"),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Error processing plot data" in completed.stdout.decode("ascii")
+
+
+def test_cli_invalid_dataset_sql(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has a dataset that contains SQL errors.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_dataset_sql.svl"),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Error loading data" in completed.stdout.decode("ascii")
+
+
+def test_cli_invalid_plot_filter_sql(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has a plot that contains SQL errors in a
+        FILTER clause.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_plot_filter_sql.svl"),
+        "--no-browser",
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Error processing plot data" in completed.stdout.decode("ascii")
+
+
+def test_cli_invalid_plot_transform_sql(svl_script_template):
+    """ Tests that the command line interface correctly exits 1 with the proper
+        error message when a script has a plot that contains SQL errors in a
+        TRANSFORM clause.
+    """
+    completed = subprocess.run([
+        "svl",
+        svl_script_template("invalid_plot_transform_sql.svl"),
+        "--no-browser"
+    ], check=False, stdout=subprocess.PIPE)
+
+    assert completed.returncode == 1
+    assert "Error processing plot data" in completed.stdout.decode("ascii")
