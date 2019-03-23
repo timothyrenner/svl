@@ -48,7 +48,7 @@ The screenshot below was built with just **XXX** lines of SVL.
 
 **CSV and Parquet files**: Currently the data is limited to files, and SVL has support for CSV and (if pyarrow (**TODO link**) is installed) parquet files.
 
-## Not Alpha Features, but Very Possible
+## Not Alpha Features, but Possible
 
 **Other plot backends** The compiler isn't married to Plotly.
 SVL can have future support for other backends like Vega, Bokeh, or even Matplotlib (probably).
