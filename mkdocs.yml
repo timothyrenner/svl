@@ -1,0 +1,15 @@
+site_name: SVL Documentation
+repo_name: 'timothyrenner/svl'
+repo_url: 'https://github.com/timothyrenner/svl'
+theme:
+  name: 'material'
+  logo:
+    icon: 'show_chart'
+nav:
+  - Home: 'index.md'
+  - Tutorials:
+    - Basic SVL: 'tutorials/basic_svl.md'
+    - Advanced SVL: 'tutorials/advanced_svl.md'
+  - Reference:
+    - Syntax: 'reference/syntax_reference.md'
+    - Under the Hood: 'reference/under_the_hood.md'
