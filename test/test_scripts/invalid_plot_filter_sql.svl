@@ -1,0 +1,7 @@
+DATASETS
+    bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
+LINE bigfoot
+    X date by year label "year"
+    Y date count label "number of sightings"
+    SPLIT BY classification
+    FILTER "daet > 1990-01-01"

@@ -1,0 +1,7 @@
+DATASETS
+    bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
+PIE bigfoot
+    TITLE "Bigfoot Sightings with Location"
+    HOLE 0.3
+    AXIS TRANSFORM "CASE WHEN latitude IS NULL THEN no_location
+        ELSE 'has_location' END"
