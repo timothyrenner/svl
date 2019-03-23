@@ -331,6 +331,12 @@ def get_svl_data(svl_plot, conn):
     # it does :).
     data_list = cursor.fetchall()
 
+    if len(data_list) == 0:
+        # TODO Make this a different error? Might not matter.
+        raise sqlite3.DatabaseError(
+            "Encountered empty result set. Check filters or source data."
+        )
+
     # Step 3: Convert the resulting list of sqlite rows into SVL data
     # structures.
     # NOTE: For now this structure corresponds _mostly_ to plotly's

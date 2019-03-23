@@ -1,0 +1,5 @@
+DATASETS
+    bigfoot "{{ test_dir }}/test_datasets/bigfoot_sightings.csv"
+
+HISTOGRAM bigfoot
+    X not_a_field BINS 50

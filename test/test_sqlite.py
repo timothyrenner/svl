@@ -794,3 +794,20 @@ def test_get_svl_data_pie(test_conn):
     assert "labels" in answer
     assert "values" in answer
     assert len(answer["labels"]) == len(answer["values"])
+
+
+def test_get_svl_data_empty_result_set(test_conn):
+    """ Tests that the get_svl_data function raises a sqlite3.DatabaseError
+        when there's an empty result set returned.
+    """
+    svl_plot = {
+        "type": "pie",
+        "data": "bigfoot",
+        "axis": {
+            "field": "classification"
+        },
+        "filter": "classification = 'D'"
+    }
+
+    with pytest.raises(sqlite3.DatabaseError):
+        get_svl_data(svl_plot, test_conn)
