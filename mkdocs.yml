@@ -15,4 +15,5 @@ nav:
     - Under the Hood: 'reference/under_the_hood.md'
   - Sample Visualizations:
     - Quickstart: 'sample_visualizations/quickstart_example.html'
-    - Basic Tutorial Chart Types: 'sample_visualizations/basic_tutorial_chart_types.html'
+    - Basic SVL - Chart Types: 'sample_visualizations/basic_tutorial_chart_types.html'
+    - Basic SVL - Customizing Charts: 'sample_visualizations/basic_tutorial_customizing_charts.html'

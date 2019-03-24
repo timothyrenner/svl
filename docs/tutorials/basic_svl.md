@@ -1,4 +1,4 @@
-# Basic Tutorial
+# Basic SVL
 
 This tutorial will walk through the basics of creating SVL programs.
 By the end of this tutorial you will know how to
@@ -166,7 +166,7 @@ We get this
 Note:
 
 1. Pie charts require `AXIS` _instead_ of `X` or `Y`.
-2. `HOLE` only applies to pie charts, and must be values between zero and 1.
+2. `HOLE` only applies to pie charts, and must be values between zero and one.
 
 ### In Summary
 
@@ -207,10 +207,74 @@ And this is what it looks like:
 
 You can view an interactive version [here](../sample_visualizations/basic_tutorial_chart_types.html).
 
-## Customizing Charts
+A few things that jump out:
 
-## Additional Axes: Split By and Color By
+1. The titles and axis labels aren't pretty. I'll cover how to do that next.
+2. The plots look stretched and weird. This is partly due to browser window width, and partly due to the fact that some of those plots (looking at you pie chart) don't need _that_ much screen real estate. The "Plot Arrangement" section covers this.
+3. What if you want multiple lines / bars /etc on one plot - like number of sightings per classification? `SPLIT BY` and it's cousin `COLOR BY` cover how these additional axes work.
 
-## Temporal Fields
+## Customizing Charts - Titles and Axis Labels
+
+SVL provides default titles and labels for axes based on the fields in the file, but those aren't the prettiest.
+To add some class to your plots, SVL provides the `TITLE` and `LABEL` keywords.
+Here's a beautified version of our histogram.
+
+```
+HISTOGRAM bigfoot
+    TITLE "Bigfoot Sighting Moon Phases"
+    X moon_phase LABEL "Moon Phase"
+    STEP 0.1
+```
+
+It looks like this:
+
+![](../images/basic_tutorial_histogram_with_labels_and_title.png)
+
+`TITLE` can appear anywhere after the plot declaration (i.e. `HISTOGRAM bigfoot`).
+`LABEL` can appear anywhere after the axis declaration (i.e. `X moon_phase`).
+
+✅ **VALID AXIS LABEL**: `X moon_phase LABEL "Moon Phase"`
+
+❌ **INVALID AXIS LABEL**: `X LABEL "Moon Phase" moon_phase``
+
+For completeness here's a fully beautified example of our earlier results.
+
+```
+DATASETS
+    -- Path is a little different from tutorial.
+    bigfoot "sample_data/bigfoot_sightings.csv"
+
+HISTOGRAM bigfoot
+    TITLE "Bigfoot Sighting Moon Phases"
+    X moon_phase LABEL "Moon Phase"
+    STEP 0.1
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+
+BAR bigfoot
+    TITLE "Number of Bigfoot Sightings by Classification"
+    X classification LABEL "Sighting Classification"
+    Y number COUNT LABEL "Number of Sightings"
+
+LINE bigfoot
+    X date BY YEAR LABEL "Year of Sighting"
+    TITLE "Bigfoot Sightings by Year"    -- TITLE can go between axes nbd.
+    Y number COUNT LABEL "Number of Sightings"
+
+PIE bigfoot
+    TITLE "Number of Bigfoot Sightings by Classification"
+    AXIS classification LABEL "This gets ignored"
+    HOLE 0.3
+```
+
+![](../images/basic_tutorial_customizing_charts_1.png)
+![](../images/basic_tutorial_customizing_charts_2.png)
+
+You can see an interactive version of this visualization [here](../sample_visualizations/basic_tutorial_customizing_charts.html).
 
 ## Plot Arrangement
+
+## Additional Axes: Split By and Color By
