@@ -18,7 +18,45 @@ After that, you're all set.
 
 ## Quickstart
 
-***TODO***
+I've bundled a trimmed-down sample dataset of [Bigfoot sightings](https://data.world/timothyrenner/bfro-sightings-data) for the quickstart and tutorials.
+You're welcome.
+
+After SVL has been installed, download the sample dataset [from Github](https://github.com/timothyrenner/svl/blob/docs/sample_data/bigfoot_sightings.csv).
+
+```
+wget https://github.com/timothyrenner/svl/raw/docs/sample_data/bigfoot_sightings.csv
+```
+
+In the same directory as the dataset, create a file named `quickstart.svl` and paste the following code in it.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+LINE bigfoot
+    X date BY YEAR
+    Y number COUNT
+    SPLIT BY classification
+CONCAT(
+    HISTOGRAM bigfoot X temperature_mid
+    HISTOGRAM bigfoot X humidity
+)
+```
+
+🎉 This is a complete SVL program. 🎉
+
+Compile it by running this in your shell.
+
+```
+svl quickstart.svl
+```
+
+You should see a browser window pop up that looks something like this:
+
+![](images/readme_example.png)
+
+(interactive version [here](sample_visualizations/quickstart_example.html))
+
+SVL also saved this visualization as `visualization.html` in the directory where it was run.
 
 If you'd like to read more about what's in SVL and why I created it, read on!
 
@@ -64,7 +102,7 @@ There are two things I notice while I'm working with these tools.
 2. I tend to make the same kinds of plots over and over again. Yes there are all sorts of powerful things you can do with these libraries to make publication-quality charts, but honestly I pretty much just make scatter plots and histograms and like one bar chart per project.
 
 There's another scenario I use plots for - operational metrics.
-When I execute a training / offline prediction run for a machine learning model, I want to visualize a whole bunch of stuff all at once to get a "feel" for what the model's doing with the features, and what kind of impacts we'll expect to put onto our downstream consumers.
+When I execute a training / offline prediction run for a machine learning model, I want to visualize a whole bunch of stuff all at once to get a "feel" for what the model's doing with the features, as well as the kind of impacts we'll expect to put onto our downstream consumers.
 These are basically operational dashboards (like what you'd make with Splunk or Datadog), but for machine learning models.
 For these plots I don't want super customized stuff, I just want simple visualizations to give me a feel for what's going on in one place.
 Now I could just have a notebook that does this for me - in fact the [Lore](https://github.com/instacart/lore) framework from Instacart takes this approach, but there are a number of issues with using a notebook for operational stuff:
@@ -104,11 +142,13 @@ SQL doesn't have variables, objects or control structures.
 There are some things that it's not well suited for, but for a huge amount of tabular data processing and manipulation it's easily the simplest tool for the job.
 SQL sits squarely between "spreadsheet" and "pandas/dplyr" on the simplicity<->flexibility spectrum for data processing.
 
-***TODO Diagram***
+![](images/data_processing_complexity.png)
+<br><br><br>
 
 SVL sits between "GUI program" and "seaborn/ggplot" for data visualization.
 
-***TODO Diagram***
+![](images/visualization_tool_complexity.png)
+<br><br><br>
 
 My goal in creating SVL isn't to replace my usual set of plotting tools, it's to get me making _more plots, faster_.
 Hopefully you will find SVL as useful as I do.

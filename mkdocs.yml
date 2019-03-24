@@ -9,7 +9,9 @@ nav:
   - Home: 'index.md'
   - Tutorials:
     - Basic SVL: 'tutorials/basic_svl.md'
-    - Advanced SVL: 'tutorials/advanced_svl.md'
+    - '"Advanced" SVL': 'tutorials/advanced_svl.md'
   - Reference:
     - Syntax: 'reference/syntax_reference.md'
     - Under the Hood: 'reference/under_the_hood.md'
+  - Sample Visualizations:
+    - Quickstart example: 'sample_visualizations/quickstart_example.html'

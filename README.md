@@ -35,8 +35,6 @@ Results:
 
 ![](docs/images/readme_example.png)
 
-(interactive version [here](sample_visualizations/readme_example.html))
-
 ## Alpha Features
 
 ✅ **Easy to learn**: The entire grammar is under 150 lines.
