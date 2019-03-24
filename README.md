@@ -35,6 +35,8 @@ Results:
 
 ![](docs/images/readme_example.png)
 
+(interactive version [here](sample_visualizations/readme_example.html))
+
 ## Alpha Features
 
 ✅ **Easy to learn**: The entire grammar is under 150 lines.
@@ -60,3 +62,31 @@ In fact, most of the data processing is done under the hood by [SQLite](https://
 ## I'm sold!
 
 🎉 Sweet! 🎉 Check out the docs [here]() ***TODO: link docs*** to learn more.
+
+
+## Development
+
+I've been using [Anaconda](https://www.anaconda.com/distribution/) to manage environments.
+If you've got that installed, just do
+
+```bash
+conda env create -f env.yml
+
+# then install the module
+
+conda activate svl && pip install -e .
+```
+
+To run the tests,
+
+```bash
+pytest test/ --cov=svl  # last option if you want coverage.
+```
+
+To lint,
+
+```bash
+flake8 svl
+```
+
+in the top level directory and start hacking away!
