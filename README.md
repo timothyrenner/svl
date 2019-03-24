@@ -20,10 +20,10 @@ SVL code:
 
 ```
 DATASETS
-    bigfoot "bigfoot_sightings.csv"
+    bigfoot "sample_data/bigfoot_sightings.csv"
 LINE bigfoot
     X date BY YEAR
-    Y date COUNT
+    Y number COUNT
     SPLIT BY classification
 CONCAT(
     HISTOGRAM bigfoot X temperature_mid
@@ -33,7 +33,7 @@ CONCAT(
 
 Results:
 
-*** TODO - screen grab or iframe this in ***
+![](docs/images/readme_example.png)
 
 ## Alpha Features
 
