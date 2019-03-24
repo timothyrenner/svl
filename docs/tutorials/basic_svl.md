@@ -30,6 +30,7 @@ Before I start there's boring stuff I need to cover.
 1. All keywords in SVL are case-**insensitive**, but field names, file names, and anything in quotes are not. By convention I will capitalize keywords but it's not required.
 2. Comments start with `--` and extend to the end of the line.
 3. All dataset and field names (basically anything not in quotes) must start with an underscore or letter, and can only contain letters, underscores or digits.
+4. SVL is not sensitive to tabs or newlines. The entire program could be written on one line if you wanted.
 
 Aside from field and dataset names being case sensitive, this is pretty much just like SQL.
 
@@ -77,7 +78,7 @@ svl basic_tutorial.svl
 
 and you should see
 
-***TODO image here***
+![](../images/basic_tutorial_histogram.png)
 
 A couple of things to note:
 
@@ -100,11 +101,14 @@ SCATTER bigfoot
 That's it.
 Compile again and it'll appear right under the histogram.
 
-***TODO image here***
+![](../images/basic_tutorial_scatter.png)
 
 ### BAR
 
 Bar charts are basically declared the same way as scatter plots, except that they usually appear with aggregations.
+Bigfoot sighting reports are classified by three types: A, B and C.
+A is direct evidence, B is indirect evidence, and C is a secondhand account.
+Suppose we want to count the number of sightings with each classification rating.
 
 ```
 BAR bigfoot
@@ -114,7 +118,7 @@ BAR bigfoot
 
 This plot will count the number of reports for each classification.
 
-***TODO image here***
+![](../images/basic_tutorial_bar.png)
 
 A couple of things to note:
 
@@ -126,6 +130,7 @@ A couple of things to note:
 
 Line charts, like bar charts, usually appear with aggregations.
 They are good for plotting things like time.
+If we want to know the number of bigfoot sightings over time, this plot will get us there.
 
 ```
 LINE bigfoot
@@ -135,7 +140,7 @@ LINE bigfoot
 
 This plot counts the number of sightings by year.
 
-***TODO image here***
+![](../images/basic_tutorial_line.png)
 
 This plot also introduces a **temporal transformation**.
 Basically, SVL truncates each date at the year and then counts each year's worth of sightings.
@@ -144,7 +149,63 @@ The following temporal transformations are available: `YEAR`, `MONTH`, `DAY`, `H
 
 ### PIE
 
+Pie charts are a little different from the others.
+Basically they count the different values of the axis we select.
+Suppose we wanted to view the proportion of sighting classifications.
+
+```
+PIE bigfoot
+    AXIS classification
+    HOLE 0.3               -- HOLE is only available for pie charts.
+```
+
+We get this
+
+![](../images/basic_tutorial_pie.png)
+
+Note:
+
+1. Pie charts require `AXIS` _instead_ of `X` or `Y`.
+2. `HOLE` only applies to pie charts, and must be values between zero and 1.
+
 ### In Summary
+
+Let's tally up our Bigfoot knowledge.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+-- Keep in mind the line breaks and tabs are only to make things visually
+-- coherent. They're not required by language syntax.
+
+HISTOGRAM bigfoot    -- same name as DATASETS
+    X moon_phase     -- can specify Y for vertical histogram
+    STEP 0.1         -- optional, can also specify BINS to set number of bins
+
+SCATTER bigfoot
+    X latitude
+    Y temperature_mid
+
+BAR bigfoot
+    X classification
+    Y number COUNT    -- COUNT is an aggregation, number is a field in the dataset.
+
+LINE bigfoot
+    X date BY YEAR
+    Y number COUNT
+
+PIE bigfoot
+    AXIS classification
+    HOLE 0.3               -- HOLE is only available for pie charts.
+```
+
+And this is what it looks like:
+
+![](../images/basic_tutorial_chart_types_1.png)
+![](../images/basic_tutorial_chart_types_2.png)
+
+You can view an interactive version [here](../sample_visualizations/basic_tutorial_chart_types.html).
 
 ## Customizing Charts
 

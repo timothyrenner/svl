@@ -14,4 +14,5 @@ nav:
     - Syntax: 'reference/syntax_reference.md'
     - Under the Hood: 'reference/under_the_hood.md'
   - Sample Visualizations:
-    - Quickstart example: 'sample_visualizations/quickstart_example.html'
+    - Quickstart: 'sample_visualizations/quickstart_example.html'
+    - Basic Tutorial Chart Types: 'sample_visualizations/basic_tutorial_chart_types.html'

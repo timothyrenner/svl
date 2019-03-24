@@ -1,0 +1,26 @@
+DATASETS
+    -- Path is a little different from tutorial.
+    bigfoot "sample_data/bigfoot_sightings.csv"
+
+-- Keep in mind the line breaks and tabs are only to make things visually
+-- coherent. They're not required by language syntax.
+
+HISTOGRAM bigfoot    -- same name as DATASETS
+    X moon_phase     -- can specify Y for vertical histogram
+    STEP 0.1         -- optional, can also specify BINS to set number of bins
+
+SCATTER bigfoot
+    X latitude
+    Y temperature_mid
+
+BAR bigfoot
+    X classification
+    Y number COUNT    -- COUNT is an aggregation, number is a field in the dataset.
+
+LINE bigfoot
+    X date BY YEAR
+    Y number COUNT
+
+PIE bigfoot
+    AXIS classification
+    HOLE 0.3               -- HOLE is only available for pie charts.
