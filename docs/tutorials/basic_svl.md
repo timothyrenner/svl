@@ -277,4 +277,153 @@ You can see an interactive version of this visualization [here](../sample_visual
 
 ## Plot Arrangement
 
+So far we've been placing the plots one after the other, and SVL has just stacked them.
+SVL provides a significant amount of control over how plots are laid out, however.
+In my opinion this is the coolest part of the language.
+
+SVL has a couple of ways of arranging plots to help you make the most of your screen real estate.
+SVL supports both vertical and horizontal concatenation, and allows these concatenations to be nested.
+The only plots in `basic_tutorial.svl` that really need the whole width of the screen are the line chart and scatter plot; the others can use a shrinking.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+LINE bigfoot
+    X date BY YEAR LABEL "Year of Sighting"
+    TITLE "Bigfoot Sightings by Year"
+    Y number COUNT LABEL "Number of Sightings"
+
+-- The CONCAT function performs a horizontal concatenation.
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+
+    BAR bigfoot
+        TITLE "Number of Bigfoot Sightings by Classification"
+        X classification LABEL "Sighting Classification"
+        Y number COUNT LABEL "Number of Sightings"
+
+    PIE bigfoot
+        TITLE "Number of Bigfoot Sightings by Classification"
+        AXIS classification LABEL "This gets ignored"
+        HOLE 0.3
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+```
+
+What I've done is switched the order of the plots by putting the line on top and the scatter on the bottom, and placing the bar, pie and histogram in the middle wrapped in a function called `CONCAT`.
+`CONCAT` _horizonally_ concatenates plots, placing them on the same row.
+The above chart looks like this.
+
+![](../images/basic_tutorial_plot_arrangement_1.png)
+
+View an interactive version [here](../sample_visualizations/basic_tutorial_plot_arrangement_1.html).
+
+Pretty sweet right?
+Think of things this way - at the top "level" of nesting there are three rows.
+The first row haw one plot, so it gets the full width of the page.
+The middle row has three plots that are horizontally concatenated, so each plot gets a third of the width.
+The final row just has one, so it takes the full screen.
+
+Let's say we want that histogram to take a little more space, and the bar / pie charts to take a little less.
+We can _nest_ concatenations.
+Check this out.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+LINE bigfoot
+    X date BY YEAR LABEL "Year of Sighting"
+    TITLE "Bigfoot Sightings by Year"
+    Y number COUNT LABEL "Number of Sightings"
+
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+    
+    CONCAT(
+        BAR bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            X classification LABEL "Sighting Classification"
+            Y number COUNT LABEL "Number of Sightings"
+
+        PIE bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            AXIS classification LABEL "This gets ignored"
+            HOLE 0.3
+    )
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+```
+
+What do you think it will look like?
+The top and bottom rows are the same, but the middle row is now split twice - one half is the histogram, and the other half is split between the bar chart and the pie chart.
+
+![](../images/basic_tutorial_plot_arrangement_2.png)
+
+That is what we see (interactive example [here](../sample_visualizations/basic_tutorial_plot_arrangement_2.html)), but now there's an unintended side effect: the plot titles are cut off because there's not enough width.
+Resizing the browser can fix this, but we can also change the concatenation of those two plots from a horizontal one to a vertical one.
+Vertical concatenations are implicit at the top level, but inside a `CONCAT` there needs to be something to denote vertical vs horizontal concatenation.
+This is done using parens.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+LINE bigfoot
+    X date BY YEAR LABEL "Year of Sighting"
+    TITLE "Bigfoot Sightings by Year"
+    Y number COUNT LABEL "Number of Sightings"
+
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+
+    -- Same as before, but with CONCAT removed. Now these two are vertically
+    -- stacked.
+    (
+        BAR bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            X classification LABEL "Sighting Classification"
+            Y number COUNT LABEL "Number of Sightings"
+
+        PIE bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            AXIS classification LABEL "This gets ignored"
+            HOLE 0.3
+    )
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+```
+
+![](../images/basic_tutorial_plot_arrangement_3a.png)
+![](../images/basic_tutorial_plot_arrangement_3b.png)
+![](../images/basic_tutorial_plot_arrangement_3c.png)
+
+Interactive version [here](../sample_visualizations/basic_tutorial_plot_arrangement_3.html).
+
+Not only did the bar and pie charts stack, every row got taller making the whole page bigger.
+This happens because there's a minimum plot height.
+When the most nested plot reaches that minimum height, the entire document will resize to make sure everything remains proportional to what's in the script.
+
 ## Additional Axes: Split By and Color By
