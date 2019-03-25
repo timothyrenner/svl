@@ -426,4 +426,117 @@ Not only did the bar and pie charts stack, every row got taller making the whole
 This happens because there's a minimum plot height.
 When the most nested plot reaches that minimum height, the entire document will resize to make sure everything remains proportional to what's in the script.
 
-## Additional Axes: Split By and Color By
+## Additional Axes: SPLIT BY and COLOR BY
+
+So now we know a thing or two about Bigfoot - can we go deeper?
+Well for one thing it might be worth checking out how the number of sightings by time breaks down by sighting classification.
+For that we'd need three lines.
+SVL allows us to split a plot by a field's values using a special axis specifier called ... `SPLIT BY`.
+
+Focusing on just the line plot,
+
+```
+LINE bigfoot
+    TITLE "Bigfoot Sightings by Year"
+    X date BY YEAR LABEL "Year of Sighting"
+    Y number COUNT LABEL "Number of Sightings"
+    SPLIT BY classification
+```
+
+This splits the data into three lines, one for each classification value.
+
+![](../images/basic_tutorial_additional_axes_1.png)
+
+`SPLIT BY` is perfect for categorical variables - what about continuous ones?
+
+Suppose we want to overlay the moon phase onto the scatter plot.
+Then we'd know for sure if more Bigfoot sightings in Florida happened during a full moon (be honest ... you think it's true).
+SVL also has syntax for that - `COLOR BY` colors the existing points by the specified field.
+
+```
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+    COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"
+```
+
+![](../images/basic_tutorial_additional_axes_3.png)
+
+For `COLOR BY`, you can optionally provide a color scale.
+It must appear after the axis declaration before any modifiers.
+
+✅ **VALID** `COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"`
+
+❌ **INVALID** `COLOR BY moon_phase LABEL "Moon Phase" "YlOrRd"`
+
+❌ **INVALID** `COLOR BY "YlOrRd" moon_phase LABEL "Moon Phase"`
+
+All together, the script looks like this...
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+LINE bigfoot
+    TITLE "Bigfoot Sightings by Year"
+    X date BY YEAR LABEL "Year of Sighting"
+    Y number COUNT LABEL "Number of Sightings"
+    SPLIT BY classification
+
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+
+    -- Same as before, but with CONCAT removed. Now these two are vertically
+    -- stacked.
+    (
+        BAR bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            X classification LABEL "Sighting Classification"
+            Y number COUNT LABEL "Number of Sightings"
+
+        PIE bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            AXIS classification
+            HOLE 0.3
+    )
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+    COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"
+```
+
+... and produces plots that look like this:
+
+![](../images/basic_tutorial_additional_axes_1.png)
+![](../images/basic_tutorial_additional_axes_2.png)
+![](../images/basic_tutorial_additional_axes_3.png)
+
+View an interactive version [here](../sample_visualizations/basic_tutorial_additional_axes.html).
+
+## Conclusion
+
+That's it for the basic SVL tutorial.
+Here's what we covered.
+
+* The structure of an SVL program.
+* The five plot types: histogram, bar, scatter, line and pie.
+* Customizing plots with titles and axis labels.
+* Arranging plots with `CONCAT`.
+* Additional axes with `SPLIT BY` and `COLOR BY`.
+
+There are a few questions this tutorial doesn't answer.
+
+* What if I want to sort the results of a plot?
+* That line plot has some outliers on the X axis. What if I want to filter the results of a plot?
+* What if I don't want to hard code the file name in the script?
+* What if I want to transform the data with something other than a temporal transformation?
+
+SVL supports all of the above.
+That's all covered in the [Advanced SVL](advanced_svl.md) tutorial.
