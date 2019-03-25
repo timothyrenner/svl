@@ -8,6 +8,11 @@ LINE bigfoot
     Y number COUNT LABEL "Number of Sightings"
     SPLIT BY classification
 
+BAR bigfoot
+    TITLE "Bigfoot Sightings by State"
+    X state LABEL "State"
+    Y state COUNT LABEL "Number of Sightings" SORT DESC
+
 CONCAT(
     HISTOGRAM bigfoot
         TITLE "Bigfoot Sighting Moon Phases"

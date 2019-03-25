@@ -21,7 +21,7 @@ wget https://github.com/timothyrenner/svl/raw/docs/sample_data/bigfoot_sightings
 ```
 
 The tutorial's been designed to operate on a single file, but it can be split up too.
-I'll include a complete version of the state of the file (which I'll name `bigfoot_basic.svl`) at the end of each section.
+I'll include a complete version of the state of the file (which I'll name `basic_tutorial.svl`) at the end of each section.
 
 ## Boring Stuff
 
@@ -490,8 +490,6 @@ CONCAT(
         X moon_phase LABEL "Moon Phase"
         STEP 0.1
 
-    -- Same as before, but with CONCAT removed. Now these two are vertically
-    -- stacked.
     (
         BAR bigfoot
             TITLE "Number of Bigfoot Sightings by Classification"
