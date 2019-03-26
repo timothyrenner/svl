@@ -5,6 +5,9 @@ theme:
   name: 'material'
   logo:
     icon: 'show_chart'
+markdown_extensions:
+  - codehilite
+  - pymdownx.tilde
 nav:
   - Home: 'index.md'
   - Tutorials:
