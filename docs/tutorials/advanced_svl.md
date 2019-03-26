@@ -185,22 +185,21 @@ LINE bigfoot
     FILTER "date > '1960-01-01'"
 ```
 
-Now the plot looks much better.
-
 ![](../images/advanced_tutorial_filter_line.png)
 
 🎉 Much better! 🎉
 
-The most important thing to note is that SVL has _no idea_ what's in those quotes.
+The most important thing to note about `FILTER` (and really all of SVL's SQL support) is that SVL has _no idea_ what's in those quotes.
 It literally pastes the stuff in quotes right into the query.
 The field names of the dataset match the field names in the SQLite database.
 Other than that - there are no rules, so use with caution.
-I might have to rethink this when introducing remote data sources for security reasons, but for now it's only dangerous to you 😄.
+I might have to rethink this when introducing remote data sources for security reasons, but for now it's only dangerous to you 😉.
 
 ### Transforming Data
 
 I have a confession to make - I like pie charts.
 The caveat is that I pretty much only like them for one thing: counting null values.
+As an engineer who has to send data-powered software into production environments, I count null values a _lot_.
 I want to rewrite our pie chart to count the number of null locations in the Bigfoot dataset.
 
 Thankfully SVL doesn't support SQL just for filters.
@@ -222,7 +221,45 @@ PIE bigfoot
 Just like with `FILTER`, everything in quotes after `TRANSFORM` literally gets pasted into a SQL query (this time it's a SELECT instead of WHERE).
 SVL has _no idea_ what's in those quotes, so keeping it simple is probably a good idea.
 
+Also, `TRANSFORM` replaces a field specifier in an axis declaration.
+It can apply to `X`, `Y`, `AXIS` and `COLOR BY`.
+Currently it does _not_ work on `SPLIT BY` due to a technical oversight on the part of the language author (🙋‍♂ hey that's me - see details [here](https://github.com/timothyrenner/svl/issues/33)), but hopefully I can get that fixed pretty soon.
+
 ### Custom Datasets
+
+When SVL loads each dataset into the SQLite database, it creates a table with the same name as the dataset.
+Once all of the files have been loaded, SVL can actually create _new_ tables from SQL queries on file-based datasets.
+This is useful if you can't get what you want from `FILTER`s, `TRANSFORM`s, or any of SVL's built in aggregation functions.
+Joining two files would be one example.
+
+To illustrate, suppose I want to aggregate the number of sightings by classification separate from the bar chart (maybe I want this precomputed because I'm going to plot it a whole lot or something).
+Then I'll need to construct a second dataset using SQL.
+This is done in the `DATASETS` declaration with the `SQL` keyword.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+    -- Note the aggregation must be aliased so it's a valid SVL identifier.
+    bigfoot_class_counts SQL 
+        "SELECT 
+            classification,
+            COUNT(*) AS count 
+        FROM bigfoot 
+        GROUP BY classification"
+```
+
+The bar chart can now reference the new dataset.
+
+```
+BAR bigfoot_class_counts
+    TITLE "Number of Bigfoot Sightings by Classification"
+    X classification LABEL "Sighting Classification"
+    Y count LABEL "Number of Sightings"
+```
+
+![](../images/advanced_tutorial_data_bar.png)
+
+The plot is the same as before.
 
 ### All Together
 
