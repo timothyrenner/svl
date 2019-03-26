@@ -14,16 +14,17 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/timothyrenner/svl",
     packages=find_packages(exclude=[
-        "sample_data/",
-        "sample_scripts/",
-        "sample_visualizations/",
-        "build/",
-        "dist/",
-        "graffle/",
-        "site/",
-        "test/",
-        "docs/"
+        "sample_data",
+        "sample_scripts",
+        "sample_visualizations",
+        "build",
+        "dist",
+        "graffle",
+        "site",
+        "test",
+        "docs"
     ]),
+    include_package_data=True,
     license='MIT',
     author="Tim Renner",
     classifiers=[
