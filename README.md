@@ -11,7 +11,7 @@ Maybe you will find it useful too.
 
 If you're interested, hit the link for the docs below.
 
-*** TODO link to docs ***
+[timothyrenner.github.io/svl](https://timothyrenner.github.io/svl/)
 
 Not convinced?
 Maybe ✨ ***this*** ✨ will change your mind...
