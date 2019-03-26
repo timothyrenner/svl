@@ -214,7 +214,7 @@ So we have a flat list of plot specifiers, and a flat list of data representatio
 Both of these are completely internal representations; they're agnostic to the plotting machinery.
 This is the point where they combine to form Plotly graphs (as dictionaries, not Plotly's graph objs).
 There's a function for each plot type that combines the data and specifier into a plotly graph.
-It's a little tedious so I'm not going to go into the details of the Plotly graph specifiers - you can read about it [here]().
+It's a little tedious so I'm not going to go into the details of the Plotly graph specifiers - you can read about it [here](https://plot.ly/javascript/).
 The important part is, for each plot, we extract this information:
 
 ```python
