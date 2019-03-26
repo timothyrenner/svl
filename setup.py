@@ -6,15 +6,19 @@ setup(
     name='svl',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    packages=find_packages(exclude=["scripts/", "data/"]),
+    packages=find_packages(exclude=[
+        "sample_data/",
+        "sample_scripts/",
+        "sample_visualizations/"
+    ]),
     license='MIT',
     author="Tim Renner",
     classifiers=[
-      "Development Status :: 3 - Alpha",
-      "License :: OSI Approved :: MIT License",
-      "Programming Language :: Python :: 3.5",
-      "Programming Language :: Python :: 3.6",
-      "Programming Language :: Python :: 3.7"
+        "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7"
     ],
     install_requires=[
         'click==6.7',
