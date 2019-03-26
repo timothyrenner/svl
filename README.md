@@ -13,6 +13,12 @@ If you're interested, hit the link for the docs below.
 
 [timothyrenner.github.io/svl](https://timothyrenner.github.io/svl/)
 
+and install with
+
+```
+pip install svl
+```
+
 Not convinced?
 Maybe ✨ ***this*** ✨ will change your mind...
 
@@ -59,7 +65,7 @@ In fact, most of the data processing is done under the hood by [SQLite](https://
 
 ## I'm sold!
 
-🎉 Sweet! 🎉 Check out the docs [here]() ***TODO: link docs*** to learn more.
+🎉 Sweet! 🎉 Check out the docs [here](https://timothyrenner.github.io/svl/) to learn more.
 
 
 ## Development
