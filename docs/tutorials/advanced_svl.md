@@ -263,4 +263,77 @@ The plot is the same as before.
 
 ### All Together
 
+In this section I've demonstrated the features of SVL that take advantage of the underlying SQLite-powered data processing.
+By allowing functions that can directly leverage SQL to be integrated with the language, SVL no longer has to provide a huge suite of data processing capability, and you the user do not have to learn yet another data processing language.
+SVL stays both small and flexible.
+Adding SQL commands does make things a little more complicated, but there will probably be cases where the tradeoff is worth it.
+
+Here's the final `advanced_tutorial.svl` script with all of the modifications in this section.
+
+```
+DATASETS
+    bigfoot "bigfoot_sightings.csv"
+
+    -- Note the aggregation must be aliased to a valid SVL identifier.
+    bigfoot_class_counts SQL 
+        "SELECT 
+            classification,
+            COUNT(*) AS count 
+        FROM bigfoot 
+        GROUP BY classification"
+
+LINE bigfoot
+    TITLE "Bigfoot Sightings by Year"
+    X date BY YEAR LABEL "Year of Sighting"
+    Y number COUNT LABEL "Number of Sightings"
+    SPLIT BY classification
+    -- The filter string gets pasted into a SQL WHERE clause.
+    FILTER "date > '1960-01-01'"
+
+BAR bigfoot
+    TITLE "Bigfoot Sightings by State"
+    X state LABEL "State"
+    Y state COUNT LABEL "Number of Sightings" SORT DESC
+
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+
+    (
+        BAR bigfoot_class_counts
+            TITLE "Number of Bigfoot Sightings by Classification"
+            X classification LABEL "Sighting Classification"
+            Y count LABEL "Number of Sightings"
+
+        PIE bigfoot
+            TITLE "Number of Geocoded Sightings"
+            -- Yes line breaks do work.
+            AXIS TRANSFORM 
+                "CASE WHEN latitude IS NULL THEN 'No Location' 
+                 ELSE 'Location' END"
+            HOLE 0.3
+    )
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+    COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"
+```
+
+This script is just over 50 lines of very spread out code.
+The visualization looks like this.
+
+![](../images/advanced_tutorial_final_data_1.png)
+![](../images/advanced_tutorial_final_data_2.png)
+![](../images/advanced_tutorial_final_data_3.png)
+![](../images/advanced_tutorial_final_data_4.png)
+
+Interactive version [here](../sample_visualizations/advanced_tutorial_data.html).
+
+This script demonstrates every syntax feature of the SVL language.
+
 ## Conclusion
