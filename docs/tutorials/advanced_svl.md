@@ -337,3 +337,15 @@ Interactive version [here](../sample_visualizations/advanced_tutorial_data.html)
 This script demonstrates every syntax feature of the SVL language.
 
 ## Conclusion
+
+In addition to syntax for declaring datasets and creating / customizing charts, SVL also provides advanced data processing capability by exposing the underlying SQL processing engine directly.
+This provides an immense amount of flexibility for arranging the data in a way that best suits the charts without leaving SVL _or_ adding a bunch of duplicate syntax.
+
+At this point you know the whole language.
+The final script in this tutorial touched every part of the SVL grammar.
+
+If you need a reference to the grammar, head on over to the [language reference](../reference/syntax_reference.md) section.
+If you'd like to _really_ know how SVL works from top to bottom, check out [this article](../reference/under_the_hood.md).
+
+Thanks for taking the time to walk through the SVL language.
+I hope you find yourself using it to make and share lots and lots of plots.
