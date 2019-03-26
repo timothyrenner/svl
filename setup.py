@@ -1,11 +1,18 @@
 
 from setuptools import setup, find_packages
+import pathlib
 import versioneer
+
+HERE = pathlib.Path(__file__).parent
+README = (HERE / "README.md").read_text()
 
 setup(
     name='svl',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
+    long_description=README,
+    long_description_content_type="text/markdown",
+    url="https://github.com/timothyrenner/svl",
     packages=find_packages(exclude=[
         "sample_data/",
         "sample_scripts/",

@@ -11,3 +11,5 @@ visualization.html
 .coverage
 .hypothesis/
 graffle/
+build/
+dist/
