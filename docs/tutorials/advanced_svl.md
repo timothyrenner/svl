@@ -96,6 +96,61 @@ Interactive version [here](../sample_visualizations/advanced_tutorial_sort.html)
 
 ## Datasets at the Command Line
 
+Sometimes it might be convenient not to have the name of the file hard coded into the SVL script.
+For example, suppose you've got a pipeline that produces files with dates in the name.
+It would be nice if you could create the same visualizations and treat the file as a parameter.
+SVL supports passing in dataset file definitions from the command line.
+In fact, the `DATASETS` declaration is optional.
+
+```
+-- No DATASETS!
+
+LINE bigfoot
+    TITLE "Bigfoot Sightings by Year"
+    X date BY YEAR LABEL "Year of Sighting"
+    Y number COUNT LABEL "Number of Sightings"
+    SPLIT BY classification
+
+BAR bigfoot
+    TITLE "Bigfoot Sightings by State"
+    X state LABEL "State"
+    Y state COUNT LABEL "Number of Sightings" SORT DESC
+
+CONCAT(
+    HISTOGRAM bigfoot
+        TITLE "Bigfoot Sighting Moon Phases"
+        X moon_phase LABEL "Moon Phase"
+        STEP 0.1
+
+    (
+        BAR bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            X classification LABEL "Sighting Classification"
+            Y number COUNT LABEL "Number of Sightings"
+
+        PIE bigfoot
+            TITLE "Number of Bigfoot Sightings by Classification"
+            AXIS classification
+            HOLE 0.3
+    )
+)
+
+SCATTER bigfoot
+    TITLE "Bigfoot Sighting Temperature by Latitude"
+    X latitude LABEL "Latitude"
+    Y temperature_mid LABEL "Temperature (F)"
+    COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"
+```
+
+is what our Bigfoot SVL script looks like without a `DATASETS` declaration.
+It won't compile without one additional command line argument.
+
+```
+svl advanced_tutorial.svl --dataset bigfoot=bigfoot_sightings.csv
+```
+
+You can pass multiple files with different labels by repeating `--dataset label=path` for each file.
+
 ## Filtering Data
 
 ## Transforming Data
