@@ -1,0 +1,19 @@
+DATASETS
+    bigfoot "data/bigfoot_sightings.parquet"
+
+HISTOGRAM bigfoot
+    X temperature_mid LABEL "Mid Temperature (F)"
+    STEP 1
+    TITLE "Mid Temperature"
+
+CONCAT(
+HISTOGRAM bigfoot
+    X temperature_low LABEL "Low Temperature (F)"
+    STEP 1
+    TITLE "Low Temperature"
+
+HISTOGRAM bigfoot
+    X temperature_high LABEL "High Temperature (F)"
+    STEP 1
+    TITLE "High Temperature"
+)

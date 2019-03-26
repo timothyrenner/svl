@@ -1,0 +1,10 @@
+DATASETS
+    bigfoot "sample_data/bigfoot_sightings.csv"
+LINE bigfoot
+    X date BY YEAR
+    Y number COUNT
+    SPLIT BY classification
+CONCAT(
+    HISTOGRAM bigfoot X temperature_mid
+    HISTOGRAM bigfoot X humidity
+)

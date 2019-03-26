@@ -1,0 +1,26 @@
+site_name: SVL Documentation
+repo_name: 'timothyrenner/svl'
+repo_url: 'https://github.com/timothyrenner/svl'
+theme:
+  name: 'material'
+  logo:
+    icon: 'show_chart'
+markdown_extensions:
+  - codehilite
+  - pymdownx.tilde
+nav:
+  - Home: 'index.md'
+  - Tutorials:
+    - Basic SVL: 'tutorials/basic_svl.md'
+    - Advanced SVL: 'tutorials/advanced_svl.md'
+  - Reference:
+    - Syntax: 'reference/syntax_reference.md'
+    - Under the Hood: 'reference/under_the_hood.md'
+  - Sample Visualizations:
+    - Quickstart: 'sample_visualizations/quickstart_example.html'
+    - Basic SVL - Chart Types: 'sample_visualizations/basic_tutorial_chart_types.html'
+    - Basic SVL - Customizing Charts: 'sample_visualizations/basic_tutorial_customizing_charts.html'
+    - Basic SVL - Plot Arrangement: 'sample_visualizations/basic_tutorial_plot_arrangement_3.html'
+    - Basic SVL - Additional Axes: 'sample_visualizations/basic_tutorial_additional_axes.html'
+    - Advanced SVL - Sorting Data: 'sample_visualizations/advanced_tutorial_sort.html'
+    - Advanced SVL - Data in SVL: 'sample_visualizations/advanced_tutorial_data.html'
