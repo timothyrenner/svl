@@ -16,7 +16,13 @@ setup(
     packages=find_packages(exclude=[
         "sample_data/",
         "sample_scripts/",
-        "sample_visualizations/"
+        "sample_visualizations/",
+        "build/",
+        "dist/",
+        "graffle/",
+        "site/",
+        "test/",
+        "docs/"
     ]),
     license='MIT',
     author="Tim Renner",
