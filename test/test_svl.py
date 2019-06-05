@@ -17,30 +17,22 @@ def test_line_chart():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "type": "line",
+                "data": "bigfoot",
+                "title": "Bigfoot Sightings by Year and Classification",
+                "x": {"field": "date", "temporal": "YEAR", "label": "Year"},
+                "y": {
+                    "agg": "COUNT",
+                    "field": "date",
+                    "label": "Number of Sightings",
+                },
+                "split_by": {"field": "classification"},
+                "filter": "date > '1990-01-01'",
             }
-        },
-        "vcat": [{
-            "type": "line",
-            "data": "bigfoot",
-            "title": "Bigfoot Sightings by Year and Classification",
-            "x": {
-                "field": "date",
-                "temporal": "YEAR",
-                "label": "Year"
-            },
-            "y": {
-                "agg": "COUNT",
-                "field": "date",
-                "label": "Number of Sightings"
-            },
-            "split_by": {
-                "field": "classification"
-            },
-            "filter": "date > '1990-01-01'"
-        }]
+        ],
     }
 
     parsed_svl = parse_svl(svl_string)
@@ -60,22 +52,15 @@ def test_bar_chart():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "bar",
+                "x": {"field": "classification"},
+                "y": {"agg": "COUNT", "field": "classification"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "bar",
-            "x": {
-                "field": "classification"
-            },
-            "y": {
-                "agg": "COUNT",
-                "field": "classification"
-            }
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -96,19 +81,15 @@ def test_histogram_step():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
+                "step": 5,
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
-            },
-            "step": 5
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -130,20 +111,16 @@ def test_histogram_bins():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "title": "Bigfoot Sighting Humidity",
+                "type": "histogram",
+                "y": {"field": "humidity", "label": "Humidity"},
+                "bins": 25,
             }
-        }, "vcat": [{
-            "data": "bigfoot",
-            "title": "Bigfoot Sighting Humidity",
-            "type": "histogram",
-            "y": {
-                "field": "humidity",
-                "label": "Humidity"
-            },
-            "bins": 25
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -164,22 +141,16 @@ def test_histogram_split_by():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
+                "step": 5,
+                "split_by": {"field": "classification"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
-            },
-            "step": 5,
-            "split_by": {
-                "field": "classification"
-            }
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -203,24 +174,20 @@ def test_pie():
     transform_truth = """CASE WHEN latitude IS NULL THEN \'no_location\'
             ELSE \'has_location\' END"""
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "title": "Bigfoot Sightings with Location",
+                "type": "pie",
+                "axis": {"transform": transform_truth},
+                "hole": 0.3,
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "title": "Bigfoot Sightings with Location",
-            "type": "pie",
-            "axis": {
-                "transform": transform_truth
-            },
-            "hole": 0.3
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
-    print(parsed_svl_answer['vcat'])
+    print(parsed_svl_answer["vcat"])
 
     assert parsed_svl_truth == parsed_svl_answer
 
@@ -238,24 +205,16 @@ def test_scatter():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "scatter",
+                "x": {"field": "latitude"},
+                "y": {"field": "temperature_mid"},
+                "split_by": {"field": "classification"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "scatter",
-            "x": {
-                "field": "latitude"
-            },
-            "y": {
-                "field": "temperature_mid"
-            },
-            "split_by": {
-                "field": "classification"
-            }
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -275,22 +234,15 @@ def test_case_insensitivity():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "bar",
+                "x": {"field": "classification"},
+                "y": {"agg": "COUNT", "field": "classification"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "bar",
-            "x": {
-                "field": "classification"
-            },
-            "y": {
-                "agg": "COUNT",
-                "field": "classification"
-            }
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -311,19 +263,15 @@ def test_comment():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
+                "step": 5,
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
-            },
-            "step": 5
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -348,26 +296,25 @@ def test_concat():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "hcat": [
+                    {
+                        "data": "bigfoot",
+                        "type": "scatter",
+                        "x": {"field": "latitude"},
+                        "y": {"field": "temperature_mid"},
+                    },
+                    {
+                        "data": "bigfoot",
+                        "type": "bar",
+                        "x": {"field": "classification"},
+                        "y": {"agg": "COUNT", "field": "classification"},
+                    },
+                ]
             }
-        },
-        "vcat": [{
-            "hcat": [
-                {
-                    "data": "bigfoot",
-                    "type": "scatter",
-                    "x": {"field": "latitude"},
-                    "y": {"field": "temperature_mid"}
-                }, {
-                    "data": "bigfoot",
-                    "type": "bar",
-                    "x": {"field": "classification"},
-                    "y": {"agg": "COUNT", "field": "classification"}
-                }
-            ]
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -394,26 +341,25 @@ def test_implicit_vcat():
     """
 
     parsed_svl_truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "data/bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "vcat": [
+                    {
+                        "data": "bigfoot",
+                        "type": "scatter",
+                        "x": {"field": "latitude"},
+                        "y": {"field": "temperature_mid"},
+                    },
+                    {
+                        "data": "bigfoot",
+                        "type": "bar",
+                        "x": {"field": "classification"},
+                        "y": {"agg": "COUNT", "field": "classification"},
+                    },
+                ]
             }
-        },
-        "vcat": [{
-            "vcat": [
-                {
-                    "data": "bigfoot",
-                    "type": "scatter",
-                    "x": {"field": "latitude"},
-                    "y": {"field": "temperature_mid"}
-                }, {
-                    "data": "bigfoot",
-                    "type": "bar",
-                    "x": {"field": "classification"},
-                    "y": {"agg": "COUNT", "field": "classification"}
-                }
-            ]
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -435,20 +381,18 @@ def test_sql_dataset():
 
     parsed_svl_truth = {
         "datasets": {
-            "bigfoot": {
-                "file": "bigfoot_sightings.csv"
-            },
+            "bigfoot": {"file": "bigfoot_sightings.csv"},
             "recent_bigfoot_sightings": {
                 "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
-            }
+            },
         },
-        "vcat": [{
-            "data": "recent_bigfoot_sightings",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
+        "vcat": [
+            {
+                "data": "recent_bigfoot_sightings",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
             }
-        }]
+        ],
     }
 
     parsed_svl_answer = parse_svl(svl_string)
@@ -471,16 +415,14 @@ def test_no_datasets():
             # A validator would catch this, but from a parsing perspective this
             # is valid.
         },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
-            },
-            "split_by": {
-                "field": "classification"
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
+                "split_by": {"field": "classification"},
             }
-        }]
+        ],
     }
 
     answer = parse_svl(svl_string)
@@ -499,21 +441,15 @@ def test_with_kwargs():
     """
 
     truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature_mid"},
+                "split_by": {"field": "classification"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "histogram",
-            "x": {
-                "field": "temperature_mid"
-            },
-            "split_by": {
-                "field": "classification"
-            }
-        }]
+        ],
     }
 
     answer = parse_svl(svl_string, bigfoot="bigfoot_sightings.csv")
@@ -534,23 +470,15 @@ def test_sort():
     """
 
     truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "bar",
+                "x": {"field": "classification", "sort": "ASC"},
+                "y": {"field": "classification", "agg": "COUNT"},
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "bar",
-            "x": {
-                "field": "classification",
-                "sort": "ASC"
-            },
-            "y": {
-                "field": "classification",
-                "agg": "COUNT"
-            }
-        }]
+        ],
     }
 
     answer = parse_svl(svl_string)
@@ -571,30 +499,25 @@ def test_color_by():
     """
 
     truth = {
-        "datasets": {
-            "bigfoot": {
-                "file": "bigfoot_sightings.csv"
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "line",
+                "x": {"field": "date", "temporal": "YEAR"},
+                "y": {
+                    "field": "report_id",
+                    "agg": "COUNT",
+                    "label": "Number of Sightings",
+                },
+                "color_by": {
+                    "field": "temperature_mid",
+                    "agg": "AVG",
+                    "color_scale": "Jet",
+                    "label": "Average Temperature (F)",
+                },
             }
-        },
-        "vcat": [{
-            "data": "bigfoot",
-            "type": "line",
-            "x": {
-                "field": "date",
-                "temporal": "YEAR"
-            },
-            "y": {
-                "field": "report_id",
-                "agg": "COUNT",
-                "label": "Number of Sightings"
-            },
-            "color_by": {
-                "field": "temperature_mid",
-                "agg": "AVG",
-                "color_scale": "Jet",
-                "label": "Average Temperature (F)"
-            }
-        }]
+        ],
     }
 
     answer = parse_svl(svl_string)

@@ -4,103 +4,86 @@ PLOT_VALIDATORS = [
     (
         {"line", "scatter", "bar"},
         lambda x: ("x" not in x) or ("y" not in x),
-        "XY plot does not have X and Y."
+        "XY plot does not have X and Y.",
     ),
     (
         {"histogram"},
         lambda x: ("step" in x) and ("bins" in x),
-        "Histogram cannot have STEP and BINS."
+        "Histogram cannot have STEP and BINS.",
     ),
     (
         {"line", "scatter", "bar"},
         lambda x: ("agg" in x["x"]) and ("agg" in x["y"]),
-        "XY plot cannot have an aggregation on X and Y."
+        "XY plot cannot have an aggregation on X and Y.",
     ),
     (
         {"histogram", "pie"},
-        lambda x: (
-            "agg" in get("x", x, {})
-        ) or (
-            "agg" in get("y", x, {})
-        ) or (
-            "agg" in get("axis", x, {})
-        ),
-        "Histograms and pie charts cannot have aggregations."
+        lambda x: ("agg" in get("x", x, {}))
+        or ("agg" in get("y", x, {}))
+        or ("agg" in get("axis", x, {})),
+        "Histograms and pie charts cannot have aggregations.",
     ),
     (
         {"histogram", "pie"},
-        lambda x: (
-            "temporal" in get("x", x, {})
-        ) or (
-            "temporal" in get("y", x, {})
-        ) or (
-            "temporal" in get("axis", x, {})
-        ),
-        "Histograms and pie charts cannot have temporal axes."
+        lambda x: ("temporal" in get("x", x, {}))
+        or ("temporal" in get("y", x, {}))
+        or ("temporal" in get("axis", x, {})),
+        "Histograms and pie charts cannot have temporal axes.",
     ),
     (
         {"histogram"},
         lambda x: ("x" in x) and ("y" in x),
-        "Histograms can have X or Y, not both."
+        "Histograms can have X or Y, not both.",
     ),
     (
         {"histogram"},
         lambda x: ("x" not in x) and ("y" not in x),
-        "Histograms must have an X or Y."
+        "Histograms must have an X or Y.",
     ),
-    (
-        {"pie"},
-        lambda x: "axis" not in x,
-        "Pie charts must have an axis."
-    ),
+    ({"pie"}, lambda x: "axis" not in x, "Pie charts must have an axis."),
     (
         {"line", "bar"},  # SORT is a no-op for scatter.
         lambda x: ("sort" in x["x"]) and ("sort" in x["y"]),
-        "Cannot sort by two axes."
+        "Cannot sort by two axes.",
     ),
     (
         {"pie"},
         lambda x: (get("hole", x, 0.0) < 0) or (get("hole", x, 0.0) > 1),
-        "HOLE must be between zero and one."
+        "HOLE must be between zero and one.",
     ),
     (
         {"histogram"},
         lambda x: get("step", x, 1) <= 0,
-        "STEP must be greater than zero."
+        "STEP must be greater than zero.",
     ),
     (
         {"histogram"},
         lambda x: get("bins", x, 1) <= 0,
-        "BINS must be greater than zero."
+        "BINS must be greater than zero.",
     ),
     (
         {"histogram", "pie"},
         lambda x: "color_by" in x,
-        "Histograms and pie charts cannot have COLOR BY."
+        "Histograms and pie charts cannot have COLOR BY.",
     ),
-    (
-        {"pie"},
-        lambda x: "split_by" in x,
-        "Pie charts cannot have SPLIT BY."
-    ),
+    ({"pie"}, lambda x: "split_by" in x, "Pie charts cannot have SPLIT BY."),
     (
         {"line", "scatter", "bar"},
         lambda x: ("split_by" in x) and ("color_by" in x),
-        "Cannot have COLOR BY and SPLIT BY on same plot."
+        "Cannot have COLOR BY and SPLIT BY on same plot.",
     ),
     (
         {"line", "scatter", "bar"},
         lambda x: (
             # If we don't include this it can throw exceptions for other
             # validators.
-            ("x" in x) and ("y" in x)
-        ) and (
-            ("agg" in x["x"]) or ("agg" in x["y"])
-        ) and (
-            ("color_by" in x) and ("agg" not in x["color_by"])
-        ),
-        "If there's an aggregation on X or Y, COLOR BY must also aggregate."
-    )
+            ("x" in x)
+            and ("y" in x)
+        )
+        and (("agg" in x["x"]) or ("agg" in x["y"]))
+        and (("color_by" in x) and ("agg" not in x["color_by"])),
+        "If there's an aggregation on X or Y, COLOR BY must also aggregate.",
+    ),
 ]
 
 

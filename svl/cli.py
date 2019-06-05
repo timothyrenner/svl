@@ -18,17 +18,13 @@ def _extract_cli_datasets(datasets):
 
 
 @click.command()
-@click.argument("svl_source", type=click.File('r'))
+@click.argument("svl_source", type=click.File("r"))
 @click.option("--debug", is_flag=True)
 @click.option(
-    '--backend', '-b',
-    type=click.Choice(['plotly', 'vega']),
-    default='plotly'
+    "--backend", "-b", type=click.Choice(["plotly", "vega"]), default="plotly"
 )
 @click.option(
-    "--output-file", "-o",
-    type=click.File("w"),
-    default="visualization.html"
+    "--output-file", "-o", type=click.File("w"), default="visualization.html"
 )
 @click.option("--dataset", "-d", multiple=True)
 @click.option("--no-browser", is_flag=True)
@@ -72,10 +68,11 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
     for plot in svl_plots:
         if plot["data"] not in svl_spec["datasets"]:
             existing_datasets = ", ".join(list(svl_spec["datasets"].keys()))
-            print("Dataset {} is not in provided datasets {}.".format(
-                plot["data"],
-                existing_datasets
-            ))
+            print(
+                "Dataset {} is not in provided datasets {}.".format(
+                    plot["data"], existing_datasets
+                )
+            )
             sys.exit(1)
 
     # Create a connection to the sqlite database (eventually this will be
@@ -102,10 +99,7 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
 
     # For now, plotly is the only choice.
     if backend == "plotly":
-        template_vars = plotly_template_vars(
-            svl_plots,
-            svl_plot_data
-        )
+        template_vars = plotly_template_vars(svl_plots, svl_plot_data)
         template = plotly_template()
 
     else:
@@ -116,8 +110,5 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
 
     if not no_browser:
         webbrowser.open(
-            "file://{}".format(
-                os.path.realpath(output_file.name)
-            ),
-            new=2
+            "file://{}".format(os.path.realpath(output_file.name)), new=2
         )

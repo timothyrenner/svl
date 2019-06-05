@@ -15,32 +15,24 @@ from svl.sqlite import (
     svl_to_sql_xy,
     svl_to_sql_hist,
     svl_to_sql_pie,
-    get_svl_data
+    get_svl_data,
 )
 
 
 @pytest.fixture()
 def test_csv_file():
-    current_dir = os.path.dirname(
-        os.path.abspath(__file__)
-    )
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     test_csv_file = os.path.join(
-        current_dir,
-        "test_datasets",
-        "bigfoot_sightings.csv"
+        current_dir, "test_datasets", "bigfoot_sightings.csv"
     )
     return test_csv_file
 
 
 @pytest.fixture()
 def test_parquet_file():
-    current_dir = os.path.dirname(
-        os.path.abspath(__file__)
-    )
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     test_parquet_file = os.path.join(
-        current_dir,
-        "test_datasets",
-        "bigfoot_sightings.parquet"
+        current_dir, "test_datasets", "bigfoot_sightings.parquet"
     )
     return test_parquet_file
 
@@ -49,12 +41,10 @@ def test_parquet_file():
 def test_conn(test_csv_file):
     # Obviously don't need the whole plot just the bit about the file.
     test_svl_datasets = {
-        "bigfoot": {
-            "file": test_csv_file
-        },
+        "bigfoot": {"file": test_csv_file},
         "recent_bigfoot": {
             "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
-        }
+        },
     }
 
     conn = create_datasets(test_svl_datasets)
@@ -96,9 +86,7 @@ def test_get_field_transform():
     """ Tests that the _get_field function returns the correct value for an
         axis with a transform.
     """
-    svl_axis = {
-        "transform": "temperature_mid + 1"
-    }
+    svl_axis = {"transform": "temperature_mid + 1"}
 
     truth = "temperature_mid + 1"
 
@@ -111,9 +99,7 @@ def test_get_field_field():
     """ Tests that the _get_field function returns the correct value for an
         axis with a field.
     """
-    svl_axis = {
-        "field": "temperature_mid"
-    }
+    svl_axis = {"field": "temperature_mid"}
 
     truth = "temperature_mid"
 
@@ -126,9 +112,7 @@ def test_get_field_none():
     """ Tests that the _get_field function returns the correct value for an
         axis without a field or transform.
     """
-    svl_axis = {
-        "agg": "COUNT"
-    }
+    svl_axis = {"agg": "COUNT"}
 
     truth = "*"
 
@@ -175,13 +159,14 @@ def test_sqlite_table(test_csv_file):
     sqlite_table(
         "SELECT * FROM bigfoot WHERE date >= '2008-01-01'",
         "recent_bigfoot",
-        conn
+        conn,
     )
 
-    truth = pd.read_sql(
-        "SELECT * FROM bigfoot",
-        conn
-    ).query("date >= '2008-01-01'").reset_index(drop=True)
+    truth = (
+        pd.read_sql("SELECT * FROM bigfoot", conn)
+        .query("date >= '2008-01-01'")
+        .reset_index(drop=True)
+    )
     answer = pd.read_sql("SELECT * FROM recent_bigfoot", conn)
 
     assert_frame_equal(truth, answer)
@@ -191,12 +176,10 @@ def test_create_datasets(test_csv_file):
     """ Tests that the create_datasets function returns the correct value.
     """
     svl_datasets = {
-        "bigfoot": {
-            "file": test_csv_file
-        },
+        "bigfoot": {"file": test_csv_file},
         "recent_bigfoot": {
             "sql": "SELECT * FROM bigfoot WHERE date >= '2008-01-01'"
-        }
+        },
     }
 
     conn = create_datasets(svl_datasets)
@@ -222,10 +205,8 @@ def test_svl_to_sql_hist():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "bins": 25
+        "x": {"field": "temperature_mid"},
+        "bins": 25,
     }
 
     truth_query = "SELECT temperature_mid AS x FROM bigfoot"
@@ -242,11 +223,9 @@ def test_svl_to_sql_hist_filter():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "y": {
-            "field": "temperature_mid"
-        },
+        "y": {"field": "temperature_mid"},
         "bins": 25,
-        "filter": "temperature_mid <= 100"
+        "filter": "temperature_mid <= 100",
     }
 
     truth_query = (
@@ -266,13 +245,9 @@ def test_svl_to_sql_hist_split_by():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "split_by": {
-            "field": "classification"
-        },
-        "bins": 5
+        "x": {"field": "temperature_mid"},
+        "split_by": {"field": "classification"},
+        "bins": 5,
     }
 
     truth_query = (
@@ -288,12 +263,7 @@ def test_svl_to_sql_hist_split_by():
 def test_svl_to_sql_pie():
     """ Tests that the svl_to_sql_pie function returns the correct value.
     """
-    svl_plot = {
-        "data": "bigfoot",
-        "axis": {
-            "field": "classification"
-        }
-    }
+    svl_plot = {"data": "bigfoot", "axis": {"field": "classification"}}
 
     truth_query = (
         "SELECT classification AS label, COUNT(*) AS value FROM bigfoot "
@@ -311,10 +281,8 @@ def test_svl_to_sql_pie_filter():
     """
     svl_plot = {
         "data": "bigfoot",
-        "axis": {
-            "field": "classification"
-        },
-        "filter": "date >= '1960-01-01'"
+        "axis": {"field": "classification"},
+        "filter": "date >= '1960-01-01'",
     }
 
     truth_query = (
@@ -333,12 +301,8 @@ def test_svl_to_sql_xy():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature_mid"
-        }
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature_mid"},
     }
 
     truth_query = "SELECT latitude AS x, temperature_mid AS y FROM bigfoot"
@@ -354,13 +318,9 @@ def test_svl_to_sql_xy_filter():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature_mid"
-        },
-        "filter": "latitude < 84"
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature_mid"},
+        "filter": "latitude < 84",
     }
 
     truth_query = (
@@ -378,17 +338,14 @@ def test_svl_to_sql_xy_agg_x():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "classification"
-        },
-        "y": {
-            "agg": "MAX",
-            "field": "temperature"
-        }
+        "x": {"field": "classification"},
+        "y": {"agg": "MAX", "field": "temperature"},
     }
 
-    truth_query = "SELECT classification AS x, MAX(temperature) AS y " \
+    truth_query = (
+        "SELECT classification AS x, MAX(temperature) AS y "
         "FROM bigfoot GROUP BY classification"
+    )
 
     answer_query = svl_to_sql_xy(svl_plot)
 
@@ -401,17 +358,14 @@ def test_svl_to_sql_xy_agg_y():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "agg": "AVG",
-            "field": "temperature"
-        },
-        "y": {
-            "field": "classification"
-        }
+        "x": {"agg": "AVG", "field": "temperature"},
+        "y": {"field": "classification"},
     }
 
-    truth_query = "SELECT AVG(temperature) AS x, classification AS y " \
+    truth_query = (
+        "SELECT AVG(temperature) AS x, classification AS y "
         "FROM bigfoot GROUP BY classification"
+    )
 
     answer_query = svl_to_sql_xy(svl_plot)
 
@@ -424,16 +378,14 @@ def test_svl_to_sql_xy_count():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "classification"
-        },
-        "y": {
-            "agg": "COUNT"
-        }
+        "x": {"field": "classification"},
+        "y": {"agg": "COUNT"},
     }
 
-    truth_query = "SELECT classification AS x, COUNT(*) AS y "\
+    truth_query = (
+        "SELECT classification AS x, COUNT(*) AS y "
         "FROM bigfoot GROUP BY classification"
+    )
 
     answer_query = svl_to_sql_xy(svl_plot)
 
@@ -446,17 +398,13 @@ def test_svl_to_sql_xy_temporal():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "temperature"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "temperature"},
     }
 
-    truth_query = "SELECT STRFTIME('%Y', date) AS x, temperature AS y "\
-        "FROM bigfoot"
+    truth_query = (
+        "SELECT STRFTIME('%Y', date) AS x, temperature AS y " "FROM bigfoot"
+    )
 
     answer_query = svl_to_sql_xy(svl_plot)
 
@@ -469,13 +417,8 @@ def test_svl_to_sql_xy_temporal_agg():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "agg": "COUNT"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"agg": "COUNT"},
     }
 
     truth_query = (
@@ -494,19 +437,15 @@ def test_svl_to_sql_xy_split_by():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "date"
-        },
-        "y": {
-            "field": "temperature"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date"},
+        "y": {"field": "temperature"},
+        "split_by": {"field": "classification"},
     }
 
-    truth_query = "SELECT date AS x, temperature AS y, "\
+    truth_query = (
+        "SELECT date AS x, temperature AS y, "
         "classification AS split_by FROM bigfoot"
+    )
 
     answer_query = svl_to_sql_xy(svl_plot)
 
@@ -519,17 +458,9 @@ def test_svl_to_sql_xy_split_by_agg():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "split_by": {"field": "classification"},
     }
 
     truth_query = (
@@ -550,14 +481,8 @@ def test_svl_to_sql_xy_sort_x():
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "latitude",
-            "sort": "ASC"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "AVG"
-        }
+        "x": {"field": "latitude", "sort": "ASC"},
+        "y": {"field": "temperature_mid", "agg": "AVG"},
     }
 
     truth_query = (
@@ -579,14 +504,8 @@ def test_svl_to_sql_xy_sort_y():
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "classification"
-        },
-        "y": {
-            "agg": "COUNT",
-            "sort": "DESC",
-            "field": "classification"
-        }
+        "x": {"field": "classification"},
+        "y": {"agg": "COUNT", "sort": "DESC", "field": "classification"},
     }
 
     truth_query = (
@@ -608,17 +527,9 @@ def test_svl_to_sql_xy_sort_split_by():
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "latitude",
-            "sort": "ASC"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "AVG"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "latitude", "sort": "ASC"},
+        "y": {"field": "temperature_mid", "agg": "AVG"},
+        "split_by": {"field": "classification"},
     }
 
     truth_query = (
@@ -641,15 +552,9 @@ def test_svl_to_sql_xy_color_by():
     svl_plot = {
         "data": "bigfoot",
         "type": "scatter",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature_mid"
-        },
-        "color_by": {
-            "field": "humidity"
-        }
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature_mid"},
+        "color_by": {"field": "humidity"},
     }
 
     truth_query = (
@@ -669,13 +574,8 @@ def test_get_svl_data_xy(test_conn):
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "agg": "COUNT"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"agg": "COUNT"},
     }
 
     answer = get_svl_data(svl_plot, test_conn)
@@ -692,16 +592,9 @@ def test_get_svl_data_xy_split_by(test_conn):
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "agg": "COUNT"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"agg": "COUNT"},
+        "split_by": {"field": "classification"},
     }
 
     answer = get_svl_data(svl_plot, test_conn)
@@ -719,17 +612,9 @@ def test_get_svl_data_xy_color_by(test_conn):
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "agg": "COUNT"
-        },
-        "color_by": {
-            "field": "temperature_mid",
-            "agg": "AVG"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"agg": "COUNT"},
+        "color_by": {"field": "temperature_mid", "agg": "AVG"},
     }
     answer = get_svl_data(svl_plot, test_conn)
 
@@ -747,10 +632,8 @@ def test_get_svl_data_histogram(test_conn):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "bins": 25
+        "x": {"field": "temperature_mid"},
+        "bins": 25,
     }
 
     answer = get_svl_data(svl_plot, test_conn)
@@ -764,12 +647,8 @@ def test_get_svl_data_histogram_split_by(test_conn):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "y": {
-            "field": "temperature_mid"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "y": {"field": "temperature_mid"},
+        "split_by": {"field": "classification"},
     }
 
     answer = get_svl_data(svl_plot, test_conn)
@@ -785,9 +664,7 @@ def test_get_svl_data_pie(test_conn):
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "axis": {
-            "field": "classification"
-        }
+        "axis": {"field": "classification"},
     }
 
     answer = get_svl_data(svl_plot, test_conn)
@@ -803,10 +680,8 @@ def test_get_svl_data_empty_result_set(test_conn):
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "axis": {
-            "field": "classification"
-        },
-        "filter": "classification = 'D'"
+        "axis": {"field": "classification"},
+        "filter": "classification = 'D'",
     }
 
     with pytest.raises(sqlite3.DatabaseError):

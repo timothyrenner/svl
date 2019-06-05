@@ -8,9 +8,7 @@ def test_validate_plot_pass():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "y": {
-            "field": "humidity"
-        }
+        "y": {"field": "humidity"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -29,9 +27,7 @@ def test_validate_plot_xy_must_have_x_and_y():
     svl_plot = {
         "type": "bar",
         "data": "bigfoot",
-        "x": {
-            "field": "classification"
-        }
+        "x": {"field": "classification"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -50,11 +46,9 @@ def test_validate_plot_histogram_cannot_have_step_and_bins():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "wind_speed"
-        },
+        "x": {"field": "wind_speed"},
         "step": 10,
-        "bins": 100
+        "bins": 100,
     }
 
     ok, message = validate_plot(svl_plot)
@@ -73,14 +67,8 @@ def test_validate_plot_xy_cannot_have_aggs_on_x_and_y():
     svl_plot = {
         "type": "scatter",
         "data": "bigfoot",
-        "x": {
-            "field": "latitude",
-            "agg": "MAX"
-        },
-        "y": {
-            "field": "humidity",
-            "agg": "MIN"
-        }
+        "x": {"field": "latitude", "agg": "MAX"},
+        "y": {"field": "humidity", "agg": "MIN"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -99,10 +87,7 @@ def test_validate_plot_histogram_and_pie_cannot_have_aggs():
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "axis": {
-            "field": "classification",
-            "agg": "COUNT"
-        }
+        "axis": {"field": "classification", "agg": "COUNT"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -121,10 +106,7 @@ def test_validate_plot_histogram_and_pie_cannot_have_temporals():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -143,12 +125,8 @@ def test_validate_plot_histogram_cannot_have_x_and_y():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "humidity"
-        },
-        "y": {
-            "field": "wind_speed"
-        }
+        "x": {"field": "humidity"},
+        "y": {"field": "wind_speed"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -164,11 +142,7 @@ def test_validate_plot_histogram_must_have_x_or_y():
     """ Tests that the validate_plot function returns the correct value when
         the plot is a histogram without an X or Y.
     """
-    svl_plot = {
-        "type": "histogram",
-        "data": "bigfoot",
-        "bins": 10
-    }
+    svl_plot = {"type": "histogram", "data": "bigfoot", "bins": 10}
 
     ok, message = validate_plot(svl_plot)
 
@@ -183,11 +157,7 @@ def test_validate_plot_pie_must_have_axis():
     """ Tests that the validate_plot function returns the correct value when
         the plot is a pie chart without an AXIS.
     """
-    svl_plot = {
-        "type": "pie",
-        "data": "bigfoot",
-        "hole": 0.3
-    }
+    svl_plot = {"type": "pie", "data": "bigfoot", "hole": 0.3}
 
     ok, message = validate_plot(svl_plot)
 
@@ -205,15 +175,8 @@ def test_validate_plot_cannot_sort_on_both_axes():
     svl_plot = {
         "type": "line",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR",
-            "sort": "DESC"
-        }, "y": {
-            "field": "classification",
-            "agg": "COUNT",
-            "sort": "ASC"
-        }
+        "x": {"field": "date", "temporal": "YEAR", "sort": "DESC"},
+        "y": {"field": "classification", "agg": "COUNT", "sort": "ASC"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -232,10 +195,8 @@ def test_validate_plot_hole_not_between_zero_and_one():
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "axis": {
-            "field": "has_location"
-        },
-        "hole": 1.2
+        "axis": {"field": "has_location"},
+        "hole": 1.2,
     }
 
     ok, message = validate_plot(svl_plot)
@@ -254,10 +215,8 @@ def test_validate_plot_step_less_than_equal_to_zero():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "humidity"
-        },
-        "step": -1.3
+        "x": {"field": "humidity"},
+        "step": -1.3,
     }
 
     ok, message = validate_plot(svl_plot)
@@ -276,10 +235,8 @@ def test_validate_plot_bins_less_than_equal_to_zero():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "wind_speed"
-        },
-        "bins": -4
+        "x": {"field": "wind_speed"},
+        "bins": -4,
     }
 
     ok, message = validate_plot(svl_plot)
@@ -297,12 +254,8 @@ def test_validate_plot_color_by_on_histogram_pie():
     """
     svl_plot = {
         "type": "pie",
-        "axis": {
-            "field": "has_location"
-        },
-        "color_by": {
-            "field": "temperature_mid"
-        }
+        "axis": {"field": "has_location"},
+        "color_by": {"field": "temperature_mid"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -321,12 +274,8 @@ def test_validate_plot_split_by_on_pie():
     svl_plot = {
         "type": "pie",
         "data": "bigfoot",
-        "axis": {
-            "field": "has_location"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "axis": {"field": "has_location"},
+        "split_by": {"field": "classification"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -345,22 +294,10 @@ def test_validate_plot_split_by_and_color_by():
     svl_plot = {
         "type": "line",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "date",
-            "agg": "COUNT",
-            "label": "Number of Sightings"
-        },
-        "split_by": {
-            "field": "classification"
-        },
-        "color_by": {
-            "field": "moon_phase",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "date", "agg": "COUNT", "label": "Number of Sightings"},
+        "split_by": {"field": "classification"},
+        "color_by": {"field": "moon_phase", "agg": "MAX"},
     }
 
     ok, message = validate_plot(svl_plot)
@@ -378,24 +315,16 @@ def test_validate_plot_color_by_missing_agg():
     """
     svl_plot = {
         "type": "scatter",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity"
-        }
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "color_by": {"field": "humidity"},
     }
 
     ok, message = validate_plot(svl_plot)
 
     truth_ok = False
     truth_message = (
-            "If there's an aggregation on X or Y, "
-            "COLOR BY must also aggregate."
+        "If there's an aggregation on X or Y, " "COLOR BY must also aggregate."
     )
 
     assert truth_ok == ok

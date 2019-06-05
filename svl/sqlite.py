@@ -1,5 +1,6 @@
 try:
     import pandas as pd
+
     PANDAS = True
 except ImportError:
     PANDAS = False
@@ -12,7 +13,7 @@ TEMPORAL_CONVERTERS = {
     "DAY": "STRFTIME('%Y-%m-%D', {})",
     "HOUR": "STRFTIME('%Y-%m-%DT%H', {})",
     "MINUTE": "STRFTIME('%Y-%m-%DT%H:%M', {})",
-    "SECOND": "STRFTIME('%Y-%m-%DT%H:%M:%S', {})"
+    "SECOND": "STRFTIME('%Y-%m-%DT%H:%M:%S', {})",
 }
 
 
@@ -150,8 +151,7 @@ def svl_to_sql_hist(svl_plot):
         select_fields.append("{} AS {}".format(field, axis))
 
     query = "SELECT {} FROM {}".format(
-        ", ".join(select_fields),
-        svl_plot["data"]
+        ", ".join(select_fields), svl_plot["data"]
     )
 
     if "filter" in svl_plot:
@@ -174,8 +174,7 @@ def svl_to_sql_pie(svl_plot):
             The SQL query for the dataset required for the plot.
     """
     query = "SELECT {} AS label, COUNT(*) AS value FROM {}".format(
-        _get_field(svl_plot["axis"]),
-        svl_plot["data"]
+        _get_field(svl_plot["axis"]), svl_plot["data"]
     )
 
     if "filter" in svl_plot:
@@ -214,17 +213,19 @@ def svl_to_sql_xy(svl_plot):
         field = _get_field(svl_plot[axis])
 
         if "temporal" in svl_plot[axis]:
-            select_fields.append("{} AS {}".format(
-                TEMPORAL_CONVERTERS[svl_plot[axis]["temporal"]].format(field),
-                axis
-            ))
+            select_fields.append(
+                "{} AS {}".format(
+                    TEMPORAL_CONVERTERS[svl_plot[axis]["temporal"]].format(
+                        field
+                    ),
+                    axis,
+                )
+            )
         elif "agg" in svl_plot[axis]:
             # NOTE: Split by axis will not take aggregations.
-            select_fields.append("{}({}) AS {}".format(
-                svl_plot[axis]["agg"],
-                field,
-                axis
-            ))
+            select_fields.append(
+                "{}({}) AS {}".format(svl_plot[axis]["agg"], field, axis)
+            )
         else:
             select_fields.append("{} AS {}".format(field, axis))
 
@@ -260,18 +261,14 @@ def svl_to_sql_xy(svl_plot):
 
     # Step 3: Build the query.
     query = "SELECT {} FROM {}".format(
-        ", ".join(select_fields),
-        svl_plot["data"]
+        ", ".join(select_fields), svl_plot["data"]
     )
 
     if "filter" in svl_plot:
         query = "{} WHERE {}".format(query, svl_plot["filter"])
 
     if group_axis:
-        query = "{} GROUP BY {}".format(
-            query,
-            ", ".join(group_fields)
-        )
+        query = "{} GROUP BY {}".format(query, ", ".join(group_fields))
 
     # If there's a SPLIT BY and a sort, make sure to sort by the split by
     # field first, since each SPLIT BY value becomes it's own trace.
@@ -281,15 +278,11 @@ def svl_to_sql_xy(svl_plot):
 
     if "sort" in svl_plot["x"]:
         query = "{} ORDER BY {} {}".format(
-            query,
-            ", ".join(sort_fields + ["x"]),
-            svl_plot["x"]["sort"]
+            query, ", ".join(sort_fields + ["x"]), svl_plot["x"]["sort"]
         )
     elif "sort" in svl_plot["y"]:
         query = "{} ORDER BY {} {}".format(
-            query,
-            ", ".join(sort_fields + ["y"]),
-            svl_plot["y"]["sort"]
+            query, ", ".join(sort_fields + ["y"]), svl_plot["y"]["sort"]
         )
 
     return query
@@ -373,10 +366,7 @@ def get_svl_data(svl_plot, conn):
                     svl_data[row["split_by"]] = {axis: []}
                 svl_data[row["split_by"]][axis].append(row[axis])
     elif svl_plot["type"] == "pie":
-        svl_data = {
-            "labels": [],
-            "values": []
-        }
+        svl_data = {"labels": [], "values": []}
         for row in data_list:
             svl_data["labels"].append(row["label"])
             svl_data["values"].append(row["value"])

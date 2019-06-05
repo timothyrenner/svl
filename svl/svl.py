@@ -8,7 +8,6 @@ from svl.errors import SVL_SYNTAX_ERRORS, SvlSyntaxError
 
 
 class SVLTransformer(lark.Transformer):
-
     def visualization(self, items):
         return merge(*items)
 
@@ -16,33 +15,19 @@ class SVLTransformer(lark.Transformer):
         return {"datasets": merge(*items)}
 
     def file_dataset(self, items):
-        return {
-            items[0]: {
-                "file": items[1][1:-1]
-            }
-        }
+        return {items[0]: {"file": items[1][1:-1]}}
 
     def sql_dataset(self, items):
-        return {
-            items[0]: {
-                "sql": items[1][1:-1]
-            }
-        }
+        return {items[0]: {"sql": items[1][1:-1]}}
 
     def charts(self, items):
-        return {
-            "vcat": items
-        }
+        return {"vcat": items}
 
     def vcat(self, items):
-        return {
-            "vcat": items
-        }
+        return {"vcat": items}
 
     def hcat(self, items):
-        return {
-            "hcat": items
-        }
+        return {"hcat": items}
 
     def chart(self, items):
         return merge(*items)
@@ -127,7 +112,7 @@ debug_parser = lark.Lark(
 parser = lark.Lark(
     pkg_resources.resource_string("resources", "svl.lark").decode("utf-8"),
     parser="lalr",
-    transformer=SVLTransformer()
+    transformer=SVLTransformer(),
 )
 
 
@@ -139,13 +124,12 @@ def parse_svl(svl_string, debug=False, **kwargs):
         try:
             parsed_svl = parser.parse(svl_string)
         except (UnexpectedInput, UnexpectedCharacters) as u:
-            exception_class = u.match_examples(
-                parser.parse,
-                SVL_SYNTAX_ERRORS
-            )
+            exception_class = u.match_examples(parser.parse, SVL_SYNTAX_ERRORS)
             if not exception_class:
-                raise SvlSyntaxError("{} line:{} column:{}".format(
-                    u.get_context(svl_string), u.line, u.column)
+                raise SvlSyntaxError(
+                    "{} line:{} column:{}".format(
+                        u.get_context(svl_string), u.line, u.column
+                    )
                 )
             else:
                 raise exception_class(
@@ -156,7 +140,7 @@ def parse_svl(svl_string, debug=False, **kwargs):
             # Either DATASETS is there or is empty.
             get("datasets", parsed_svl, {}),
             # Convert each kwarg into a file dataset spec.
-            {k: {"file": v} for k, v in kwargs.items()}
+            {k: {"file": v} for k, v in kwargs.items()},
         )
 
         return parsed_svl
