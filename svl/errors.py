@@ -1,55 +1,60 @@
 class SvlSyntaxError(SyntaxError):
     """ Base class for SVL syntax errors.
     """
+
     def __str__(self):
         context, line, column = self.args
         return "{} at line {}, column {} \n\n {}".format(
-            self.label,
-            line,
-            column,
-            context
+            self.label, line, column, context
         )
 
 
 class SvlMissingValue(SvlSyntaxError):
     """ Missing values (i.e. missing field or dataset declarations).
     """
+
     label = "Missing value."
 
 
 class SvlMissingParen(SvlSyntaxError):
     """ Missing or mismatched parens.
     """
+
     label = "Missing paren."
 
 
 class SvlTypeError(SvlSyntaxError):
     """ Incorrect type for declarations with numeric stuff.
     """
+
     label = "Incorrect type."
 
 
 class SvlInvalidTimeUnit(SvlSyntaxError):
     """ Invalid or unsupported temporal unit declarations.
     """
+
     label = "Time unit invalid or unsupported."
 
 
 class SvlUnsupportedDeclaration(SvlSyntaxError):
     """ Declaration unsupported for the chart type (i.e. BINS on a line chart).
     """
+
     label = "Invalid declaration for this chart type."
 
 
 class SvlInvalidAggregation(SvlSyntaxError):
     """ Aggregation function is not supported.
     """
+
     label = "Aggregation invalid or not supported."
 
 
 class SvlInvalidSort(SvlSyntaxError):
     """ Invalid specifier for sorting.
     """
+
     label = "Sort can only be ASC or DESC."
 
 
@@ -84,7 +89,7 @@ SVL_SYNTAX_ERRORS = {
         # Missing FILTER value.
         """PIE bigfoot AXIS has_location FILTER """,
         # Missing SORT value.
-        """BAR bigfoot X classification Y classification COUNT SORT"""
+        """BAR bigfoot X classification Y classification COUNT SORT""",
     ],
     SvlMissingParen: [
         # Missing open paren on CONCAT.
@@ -139,5 +144,5 @@ SVL_SYNTAX_ERRORS = {
         # Dimension of a pie chart.
         """PIE bigfoot X latitude"""
         # ! COLOR BY on a histogram or pie chart.
-    ]
+    ],
 }

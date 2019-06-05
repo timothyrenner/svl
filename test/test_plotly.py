@@ -12,7 +12,7 @@ from svl.plotly.plotly import (
     plotly_line,
     plotly_scatter,
     plotly_template,
-    plotly_template_vars
+    plotly_template_vars,
 )
 
 
@@ -24,9 +24,9 @@ def appended_data():
         "x": [
             "2018-08-01T00:00:00Z",
             "2018-08-08T00:00:00Z",
-            "2018-08-15T00:00:00Z"
+            "2018-08-15T00:00:00Z",
         ],
-        "y": [98, 102, 94]
+        "y": [98, 102, 94],
     }
 
 
@@ -34,42 +34,28 @@ def appended_data():
 def univariate_appended_data_x():
     """ A fixture for univariate data.
     """
-    return {
-        "x": [98, 102, 94]
-    }
+    return {"x": [98, 102, 94]}
 
 
 @pytest.fixture
 def univariate_appended_data_y():
     """ A fixture for univariate data on the y axis.
     """
-    return {
-        "y": [98, 102, 94]
-    }
+    return {"y": [98, 102, 94]}
 
 
 @pytest.fixture
 def univariate_categorical_data():
     """ A fixture for univariate categorical data.
     """
-    return {
-        "labels": ["Class A", "Class B", "Class C"],
-        "values": [10, 5, 1]
-    }
+    return {"labels": ["Class A", "Class B", "Class C"], "values": [10, 5, 1]}
 
 
 @pytest.fixture
 def split_by_univariate_data():
     """ A fixture for univariate data that's split by.
     """
-    return {
-        "A": {
-            "y": [98, 99, 94]
-        },
-        "B": {
-            "y": [93, 92, 89]
-        }
-    }
+    return {"A": {"y": [98, 99, 94]}, "B": {"y": [93, 92, 89]}}
 
 
 @pytest.fixture
@@ -81,18 +67,18 @@ def split_by_appended_data():
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-08-01T00:00:00Z",
-                "2018-09-01T00:00:00Z"
+                "2018-09-01T00:00:00Z",
             ],
-            "y": [98, 99, 94]
+            "y": [98, 99, 94],
         },
         "B": {
             "x": [
                 "2018-09-01T00:00:00Z",
                 "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
+                "2018-10-01T00:00:00Z",
             ],
-            "y": [93, 92, 89]
-        }
+            "y": [93, 92, 89],
+        },
     }
 
 
@@ -104,9 +90,9 @@ def agged_data():
         "x": [
             "2018-08-01T00:00:00Z",
             "2018-09-01T00:00:00Z",
-            "2018-10-01T00:00:00Z"
+            "2018-10-01T00:00:00Z",
         ],
-        "y": [98, 94, 89]
+        "y": [98, 94, 89],
     }
 
 
@@ -120,18 +106,18 @@ def split_by_agged_data():
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
+                "2018-10-01T00:00:00Z",
             ],
-            "y": [98, 94, 89]
+            "y": [98, 94, 89],
         },
         "B": {
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
+                "2018-10-01T00:00:00Z",
             ],
-            "y": [99, 92, 87]
-        }
+            "y": [99, 92, 87],
+        },
     }
 
 
@@ -144,10 +130,10 @@ def color_by_agged_data():
         "x": [
             "2017-01-01T00:00:00Z",
             "2018-01-01T00:00:00Z",
-            "2019-01-01T00:00:00Z"
+            "2019-01-01T00:00:00Z",
         ],
         "y": [99, 98, 99],
-        "color_by": [0.3, 0.2, 0.1]
+        "color_by": [0.3, 0.2, 0.1],
     }
 
 
@@ -156,24 +142,20 @@ def test_extract_all_traces_no_split_by(agged_data):
         when the plot has no split by specifier.
     """
     svl_plot = {
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
     }
 
-    truth = [{
-        "x": [
-            "2018-08-01T00:00:00Z",
-            "2018-09-01T00:00:00Z",
-            "2018-10-01T00:00:00Z"
-        ],
-        "y": [98, 94, 89]
-    }]
+    truth = [
+        {
+            "x": [
+                "2018-08-01T00:00:00Z",
+                "2018-09-01T00:00:00Z",
+                "2018-10-01T00:00:00Z",
+            ],
+            "y": [98, 94, 89],
+        }
+    ]
 
     answer = _extract_all_traces(svl_plot, agged_data)
 
@@ -185,17 +167,9 @@ def test_extract_all_traces_split_by(split_by_agged_data):
         when the plot has a split by specifier.
     """
     svl_plot = {
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "split_by": {"field": "classification"},
     }
 
     truth = [
@@ -203,17 +177,18 @@ def test_extract_all_traces_split_by(split_by_agged_data):
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
+                "2018-10-01T00:00:00Z",
             ],
-            "y": [98, 94, 89]
-        }, {
+            "y": [98, 94, 89],
+        },
+        {
             "x": [
                 "2018-08-01T00:00:00Z",
                 "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
+                "2018-10-01T00:00:00Z",
             ],
-            "y": [99, 92, 87]
-        }
+            "y": [99, 92, 87],
+        },
     ]
 
     answer = _extract_all_traces(svl_plot, split_by_agged_data)
@@ -226,28 +201,21 @@ def test_extract_all_traces_color_by(color_by_agged_data):
         when there's a color_by axis in the svl specifier.
     """
     svl_plot = {
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "color_by": {"field": "humidity", "agg": "MAX"},
     }
 
-    truth = [{
-        "x": [
-            "2017-01-01T00:00:00Z",
-            "2018-01-01T00:00:00Z",
-            "2019-01-01T00:00:00Z"
-        ],
-        "y": [99, 98, 99]
-    }]
+    truth = [
+        {
+            "x": [
+                "2017-01-01T00:00:00Z",
+                "2018-01-01T00:00:00Z",
+                "2019-01-01T00:00:00Z",
+            ],
+            "y": [99, 98, 99],
+        }
+    ]
 
     answer = _extract_all_traces(svl_plot, color_by_agged_data)
 
@@ -260,14 +228,10 @@ def test_get_title_explicit():
     """
     svl_plot = {
         "dataset": "bigfoot",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature_mid"
-        },
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature_mid"},
         "title": "Temperature by Latitude",
-        "type": "scatter"
+        "type": "scatter",
     }
 
     truth = "Temperature by Latitude"
@@ -282,10 +246,8 @@ def test_get_title_histogram():
     """
     svl_plot = {
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "type": "histogram"
+        "x": {"field": "temperature_mid"},
+        "type": "histogram",
     }
 
     truth = "bigfoot: temperature_mid"
@@ -300,10 +262,8 @@ def test_get_title_pie():
     """
     svl_plot = {
         "data": "bigfoot",
-        "axis": {
-            "field": "classification"
-        },
-        "type": "pie"
+        "axis": {"field": "classification"},
+        "type": "pie",
     }
 
     truth = "bigfoot: classification"
@@ -319,13 +279,8 @@ def test_get_title_xy():
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "classification"
-        },
-        "y": {
-            "field": "*",
-            "agg": "COUNT"
-        }
+        "x": {"field": "classification"},
+        "y": {"field": "*", "agg": "COUNT"},
     }
 
     truth = "bigfoot: classification - *"
@@ -340,17 +295,9 @@ def test_get_axis_label():
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR",
-            "label": "Date"
-        },
-        "y": {
-            "field": "*",
-            "agg": "COUNT",
-            "label": "Number of Sightings"
-        },
-        "title": "Bigfoot Sightings by Year"
+        "x": {"field": "date", "temporal": "YEAR", "label": "Date"},
+        "y": {"field": "*", "agg": "COUNT", "label": "Number of Sightings"},
+        "title": "Bigfoot Sightings by Year",
     }
 
     truth = "Date"
@@ -366,9 +313,7 @@ def test_get_bins_x():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_mid"
-        }
+        "x": {"field": "temperature_mid"},
     }
 
     truth = {"autobinx": True}
@@ -384,9 +329,7 @@ def test_get_bins_y():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "y": {
-            "field": "temperature_mid"
-        }
+        "y": {"field": "temperature_mid"},
     }
 
     truth = {"autobiny": True}
@@ -402,10 +345,8 @@ def test_get_bins_step_x():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_low"
-        },
-        "step": 5
+        "x": {"field": "temperature_low"},
+        "step": 5,
     }
 
     truth = {"xbins": {"size": 5}}
@@ -421,10 +362,8 @@ def test_get_bins_step_y():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "y": {
-            "field": "temperature_low"
-        },
-        "step": 5
+        "y": {"field": "temperature_low"},
+        "step": 5,
     }
 
     truth = {"ybins": {"size": 5}}
@@ -440,10 +379,8 @@ def test_get_bins_bins_x():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "bins": 50
+        "x": {"field": "temperature_mid"},
+        "bins": 50,
     }
 
     truth = {"nbinsx": 50}
@@ -459,10 +396,8 @@ def test_get_bins_bins_y():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "temperature_mid"
-        },
-        "bins": 50
+        "x": {"field": "temperature_mid"},
+        "bins": 50,
     }
 
     truth = {"nbinsx": 50}
@@ -478,10 +413,7 @@ def test_get_axis_label_histogram_with_label():
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "x": {
-            "field": "wind_speed",
-            "label": "Wind Speed (MPH)"
-        },
+        "x": {"field": "wind_speed", "label": "Wind Speed (MPH)"},
     }
 
     truth = "Wind Speed (MPH)"
@@ -497,9 +429,7 @@ def test_get_axis_label_histogram():
     svl_plot = {
         "data": "bigfoot",
         "type": "histogram",
-        "x": {
-            "field": "wind_speed"
-        }
+        "x": {"field": "wind_speed"},
     }
 
     truth = "wind_speed"
@@ -515,14 +445,8 @@ def test_get_axis_label_xy_agg():
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "*",
-            "agg": "COUNT"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "*", "agg": "COUNT"},
     }
 
     truth = "* (COUNT)"
@@ -538,12 +462,8 @@ def test_get_axis_label_xy_noagg():
     svl_plot = {
         "type": "scatter",
         "data": "bigfoot",
-        "x": {
-            "field": "latitude"
-        },
-        "y": {
-            "field": "temperature_mid"
-        }
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature_mid"},
     }
 
     truth = "temperature_mid"
@@ -560,13 +480,8 @@ def test_get_colorspec_no_color_by(agged_data):
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        }
+        "x": {"field": "date"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
     }
 
     truth = {}
@@ -583,29 +498,21 @@ def test_get_colorspec(color_by_agged_data):
     svl_plot = {
         "dataset": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date",
-            "temporal": "DAY"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        },
+        "x": {"field": "date", "temporal": "DAY"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
         "color_by": {
             "field": "humidity",
             "agg": "MAX",
             "label": "Humidity",
-            "color_scale": "Jet"
-        }
+            "color_scale": "Jet",
+        },
     }
 
     truth = {
         "marker": {
             "color": [0.3, 0.2, 0.1],
-            "colorbar": {
-                "title": "Humidity"
-            },
-            "colorscale": "Jet"
+            "colorbar": {"title": "Humidity"},
+            "colorscale": "Jet",
         }
     }
 
@@ -622,27 +529,16 @@ def test_get_colorspec_no_label_no_scale(color_by_agged_data):
     svl_plot = {
         "dataset": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date",
-            "temporal": "DAY"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "DAY"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
+        "color_by": {"field": "humidity", "agg": "MAX"},
     }
 
     truth = {
         "marker": {
             "color": [0.3, 0.2, 0.1],
-            "colorbar": {
-                "title": "humidity (MAX)"
-            },
-            "colorscale": None
+            "colorbar": {"title": "humidity (MAX)"},
+            "colorscale": None,
         }
     }
 
@@ -658,24 +554,16 @@ def test_plotly_histogram_x(univariate_appended_data_x):
 
     svl_plot = {
         "type": "histogram",
-        "x": {
-            "field": "temperature"
-        },
-        "data": "bigfoot"
+        "x": {"field": "temperature"},
+        "data": "bigfoot",
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: temperature",
-            "xaxis": {
-                "title": "temperature"
-            }
+            "xaxis": {"title": "temperature"},
         },
-        "data": [{
-            "type": "histogram",
-            "x": [98, 102, 94],
-            "autobinx": True
-        }]
+        "data": [{"type": "histogram", "x": [98, 102, 94], "autobinx": True}],
     }
 
     answer = plotly_histogram(svl_plot, univariate_appended_data_x)
@@ -690,24 +578,16 @@ def test_plotly_histogram_y(univariate_appended_data_y):
 
     svl_plot = {
         "type": "histogram",
-        "y": {
-            "field": "temperature"
-        },
-        "data": "bigfoot"
+        "y": {"field": "temperature"},
+        "data": "bigfoot",
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: temperature",
-            "yaxis": {
-                "title": "temperature"
-            }
+            "yaxis": {"title": "temperature"},
         },
-        "data": [{
-            "type": "histogram",
-            "y": [98, 102, 94],
-            "autobiny": True
-        }]
+        "data": [{"type": "histogram", "y": [98, 102, 94], "autobiny": True}],
     }
 
     answer = plotly_histogram(svl_plot, univariate_appended_data_y)
@@ -719,21 +599,15 @@ def test_plotly_histogram_split_by(split_by_univariate_data):
     svl_plot = {
         "type": "histogram",
         "data": "bigfoot",
-        "y": {
-            "field": "temperature_mid"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "y": {"field": "temperature_mid"},
+        "split_by": {"field": "classification"},
     }
 
     truth = {
         "layout": {
             "barmode": "overlay",
             "title": "bigfoot: temperature_mid",
-            "yaxis": {
-                "title": "temperature_mid"
-            }
+            "yaxis": {"title": "temperature_mid"},
         },
         "data": [
             {
@@ -741,15 +615,16 @@ def test_plotly_histogram_split_by(split_by_univariate_data):
                 "name": "A",
                 "y": [98, 99, 94],
                 "autobiny": True,
-                "opacity": 0.6
-            }, {
+                "opacity": 0.6,
+            },
+            {
                 "type": "histogram",
                 "name": "B",
                 "y": [93, 92, 89],
                 "autobiny": True,
-                "opacity": 0.6
-            }
-        ]
+                "opacity": 0.6,
+            },
+        ],
     }
 
     answer = plotly_histogram(svl_plot, split_by_univariate_data)
@@ -763,22 +638,20 @@ def test_plotly_pie(univariate_categorical_data):
 
     svl_plot = {
         "type": "pie",
-        "axis": {
-            "field": "classification"
-        },
-        "data": "bigfoot"
+        "axis": {"field": "classification"},
+        "data": "bigfoot",
     }
 
     truth = {
-        "layout": {
-            "title": "bigfoot: classification"
-        },
-        "data": [{
-            "type": "pie",
-            "labels": ["Class A", "Class B", "Class C"],
-            "values": [10, 5, 1],
-            "hole": 0
-        }]
+        "layout": {"title": "bigfoot: classification"},
+        "data": [
+            {
+                "type": "pie",
+                "labels": ["Class A", "Class B", "Class C"],
+                "values": [10, 5, 1],
+                "hole": 0,
+            }
+        ],
     }
 
     answer = plotly_pie(svl_plot, univariate_categorical_data)
@@ -791,24 +664,22 @@ def test_plotly_pie_hole(univariate_categorical_data):
     """
     svl_plot = {
         "type": "pie",
-        "axis": {
-            "field": "classification"
-        },
+        "axis": {"field": "classification"},
         "data": "bigfoot",
         "hole": 0.4,
-        "title": "Bigfoot Sightings by Classification"
+        "title": "Bigfoot Sightings by Classification",
     }
 
     truth = {
-        "layout": {
-            "title": "Bigfoot Sightings by Classification"
-        },
-        "data": [{
-            "type": "pie",
-            "labels": ["Class A", "Class B", "Class C"],
-            "values": [10, 5, 1],
-            "hole": 0.4
-        }]
+        "layout": {"title": "Bigfoot Sightings by Classification"},
+        "data": [
+            {
+                "type": "pie",
+                "labels": ["Class A", "Class B", "Class C"],
+                "values": [10, 5, 1],
+                "hole": 0.4,
+            }
+        ],
     }
 
     answer = plotly_pie(svl_plot, univariate_categorical_data)
@@ -822,35 +693,27 @@ def test_plotly_bar(agged_data):
     svl_plot = {
         "data": "bigfoot",
         "type": "bar",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "agg": "MAX",
-            "field": "temperature"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"agg": "MAX", "field": "temperature"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature (MAX)"},
         },
-        "data": [{
-            "type": "bar",
-            "x": [
-                "2018-08-01T00:00:00Z",
-                "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
-            ],
-            "y": [98, 94, 89]
-        }]
+        "data": [
+            {
+                "type": "bar",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z",
+                ],
+                "y": [98, 94, 89],
+            }
+        ],
     }
 
     answer = plotly_bar(svl_plot, agged_data)
@@ -865,29 +728,17 @@ def test_plotly_bar_split_by(split_by_agged_data):
     svl_plot = {
         "type": "bar",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "split_by": {"field": "classification"},
     }
 
     truth = {
         "layout": {
             "barmode": "group",
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature (MAX)"},
         },
         "data": [
             {
@@ -896,20 +747,21 @@ def test_plotly_bar_split_by(split_by_agged_data):
                 "x": [
                     "2018-08-01T00:00:00Z",
                     "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
+                    "2018-10-01T00:00:00Z",
                 ],
-                "y": [98, 94, 89]
-            }, {
+                "y": [98, 94, 89],
+            },
+            {
                 "type": "bar",
                 "name": "B",
                 "x": [
                     "2018-08-01T00:00:00Z",
                     "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
+                    "2018-10-01T00:00:00Z",
                 ],
-                "y": [99, 92, 87]
-            }
-        ]
+                "y": [99, 92, 87],
+            },
+        ],
     }
 
     answer = plotly_bar(svl_plot, split_by_agged_data)
@@ -924,29 +776,16 @@ def test_plotly_bar_color_by(color_by_agged_data):
     svl_plot = {
         "type": "bar",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
+        "color_by": {"field": "humidity", "agg": "MAX"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature_mid",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature_mid (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature_mid (MAX)"},
         },
         "data": [
             {
@@ -954,18 +793,16 @@ def test_plotly_bar_color_by(color_by_agged_data):
                 "x": [
                     "2017-01-01T00:00:00Z",
                     "2018-01-01T00:00:00Z",
-                    "2019-01-01T00:00:00Z"
+                    "2019-01-01T00:00:00Z",
                 ],
                 "y": [99, 98, 99],
                 "marker": {
                     "color": [0.3, 0.2, 0.1],
-                    "colorbar": {
-                        "title": "humidity (MAX)"
-                    },
-                    "colorscale": None
-                }
+                    "colorbar": {"title": "humidity (MAX)"},
+                    "colorscale": None,
+                },
             }
-        ]
+        ],
     }
 
     answer = plotly_bar(svl_plot, color_by_agged_data)
@@ -980,36 +817,28 @@ def test_plotly_line(agged_data):
     svl_plot = {
         "data": "bigfoot",
         "type": "line",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature (MAX)"},
         },
-        "data": [{
-            "mode": "lines+markers",
-            "type": "scatter",
-            "x": [
-                "2018-08-01T00:00:00Z",
-                "2018-09-01T00:00:00Z",
-                "2018-10-01T00:00:00Z"
-            ],
-            "y": [98, 94, 89]
-        }]
+        "data": [
+            {
+                "mode": "lines+markers",
+                "type": "scatter",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-09-01T00:00:00Z",
+                    "2018-10-01T00:00:00Z",
+                ],
+                "y": [98, 94, 89],
+            }
+        ],
     }
 
     answer = plotly_line(svl_plot, agged_data)
@@ -1024,28 +853,16 @@ def test_plotly_line_split_by(split_by_agged_data):
     svl_plot = {
         "type": "line",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature",
-            "agg": "MAX"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "split_by": {"field": "classification"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature (MAX)"},
         },
         "data": [
             {
@@ -1055,21 +872,22 @@ def test_plotly_line_split_by(split_by_agged_data):
                 "x": [
                     "2018-08-01T00:00:00Z",
                     "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
+                    "2018-10-01T00:00:00Z",
                 ],
-                "y": [98, 94, 89]
-            }, {
+                "y": [98, 94, 89],
+            },
+            {
                 "type": "scatter",
                 "mode": "lines+markers",
                 "name": "B",
                 "x": [
                     "2018-08-01T00:00:00Z",
                     "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
+                    "2018-10-01T00:00:00Z",
                 ],
-                "y": [99, 92, 87]
-            }
-        ]
+                "y": [99, 92, 87],
+            },
+        ],
     }
 
     answer = plotly_line(svl_plot, split_by_agged_data)
@@ -1084,29 +902,16 @@ def test_plotly_line_color_by(color_by_agged_data):
     svl_plot = {
         "type": "line",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
+        "color_by": {"field": "humidity", "agg": "MAX"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature_mid",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature_mid (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature_mid (MAX)"},
         },
         "data": [
             {
@@ -1115,18 +920,16 @@ def test_plotly_line_color_by(color_by_agged_data):
                 "x": [
                     "2017-01-01T00:00:00Z",
                     "2018-01-01T00:00:00Z",
-                    "2019-01-01T00:00:00Z"
+                    "2019-01-01T00:00:00Z",
                 ],
                 "y": [99, 98, 99],
                 "marker": {
                     "color": [0.3, 0.2, 0.1],
-                    "colorbar": {
-                        "title": "humidity (MAX)"
-                    },
-                    "colorscale": None
-                }
+                    "colorbar": {"title": "humidity (MAX)"},
+                    "colorscale": None,
+                },
             }
-        ]
+        ],
     }
 
     answer = plotly_line(svl_plot, color_by_agged_data)
@@ -1140,35 +943,28 @@ def test_plotly_scatter(appended_data):
     svl_plot = {
         "type": "scatter",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "DAY"
-        },
-        "y": {
-            "field": "temperature"
-        }
+        "x": {"field": "date", "temporal": "DAY"},
+        "y": {"field": "temperature"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature"},
         },
-        "data": [{
-            "mode": "markers",
-            "type": "scatter",
-            "x": [
-                "2018-08-01T00:00:00Z",
-                "2018-08-08T00:00:00Z",
-                "2018-08-15T00:00:00Z"
-            ],
-            "y": [98, 102, 94]
-        }]
+        "data": [
+            {
+                "mode": "markers",
+                "type": "scatter",
+                "x": [
+                    "2018-08-01T00:00:00Z",
+                    "2018-08-08T00:00:00Z",
+                    "2018-08-15T00:00:00Z",
+                ],
+                "y": [98, 102, 94],
+            }
+        ],
     }
 
     answer = plotly_scatter(svl_plot, appended_data)
@@ -1183,16 +979,9 @@ def test_plotly_scatter_split_by(split_by_appended_data):
     svl_plot = {
         "type": "scatter",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "MONTH"
-        },
-        "y": {
-            "field": "temperature"
-        },
-        "split_by": {
-            "field": "classification"
-        }
+        "x": {"field": "date", "temporal": "MONTH"},
+        "y": {"field": "temperature"},
+        "split_by": {"field": "classification"},
     }
 
     truth = {
@@ -1201,33 +990,30 @@ def test_plotly_scatter_split_by(split_by_appended_data):
                 "x": [
                     "2018-08-01T00:00:00Z",
                     "2018-08-01T00:00:00Z",
-                    "2018-09-01T00:00:00Z"
+                    "2018-09-01T00:00:00Z",
                 ],
                 "y": [98, 99, 94],
                 "name": "A",
                 "type": "scatter",
-                "mode": "markers"
-            }, {
+                "mode": "markers",
+            },
+            {
                 "x": [
                     "2018-09-01T00:00:00Z",
                     "2018-09-01T00:00:00Z",
-                    "2018-10-01T00:00:00Z"
+                    "2018-10-01T00:00:00Z",
                 ],
                 "y": [93, 92, 89],
                 "name": "B",
                 "type": "scatter",
-                "mode": "markers"
-            }
+                "mode": "markers",
+            },
         ],
         "layout": {
             "title": "bigfoot: date - temperature",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature"
-            }
-        }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature"},
+        },
     }
 
     answer = plotly_scatter(svl_plot, split_by_appended_data)
@@ -1242,29 +1028,16 @@ def test_plotly_scatter_color_by(color_by_agged_data):
     svl_plot = {
         "type": "scatter",
         "data": "bigfoot",
-        "x": {
-            "field": "date",
-            "temporal": "YEAR"
-        },
-        "y": {
-            "field": "temperature_mid",
-            "agg": "MAX"
-        },
-        "color_by": {
-            "field": "humidity",
-            "agg": "MAX"
-        }
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "temperature_mid", "agg": "MAX"},
+        "color_by": {"field": "humidity", "agg": "MAX"},
     }
 
     truth = {
         "layout": {
             "title": "bigfoot: date - temperature_mid",
-            "xaxis": {
-                "title": "date"
-            },
-            "yaxis": {
-                "title": "temperature_mid (MAX)"
-            }
+            "xaxis": {"title": "date"},
+            "yaxis": {"title": "temperature_mid (MAX)"},
         },
         "data": [
             {
@@ -1273,18 +1046,16 @@ def test_plotly_scatter_color_by(color_by_agged_data):
                 "x": [
                     "2017-01-01T00:00:00Z",
                     "2018-01-01T00:00:00Z",
-                    "2019-01-01T00:00:00Z"
+                    "2019-01-01T00:00:00Z",
                 ],
                 "y": [99, 98, 99],
                 "marker": {
                     "color": [0.3, 0.2, 0.1],
-                    "colorbar": {
-                        "title": "humidity (MAX)"
-                    },
-                    "colorscale": None
-                }
+                    "colorbar": {"title": "humidity (MAX)"},
+                    "colorscale": None,
+                },
             }
-        ]
+        ],
     }
 
     answer = plotly_scatter(svl_plot, color_by_agged_data)
@@ -1302,37 +1073,33 @@ def test_plotly_template_vars(univariate_appended_data_x):
             "column_start": 0,
             "column_end": 2,
             "type": "histogram",
-            "x": {
-                "field": "temperature"
-            },
+            "x": {"field": "temperature"},
             "bins": 25,
-            "data": "bigfoot"
-        }, {
+            "data": "bigfoot",
+        },
+        {
             "row_start": 1,
             "row_end": 2,
             "column_start": 0,
             "column_end": 1,
             "type": "histogram",
-            "x": {
-                "field": "temperature"
-            },
+            "x": {"field": "temperature"},
             "bins": 15,
-            "data": "bigfoot"
-        }, {
+            "data": "bigfoot",
+        },
+        {
             "row_start": 1,
             "row_end": 2,
             "column_start": 1,
             "column_end": 2,
             "type": "histogram",
-            "x": {
-                "field": "temperature"
-            },
+            "x": {"field": "temperature"},
             "bins": 10,
-            "data": "bigfoot"
-        }
+            "data": "bigfoot",
+        },
     ]
 
-    datas = [univariate_appended_data_x]*3
+    datas = [univariate_appended_data_x] * 3
 
     truth = {
         "num_rows": 2,
@@ -1346,17 +1113,14 @@ def test_plotly_template_vars(univariate_appended_data_x):
                 "plotly": {
                     "layout": {
                         "title": "bigfoot: temperature",
-                        "xaxis": {
-                            "title": "temperature"
-                        }
+                        "xaxis": {"title": "temperature"},
                     },
-                    "data": [{
-                        "type": "histogram",
-                        "x": [98, 102, 94],
-                        "nbinsx": 25
-                    }]
-                }
-            }, {
+                    "data": [
+                        {"type": "histogram", "x": [98, 102, 94], "nbinsx": 25}
+                    ],
+                },
+            },
+            {
                 "row_start": 2,
                 "row_end": 3,
                 "column_start": 1,
@@ -1364,17 +1128,14 @@ def test_plotly_template_vars(univariate_appended_data_x):
                 "plotly": {
                     "layout": {
                         "title": "bigfoot: temperature",
-                        "xaxis": {
-                            "title": "temperature"
-                        }
+                        "xaxis": {"title": "temperature"},
                     },
-                    "data": [{
-                        "type": "histogram",
-                        "x": [98, 102, 94],
-                        "nbinsx": 15
-                    }],
-                }
-            }, {
+                    "data": [
+                        {"type": "histogram", "x": [98, 102, 94], "nbinsx": 15}
+                    ],
+                },
+            },
+            {
                 "row_start": 2,
                 "row_end": 3,
                 "column_start": 2,
@@ -1382,18 +1143,14 @@ def test_plotly_template_vars(univariate_appended_data_x):
                 "plotly": {
                     "layout": {
                         "title": "bigfoot: temperature",
-                        "xaxis": {
-                            "title": "temperature"
-                        }
+                        "xaxis": {"title": "temperature"},
                     },
-                    "data": [{
-                        "type": "histogram",
-                        "x": [98, 102, 94],
-                        "nbinsx": 10
-                    }]
-                }
-            }
-        ]
+                    "data": [
+                        {"type": "histogram", "x": [98, 102, 94], "nbinsx": 10}
+                    ],
+                },
+            },
+        ],
     }
 
     answer = plotly_template_vars(svl_plots, datas)

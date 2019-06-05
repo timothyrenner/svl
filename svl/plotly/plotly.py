@@ -46,22 +46,18 @@ def _get_title(svl_plot):
     if "title" in svl_plot:
         return svl_plot["title"]
     elif svl_plot["type"] == "pie":
-        return "{}: {}".format(
-            svl_plot["data"],
-            _get_field(svl_plot["axis"])
-        )
+        return "{}: {}".format(svl_plot["data"], _get_field(svl_plot["axis"]))
     elif svl_plot["type"] == "histogram":
         svl_axis = "x" if "x" in svl_plot else "y"
         return "{}: {}".format(
-            svl_plot["data"],
-            _get_field(svl_plot[svl_axis])
+            svl_plot["data"], _get_field(svl_plot[svl_axis])
         )
     else:
         # xy plot
         return "{}: {} - {}".format(
             svl_plot["data"],
             _get_field(svl_plot["x"]),
-            _get_field(svl_plot["y"])
+            _get_field(svl_plot["y"]),
         )
 
 
@@ -88,8 +84,7 @@ def _get_axis_label(svl_plot, axis):
     elif "agg" in svl_plot[axis]:
         # If there's an aggregation, include it.
         return "{} ({})".format(
-            _get_field(svl_plot[axis]),
-            svl_plot[axis]["agg"]
+            _get_field(svl_plot[axis]), svl_plot[axis]["agg"]
         )
     else:
         # Otherwise just grab the field name.
@@ -151,10 +146,8 @@ def _get_colorspec(svl_plot, data):
                     "title": _get_axis_label(svl_plot, axis="color_by")
                 },
                 "colorscale": get_in(
-                    ["color_by", "color_scale"],
-                    svl_plot,
-                    None
-                )
+                    ["color_by", "color_scale"], svl_plot, None
+                ),
             }
         }
 
@@ -183,9 +176,7 @@ def plotly_histogram(svl_plot, data):
     layout_axis = svl_axis + "axis"
     layout = {
         "title": _get_title(svl_plot),
-        layout_axis: {
-            "title": _get_axis_label(svl_plot, axis=svl_axis)
-        }
+        layout_axis: {"title": _get_axis_label(svl_plot, axis=svl_axis)},
     }
     raw_traces = _extract_all_traces(svl_plot, data)
 
@@ -196,7 +187,7 @@ def plotly_histogram(svl_plot, data):
                 plot_type,
                 {"name": split_by, "opacity": 0.6},
                 trace,
-                _get_bins(svl_plot)
+                _get_bins(svl_plot),
             )
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
@@ -206,10 +197,7 @@ def plotly_histogram(svl_plot, data):
             for trace in raw_traces
         ]
 
-    return {
-        "layout": layout,
-        "data": traces
-    }
+    return {"layout": layout, "data": traces}
 
 
 def plotly_pie(svl_plot, data):
@@ -228,21 +216,16 @@ def plotly_pie(svl_plot, data):
         dict
             The dictionary defining the plotly plot.
     """
-    layout = {
-        "title": _get_title(svl_plot)
-    }
+    layout = {"title": _get_title(svl_plot)}
 
     trace = {
         "type": "pie",
         "labels": data["labels"],
         "values": data["values"],
-        "hole": get("hole", svl_plot, 0)
+        "hole": get("hole", svl_plot, 0),
     }
 
-    return {
-        "layout": layout,
-        "data": [trace]
-    }
+    return {"layout": layout, "data": [trace]}
 
 
 def plotly_bar(svl_plot, data):
@@ -265,12 +248,8 @@ def plotly_bar(svl_plot, data):
     color = _get_colorspec(svl_plot, data)
     layout = {
         "title": _get_title(svl_plot),
-        "xaxis": {
-            "title": _get_axis_label(svl_plot, axis="x")
-        },
-        "yaxis": {
-            "title": _get_axis_label(svl_plot, axis="y")
-        }
+        "xaxis": {"title": _get_axis_label(svl_plot, axis="x")},
+        "yaxis": {"title": _get_axis_label(svl_plot, axis="y")},
     }
     raw_traces = _extract_all_traces(svl_plot, data)
 
@@ -282,15 +261,9 @@ def plotly_bar(svl_plot, data):
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
-        traces = [
-            merge(plot_type, color, trace)
-            for trace in raw_traces
-        ]
+        traces = [merge(plot_type, color, trace) for trace in raw_traces]
 
-    return {
-        "layout": layout,
-        "data": traces
-    }
+    return {"layout": layout, "data": traces}
 
 
 def plotly_line(svl_plot, data):
@@ -315,12 +288,8 @@ def plotly_line(svl_plot, data):
 
     layout = {
         "title": _get_title(svl_plot),
-        "xaxis": {
-            "title": _get_axis_label(svl_plot, axis="x")
-        },
-        "yaxis": {
-            "title": _get_axis_label(svl_plot, axis="y")
-        }
+        "xaxis": {"title": _get_axis_label(svl_plot, axis="x")},
+        "yaxis": {"title": _get_axis_label(svl_plot, axis="y")},
     }
     raw_traces = _extract_all_traces(svl_plot, data)
 
@@ -332,15 +301,9 @@ def plotly_line(svl_plot, data):
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
-        traces = [
-            merge(plot_type, color, trace)
-            for trace in raw_traces
-        ]
+        traces = [merge(plot_type, color, trace) for trace in raw_traces]
 
-    return {
-        "layout": layout,
-        "data": traces
-    }
+    return {"layout": layout, "data": traces}
 
 
 def plotly_scatter(svl_plot, data):
@@ -363,12 +326,8 @@ def plotly_scatter(svl_plot, data):
     color = _get_colorspec(svl_plot, data)
     layout = {
         "title": _get_title(svl_plot),
-        "xaxis": {
-            "title": _get_axis_label(svl_plot, axis="x")
-        },
-        "yaxis": {
-            "title": _get_axis_label(svl_plot, axis="y")
-        }
+        "xaxis": {"title": _get_axis_label(svl_plot, axis="x")},
+        "yaxis": {"title": _get_axis_label(svl_plot, axis="y")},
     }
     raw_traces = _extract_all_traces(svl_plot, data)
 
@@ -379,15 +338,9 @@ def plotly_scatter(svl_plot, data):
             for split_by, trace in zip(sorted(data.keys()), raw_traces)
         ]
     else:
-        traces = [
-            merge(plot_type, color, trace)
-            for trace in raw_traces
-        ]
+        traces = [merge(plot_type, color, trace) for trace in raw_traces]
 
-    return {
-        "layout": layout,
-        "data": traces
-    }
+    return {"layout": layout, "data": traces}
 
 
 PLOTLY_PLOTS = {
@@ -395,7 +348,7 @@ PLOTLY_PLOTS = {
     "bar": plotly_bar,
     "line": plotly_line,
     "scatter": plotly_scatter,
-    "pie": plotly_pie
+    "pie": plotly_pie,
 }
 
 
@@ -431,15 +384,12 @@ def plotly_template_vars(svl_plots, datas):
             "row_end": plot["row_end"] + 1,
             "column_start": plot["column_start"] + 1,
             "column_end": plot["column_end"] + 1,
-            "plotly": PLOTLY_PLOTS[plot["type"]](plot, data)
-        } for plot, data in zip(svl_plots, datas)
+            "plotly": PLOTLY_PLOTS[plot["type"]](plot, data),
+        }
+        for plot, data in zip(svl_plots, datas)
     ]
 
-    return {
-        "num_rows": num_rows,
-        "num_columns": num_columns,
-        "plots": plots
-    }
+    return {"num_rows": num_rows, "num_columns": num_columns, "plots": plots}
 
 
 def plotly_template():
@@ -452,7 +402,7 @@ def plotly_template():
     """
     env = Environment(
         loader=PackageLoader("svl.plotly", "templates"),
-        autoescape=select_autoescape(["html"])
+        autoescape=select_autoescape(["html"]),
     )
 
     return env.get_template("index.jinja")

@@ -7,7 +7,7 @@ START_POSITION = {
     "row_start": 0,
     "row_end": 1,
     "column_start": 0,
-    "column_end": 1
+    "column_end": 1,
 }
 
 
@@ -28,11 +28,7 @@ def lcm(a, b):
 
 
 def shift_node_position(
-    node,
-    row_shift,
-    column_shift,
-    row_stretch,
-    column_stretch
+    node, row_shift, column_shift, row_stretch, column_stretch
 ):
     """ Shifts the position of a node in the plot layout tree, also adjusting
         the length units of the start / end values for the rows and columns.
@@ -72,8 +68,8 @@ def shift_node_position(
             ),
             "column_end": int(
                 column_stretch * node["column_end"] + column_shift
-            )
-        }
+            ),
+        },
     )
 
 
@@ -132,9 +128,11 @@ def tree_to_grid(tree):
                     # The stretch factor of the subtree depends on the breadth
                     # and the length unit of the total tree.
                     int(row_length_unit / row_breadths[ii]),
-                    int(column_length_unit / column_breadths[ii])
-                ) for node in subtree
-            ] for ii, subtree in enumerate(subtrees)
+                    int(column_length_unit / column_breadths[ii]),
+                )
+                for node in subtree
+            ]
+            for ii, subtree in enumerate(subtrees)
         ]
 
         # Concatenate all of the shifted subtrees into a single list.

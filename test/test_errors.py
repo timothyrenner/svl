@@ -5,7 +5,7 @@ from svl.errors import (
     SvlMissingValue,
     SvlMissingParen,
     SvlTypeError,
-    SvlUnsupportedDeclaration
+    SvlUnsupportedDeclaration,
 )
 from svl.svl import parse_svl
 
