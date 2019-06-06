@@ -46,6 +46,10 @@ def _parquet_to_sqlite_pandas(parquet_filename, table_name, conn):
 def _get_field(svl_axis):
     if "transform" in svl_axis:
         return svl_axis["transform"]
+    elif "temporal" in svl_axis:
+        return TEMPORAL_CONVERTERS[svl_axis["temporal"]].format(
+            svl_axis["field"]
+        )
     elif "field" in svl_axis:
         return svl_axis["field"]
     else:
@@ -212,16 +216,7 @@ def svl_to_sql_xy(svl_plot):
 
         field = _get_field(svl_plot[axis])
 
-        if "temporal" in svl_plot[axis]:
-            select_fields.append(
-                "{} AS {}".format(
-                    TEMPORAL_CONVERTERS[svl_plot[axis]["temporal"]].format(
-                        field
-                    ),
-                    axis,
-                )
-            )
-        elif "agg" in svl_plot[axis]:
+        if "agg" in svl_plot[axis]:
             # NOTE: Split by axis will not take aggregations.
             select_fields.append(
                 "{}({}) AS {}".format(svl_plot[axis]["agg"], field, axis)
@@ -239,22 +234,14 @@ def svl_to_sql_xy(svl_plot):
     elif "agg" in svl_plot["y"]:
         group_axis = "x"
 
-    if group_axis and ("temporal" in svl_plot[group_axis]):
-        # The temporal transformation needs to be applied again in the
-        # GROUP BY clause if it's in the main SELECT.
-        group_fields.append(
-            TEMPORAL_CONVERTERS[svl_plot[group_axis]["temporal"]].format(
-                _get_field(svl_plot[group_axis])
-            )
-        )
-    elif group_axis:
+    if group_axis:
         group_fields.append(_get_field(svl_plot[group_axis]))
 
     split_by_field = "" if "split_by" not in svl_plot else "split_by"
     # Only add the split by to the group by if there's already a group axis.
     # Empty strings are falsey ... I mean Falsey.
     if group_axis and split_by_field:
-        group_fields.append(svl_plot["split_by"]["field"])
+        group_fields.append(_get_field(svl_plot["split_by"]))
 
     # NOTE: the color_by field cannot appear in a GROUP BY. If there's an
     # aggregation on x or y, then there must be an aggregation on color_by.

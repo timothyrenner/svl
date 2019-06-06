@@ -121,6 +121,17 @@ def test_get_field_none():
     assert truth == answer
 
 
+def test_get_field_temporal():
+    """ Tests that the _get_field function returns the correct value for an
+        axis with a temporal modifier.
+    """
+    svl_axis = {"field": "date", "temporal": "YEAR"}
+    truth = "STRFTIME('%Y', date)"
+    answer = _get_field(svl_axis)
+
+    assert truth == answer
+
+
 def test_file_to_sqlite_csv(test_csv_file):
     """ Tests that the file_to_sqlite function loads the database with the
         correct values when the file is a CSV file.
@@ -257,6 +268,50 @@ def test_svl_to_sql_hist_split_by():
 
     answer_query = svl_to_sql_hist(svl_plot)
 
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_hist_split_by_temporal():
+    """ Tests that the svl_to_sql_hist function returns the correct value when
+        there's a split-by axis with a temporal modifier.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "x": {"field": "temperature_mid"},
+        "split_by": {"field": "date", "temporal": "YEAR"},
+        "bins": 5,
+    }
+
+    truth_query = (
+        "SELECT temperature_mid AS x, STRFTIME('%Y', date) AS split_by "
+        "FROM bigfoot"
+    )
+
+    answer_query = svl_to_sql_hist(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_hist_split_by_transform():
+    """ Tests that the svl_to_sql_hist function returns the correct value when
+        there's a split-by axis with a transform modifier.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "histogram",
+        "x": {"field": "wind_speed"},
+        "split_by": {
+            "transform": "CASE WHEN 'temperature' > 90 THEN 'hot' ELSE "
+            "'not_hot' END"
+        },
+    }
+    truth_query = (
+        "SELECT wind_speed AS x, "
+        "CASE WHEN 'temperature' > 90 THEN 'hot' ELSE 'not_hot' END "
+        "AS split_by FROM bigfoot"
+    )
+    answer_query = svl_to_sql_hist(svl_plot)
     assert truth_query == answer_query
 
 
@@ -469,6 +524,50 @@ def test_svl_to_sql_xy_split_by_agg():
         "GROUP BY STRFTIME('%Y', date), classification"
     )
 
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_split_by_temporal():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there's a split by field with a temporal modifier.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {"field": "latitude"},
+        "y": {"field": "temperature", "agg": "MAX"},
+        "split_by": {"field": "date", "temporal": "YEAR"},
+    }
+    truth_query = (
+        "SELECT latitude AS x, MAX(temperature) AS y, "
+        "STRFTIME('%Y', date) AS split_by FROM bigfoot "
+        "GROUP BY latitude, STRFTIME('%Y', date)"
+    )
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
+def test_svl_to_sql_xy_split_by_transform():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there's a split by field with a transform modifier.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {"field": "date", "temporal": "YEAR"},
+        "y": {"field": "latitude", "agg": "MAX"},
+        "split_by": {
+            "transform": "CASE WHEN temperature > 90 THEN 'hot' "
+            "ELSE 'not_hot' END"
+        },
+    }
+    truth_query = (
+        "SELECT STRFTIME('%Y', date) AS x, MAX(latitude) AS y, "
+        "CASE WHEN temperature > 90 THEN 'hot' ELSE 'not_hot' END AS split_by "
+        "FROM bigfoot GROUP BY STRFTIME('%Y', date), "
+        "CASE WHEN temperature > 90 THEN 'hot' ELSE 'not_hot' END"
+    )
     answer_query = svl_to_sql_xy(svl_plot)
 
     assert truth_query == answer_query
