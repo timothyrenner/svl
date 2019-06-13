@@ -222,8 +222,7 @@ Just like with `FILTER`, everything in quotes after `TRANSFORM` literally gets p
 SVL has _no idea_ what's in those quotes, so keeping it simple is probably a good idea.
 
 Also, `TRANSFORM` replaces a field specifier in an axis declaration.
-It can apply to `X`, `Y`, `AXIS` and `COLOR BY`.
-Currently it does _not_ work on `SPLIT BY` due to a technical oversight on the part of the language author (🙋‍♂ hey that's me - see details [here](https://github.com/timothyrenner/svl/issues/33)), but hopefully I can get that fixed pretty soon.
+It can apply to `X`, `Y`, `AXIS`, `COLOR BY`, and `SPLIT BY`.
 
 ### Custom Datasets
 

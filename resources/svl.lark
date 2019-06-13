@@ -19,7 +19,7 @@ hcat: "CONCAT"i "(" chart+ ")"
 chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
 
 // The XX_property directives include the dimensions, so at least that one
-// is required. That will have to be enforced in the compiler though.
+// is required. This is enforced by the compiler.
 xy_chart: markxy data xy_property+
 
 histogram_chart: "HISTOGRAM"i data histogram_property+
@@ -54,8 +54,7 @@ hole: "HOLE"i NUMBER
 
 // This allows for both x and y to have aggregations, which results in
 // order ambiguity (i.e. which aggregation gets applied first?).
-// TODO: Find a way to enforce only one aggregation transformation
-// between x and y.
+// This is resolved in the compiler.
 x: "X"i axis_spec axis_modifier*
 
 y: "Y"i axis_spec axis_modifier*
@@ -72,9 +71,9 @@ axis: "AXIS"i axis_spec axis_modifier*
 
 label: "LABEL"i ESCAPED_STRING
 
-// For split by temporal is supported irrespective of x and y.
-// DANGER - SPLIT BY DOES NOT CURRENTLY SUPPORT TEMPORALS BUT IT SHOULD.
-split_by: "SPLIT"i "BY"i field
+split_by: "SPLIT"i "BY"i axis_spec split_by_modifier*
+
+?split_by_modifier: temporal | label
 
 field: CNAME
 

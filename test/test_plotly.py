@@ -1,6 +1,7 @@
 import pytest
 
 from svl.plotly.plotly import (
+    _get_field_name,
     _extract_all_traces,
     _get_bins,
     _get_title,
@@ -135,6 +136,36 @@ def color_by_agged_data():
         "y": [99, 98, 99],
         "color_by": [0.3, 0.2, 0.1],
     }
+
+
+def test_get_field_name_transform():
+    """ Tests that the _get_field_name function returns the correct value
+        when the svl axis has a transform.
+    """
+    svl_axis = {"transform": "x+1"}
+    truth = "x+1"
+    answer = _get_field_name(svl_axis)
+    assert truth == answer
+
+
+def test_get_field_name_field():
+    """ Tests that the _get_field_name function returns the correct value
+        when the svl axis has a field.
+    """
+    svl_axis = {"field": "date"}
+    truth = "date"
+    answer = _get_field_name(svl_axis)
+    assert truth == answer
+
+
+def test_get_field_name_none():
+    """ Tests that the _get_field_name function returns the correct value when
+        there is no field in the SVL axis.
+    """
+    svl_axis = {"agg": "MAX"}
+    truth = "*"
+    answer = _get_field_name(svl_axis)
+    assert truth == answer
 
 
 def test_extract_all_traces_no_split_by(agged_data):

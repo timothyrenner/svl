@@ -66,7 +66,7 @@ Either of the plots inside the `hcat` could itself be an `hcat` or `vcat` ... an
 ## Flattening the Plot Tree
 
 Trees are nice inside a programming environment, but I need these plots to get rendered onto a web page, which means I need to project the tree onto a grid.
-I implemented plot layouts with [CSS grids]() because they're pretty straightforward once you get your head around it.
+I implemented plot layouts with [CSS grids](https://css-tricks.com/snippets/css/complete-guide-grid/) because they're pretty straightforward once you get your head around it.
 Basically, CSS grids need a layout declaration, and each element in the grid needs a position.
 
 So I need to go from tree of plots to a list of plots that have grid positions.
@@ -140,12 +140,12 @@ It's the only time I've ever used TDD (it worked very well for this).
 ## Loading the SQLite DB
 
 This piece is pretty straightforward.
-Because I'm ~~lazy~~ efficient, I decided to use [pandas]() to read the files and load the SQLite database.
+Because I'm ~~lazy~~ efficient, I decided to use [pandas](https://pandas.pydata.org/) to read the files and load the SQLite database.
 Files are loaded first, then the SQL datasets are constructed in the order they appear in the script.
 
 ## Retrieving the Plot Data
 
-This functionality is the proud home of probably the [worst](https://github.com/timothyrenner/svl/blob/master/svl/sqlite.py#L351) code of the whole compiler (I'm going to refactor it soon because it makes my eyes bleed), but the functionality _in principle_ is simple.
+This functionality is the proud home of probably the [worst](https://github.com/timothyrenner/svl/blob/master/svl/sqlite.py#L340) code of the whole compiler (I'm going to refactor it soon because it makes my eyes bleed), but the functionality _in principle_ is simple.
 It translates the SVL plot specifier (after flattening) into a SQL query, then marshals those results into something that can be injected into a Plotly data structure.
 
 For example, consider the following plot.

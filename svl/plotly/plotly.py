@@ -1,9 +1,29 @@
 from toolz import merge, compose, pluck, get, dissoc, get_in
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from svl.sqlite import _get_field
 
 listpluck = compose(list, pluck)
+
+
+def _get_field_name(svl_axis):
+    """ Extracts the name of the field for the SVL plot.
+
+    Parameters
+    ----------
+    svl_axis : dict
+        The SVL axis specifier.
+
+    Returns
+    -------
+    str
+        The name of the field in the axis, or the transform statement.
+    """
+    if "transform" in svl_axis:
+        return svl_axis["transform"]
+    elif "field" in svl_axis:
+        return svl_axis["field"]
+    else:
+        return "*"
 
 
 def _extract_all_traces(svl_plot, data):
@@ -46,18 +66,20 @@ def _get_title(svl_plot):
     if "title" in svl_plot:
         return svl_plot["title"]
     elif svl_plot["type"] == "pie":
-        return "{}: {}".format(svl_plot["data"], _get_field(svl_plot["axis"]))
+        return "{}: {}".format(
+            svl_plot["data"], _get_field_name(svl_plot["axis"])
+        )
     elif svl_plot["type"] == "histogram":
         svl_axis = "x" if "x" in svl_plot else "y"
         return "{}: {}".format(
-            svl_plot["data"], _get_field(svl_plot[svl_axis])
+            svl_plot["data"], _get_field_name(svl_plot[svl_axis])
         )
     else:
         # xy plot
         return "{}: {} - {}".format(
             svl_plot["data"],
-            _get_field(svl_plot["x"]),
-            _get_field(svl_plot["y"]),
+            _get_field_name(svl_plot["x"]),
+            _get_field_name(svl_plot["y"]),
         )
 
 
@@ -84,11 +106,11 @@ def _get_axis_label(svl_plot, axis):
     elif "agg" in svl_plot[axis]:
         # If there's an aggregation, include it.
         return "{} ({})".format(
-            _get_field(svl_plot[axis]), svl_plot[axis]["agg"]
+            _get_field_name(svl_plot[axis]), svl_plot[axis]["agg"]
         )
     else:
         # Otherwise just grab the field name.
-        return _get_field(svl_plot[axis])
+        return _get_field_name(svl_plot[axis])
 
 
 def _get_bins(svl_plot):

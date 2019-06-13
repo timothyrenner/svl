@@ -144,8 +144,9 @@ This plot counts the number of sightings by year.
 
 This plot also introduces a **temporal transformation**.
 Basically, SVL truncates each date at the year and then counts each year's worth of sightings.
-Currently only `YYYY-mm-ddTH:M:S` format is supported but it should be straightforward to support custom formats in the future.
+Currently only `YYYY-mm-ddTH:MM:S` format is supported but it should be straightforward to support custom formats in the future.
 The following temporal transformations are available: `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`.
+Temporal transformations can be applied to `X`, `Y`, `COLOR BY` and `SPLIT BY` axes (more on those last two shortly).
 
 ### PIE
 
@@ -232,10 +233,11 @@ It looks like this:
 
 `TITLE` can appear anywhere after the plot declaration (i.e. `HISTOGRAM bigfoot`).
 `LABEL` can appear anywhere after the axis declaration (i.e. `X moon_phase`).
+`LABEL` is valid SVL syntax for `SPLIT BY` but doesn't do anything for Plotly, because they don't currently have a straightforward way to add legend titles to plots.
 
 ✅ **VALID AXIS LABEL**: `X moon_phase LABEL "Moon Phase"`
 
-❌ **INVALID AXIS LABEL**: `X LABEL "Moon Phase" moon_phase``
+❌ **INVALID AXIS LABEL**: `X LABEL "Moon Phase" moon_phase`
 
 For completeness here's a fully beautified example of our earlier results.
 

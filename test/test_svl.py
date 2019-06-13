@@ -523,3 +523,94 @@ def test_color_by():
     answer = parse_svl(svl_string)
 
     assert truth == answer
+
+
+def test_split_by_transform():
+    """ Tests that the SPLIT BY directive with a TRANSFORM returns the
+        correct value.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "bigfoot_sightings.csv"
+    LINE bigfoot
+        X date BY YEAR
+        Y report_id COUNT
+        SPLIT BY TRANSFORM
+            "CASE WHEN temperature > 85 THEN 'hot' ELSE 'not_hot' END"
+    """
+    truth = {
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "line",
+                "x": {"field": "date", "temporal": "YEAR"},
+                "y": {"field": "report_id", "agg": "COUNT"},
+                "split_by": {
+                    "transform": "CASE WHEN temperature > 85 THEN 'hot' "
+                    "ELSE 'not_hot' END"
+                },
+            }
+        ],
+    }
+    answer = parse_svl(svl_string)
+
+    assert truth == answer
+
+
+def test_split_by_temporal():
+    """ Tests that the SPLIT BY directive with a TEMPORAL modifier returns
+        the correct value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot_sightings.csv"
+    BAR bigfoot
+        X classification
+        Y report_number COUNT
+        SPLIT BY date BY YEAR
+    """
+    truth = {
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "bar",
+                "x": {"field": "classification"},
+                "y": {"field": "report_number", "agg": "COUNT"},
+                "split_by": {"field": "date", "temporal": "YEAR"},
+            }
+        ],
+    }
+
+    answer = parse_svl(svl_string)
+    assert truth == answer
+
+
+def test_split_by_label():
+    """ Tests that the SPLIT BY directive with a LABEL modifier returns
+        the correct value.
+    """
+    svl_string = """
+    DATASETS bigfoot "bigfoot_sightings.csv"
+    HISTOGRAM bigfoot
+        X temperature
+        SPLIT BY classification LABEL "Classification"
+    """
+
+    truth = {
+        "datasets": {"bigfoot": {"file": "bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "histogram",
+                "x": {"field": "temperature"},
+                "split_by": {
+                    "field": "classification",
+                    "label": "Classification",
+                },
+            }
+        ],
+    }
+
+    answer = parse_svl(svl_string)
+    assert truth == answer

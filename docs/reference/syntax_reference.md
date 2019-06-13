@@ -161,10 +161,12 @@ Temporal is one of `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`.
 ## `SPLIT BY`
 
 ```
-SPLIT BY field_identifier
+SPLIT BY {field_identifier | TRANSFORM quoted_string} [BY temporal | LABEL quoted_string], ...
 ```
 
-Currently `SPLIT BY` does not take modifiers, but there are plans for that (see [this issue](https://github.com/timothyrenner/svl/issues/33)).
+The quoted string following `TRANSFORM` must be a valid SQL SELECT expression.
+Temporal is one of `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`.
+For the Plotly backend (currently the only one available), `LABEL` is a no-op, since adding legend titles to charts is fairly challenging for Plotly plots.
 
 ## `COLOR BY`
 
