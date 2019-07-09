@@ -1,4 +1,4 @@
-from svl.compiler.svl import parse_svl
+from svl.compiler.ast import parse_svl
 
 
 def test_line_chart():

@@ -7,7 +7,7 @@ from svl.compiler.errors import (
     SvlTypeError,
     SvlUnsupportedDeclaration,
 )
-from svl.compiler.svl import parse_svl
+from svl.compiler.ast import parse_svl
 
 
 def test_missing_dataset_definition():
