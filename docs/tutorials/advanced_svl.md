@@ -326,7 +326,6 @@ SCATTER bigfoot
 This script is just over 50 lines of very spread out code.
 The visualization looks like this.
 
-![](../images/advanced_tutorial_filter_line.png)
 ![](../images/advanced_tutorial_final_data_1.png)
 ![](../images/advanced_tutorial_final_data_2.png)
 ![](../images/advanced_tutorial_final_data_3.png)

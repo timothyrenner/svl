@@ -28,7 +28,10 @@ def _extract_cli_datasets(datasets):
 )
 @click.option("--dataset", "-d", multiple=True)
 @click.option("--no-browser", is_flag=True)
-def cli(svl_source, debug, backend, output_file, dataset, no_browser):
+@click.option("--offline-js", is_flag=True)
+def cli(
+    svl_source, debug, backend, output_file, dataset, no_browser, offline_js
+):
 
     svl_string = svl_source.read()
     if debug:
@@ -101,6 +104,10 @@ def cli(svl_source, debug, backend, output_file, dataset, no_browser):
     if backend == "plotly":
         template_vars = plotly_template_vars(svl_plots, svl_plot_data)
         template = plotly_template()
+
+        # If offline is selected, use the offline plotly in the template.
+        if offline_js:
+            template_vars["plotly_offline"] = True
 
     else:
         print("Unable to use backend {} yet.".format(backend))
