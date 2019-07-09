@@ -3,7 +3,14 @@
     <head>
         <meta charset="UTF-8"/>
         <title>SVL Plots</title>
+        {% if plotly_offline %}
+        <script>
+            {{ plotly_js }}
+        </script>
+        {% else %}
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        {% endif %}
+        
         <style>
             .container {
                 display: grid;

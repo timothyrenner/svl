@@ -122,6 +122,25 @@ def test_histogram_cli_plotly(svl_script_template, output_path):
     )
 
 
+def test_histogram_cli_plotly_offline_js(svl_script_template, output_path):
+    """ Tests that the command line interface works correctly on the test
+        dataset for histogram plots with the --offline-js flag selected.
+    """
+    subprocess.run(
+        [
+            "svl",
+            svl_script_template("histogram.svl"),
+            "--output-file",
+            output_path,
+            "--backend",
+            "plotly",
+            "--no-browser",
+            "--offline-js",
+        ],
+        check=True,
+    )
+
+
 def test_histogram_cli_no_datasets(output_path):
     """ Tests that the command line interface works correctly on the test
         dataset for histogram plots when the test dataset is passed in via

@@ -1,3 +1,5 @@
+import importlib_resources
+
 from toolz import merge, compose, pluck, get, dissoc, get_in
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -411,7 +413,20 @@ def plotly_template_vars(svl_plots, datas):
         for plot, data in zip(svl_plots, datas)
     ]
 
-    return {"num_rows": num_rows, "num_columns": num_columns, "plots": plots}
+    # Right now we're just going to slurp that file every time. If that turns
+    # out to be a perf issue or something we can always add a flag to the
+    # function to skip.
+    with importlib_resources.path(
+        "svl.plotly.js", "plotly-latest.min.js"
+    ) as plotly_js_path:
+        plotly_js = open(plotly_js_path, "r").read()
+
+    return {
+        "num_rows": num_rows,
+        "num_columns": num_columns,
+        "plots": plots,
+        "plotly_js": plotly_js,
+    }
 
 
 def plotly_template():

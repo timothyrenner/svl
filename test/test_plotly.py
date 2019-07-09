@@ -1,5 +1,6 @@
 import pytest
 
+from toolz import dissoc
 from svl.plotly.plotly import (
     _get_field_name,
     _extract_all_traces,
@@ -1186,7 +1187,8 @@ def test_plotly_template_vars(univariate_appended_data_x):
 
     answer = plotly_template_vars(svl_plots, datas)
 
-    assert truth == answer
+    assert "plotly_js" in answer
+    assert truth == dissoc(answer, "plotly_js")
 
 
 def test_plotly_template():
