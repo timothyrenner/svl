@@ -5,7 +5,7 @@ import sqlite3
 
 from pandas.testing import assert_frame_equal
 
-from svl.sqlite import (
+from svl.data_sources.sqlite import (
     _csv_to_sqlite_pandas,
     _parquet_to_sqlite_pandas,
     _get_field,

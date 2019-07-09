@@ -9,7 +9,7 @@ from toolz import valfilter
 from svl.compiler.svl import parse_svl
 from svl.compiler.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
-from svl.sqlite import create_datasets, get_svl_data
+from svl.data_sources.sqlite import create_datasets, get_svl_data
 from svl.compiler.plot_validators import validate_plot
 
 
