@@ -419,7 +419,8 @@ def plotly_template_vars(svl_plots, datas):
     with importlib_resources.path(
         "svl.plotly.js", "plotly-latest.min.js"
     ) as plotly_js_path:
-        plotly_js = open(plotly_js_path, "r").read()
+        # For some reason we need a string in Python 3.5.
+        plotly_js = open(str(plotly_js_path), "r").read()
 
     return {
         "num_rows": num_rows,
