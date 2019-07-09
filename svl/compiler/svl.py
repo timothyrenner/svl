@@ -4,7 +4,7 @@ import pkg_resources
 from toolz import merge, get
 from lark import UnexpectedInput, UnexpectedCharacters
 
-from svl.errors import SVL_SYNTAX_ERRORS, SvlSyntaxError
+from svl.compiler.errors import SVL_SYNTAX_ERRORS, SvlSyntaxError
 
 
 class SVLTransformer(lark.Transformer):

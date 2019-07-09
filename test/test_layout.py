@@ -1,4 +1,4 @@
-from svl.layout import shift_node_position, tree_to_grid, gcd, lcm
+from svl.compiler.layout import shift_node_position, tree_to_grid, gcd, lcm
 
 
 def test_gcd():

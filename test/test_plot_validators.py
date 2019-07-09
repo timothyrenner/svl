@@ -1,4 +1,4 @@
-from svl.plot_validators import validate_plot
+from svl.compiler.plot_validators import validate_plot
 
 
 def test_validate_plot_pass():

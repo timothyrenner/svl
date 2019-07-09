@@ -1,5 +1,4 @@
 import click
-import svl
 import webbrowser
 import os
 import sys
@@ -7,10 +6,11 @@ import sqlite3
 
 from toolz import valfilter
 
-from svl.layout import tree_to_grid
+from svl.compiler.svl import parse_svl
+from svl.compiler.layout import tree_to_grid
 from svl.plotly import plotly_template, plotly_template_vars
 from svl.sqlite import create_datasets, get_svl_data
-from svl.plot_validators import validate_plot
+from svl.compiler.plot_validators import validate_plot
 
 
 def _extract_cli_datasets(datasets):
@@ -35,7 +35,7 @@ def cli(
 
     svl_string = svl_source.read()
     if debug:
-        print(svl.parse_svl(svl_string, debug=True).pretty())
+        print(parse_svl(svl_string, debug=True).pretty())
         return
 
     # Validate that the dataset args are in the correct form.
@@ -48,7 +48,7 @@ def cli(
     cli_datasets = _extract_cli_datasets(dataset)
 
     try:
-        svl_spec = svl.parse_svl(svl_string, **cli_datasets)
+        svl_spec = parse_svl(svl_string, **cli_datasets)
     except SyntaxError as e:
         print("Syntax error:")
         print("{}".format(e))
