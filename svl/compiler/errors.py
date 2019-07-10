@@ -146,3 +146,39 @@ SVL_SYNTAX_ERRORS = {
         # ! COLOR BY on a histogram or pie chart.
     ],
 }
+
+
+class SvlMissingFileError(Exception):
+    """ A file specified as a dataset in the SVL program does not exist.
+    """
+
+    pass
+
+
+class SvlMissingDatasetError(Exception):
+    """ A dataset specified in an SVL plot is not in the dataset specifiers for
+        the program.
+    """
+
+    pass
+
+
+class SvlDataLoadError(Exception):
+    """ An error occurred loading the dataset.
+    """
+
+    pass
+
+
+class SvlPlotError(Exception):
+    """ A plot is incorrectly specified.
+    """
+
+    pass
+
+
+class SvlDataProcessingError(Exception):
+    """ An error occurred processing the dataset.
+    """
+
+    pass
