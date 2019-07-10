@@ -3,6 +3,7 @@ import sqlite3
 
 from svl.compiler.ast import parse_svl
 from svl.compiler.errors import (
+    SvlSyntaxError,
     SvlMissingFileError,
     SvlMissingDatasetError,
     SvlDataLoadError,
@@ -51,6 +52,8 @@ def svl(
 
     Raises
     ------
+    ValueError
+        If there is a malformed additional dataset specifier.
     SvlSyntaxError
         If there is a syntax error in the SVL source.
     SvlMissingFileError
@@ -70,9 +73,18 @@ def svl(
     if debug:
         return parse_svl(svl_source, debug=True).pretty()
 
+    for dataset in datasets:
+        if len(dataset.split("=")) != 2:
+            raise ValueError(
+                "dataset {} needs to be name=path".format(dataset)
+            )
+
     additional_datasets = _extract_additional_datasets(datasets)
 
-    svl_ast = parse_svl(svl_source, **additional_datasets)
+    try:
+        svl_ast = parse_svl(svl_source, **additional_datasets)
+    except SyntaxError as e:
+        raise SvlSyntaxError(str(e))
 
     # Validate that all of the files exist that need to exist.
     for _, dataset in svl_ast["datasets"].items():
