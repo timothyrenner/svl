@@ -187,7 +187,7 @@ def test_cli_dataset_arg_error():
     )
 
     assert completed.returncode == 1
-    assert "--dataset arg" in completed.stdout.decode("ascii")
+    assert "Dataset specification error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_syntax_error():
@@ -205,7 +205,7 @@ def test_cli_syntax_error():
     )
 
     assert completed.returncode == 1
-    assert "Syntax error" in completed.stdout.decode("ascii")
+    assert "Syntax error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_unsupported_backend(svl_script_template):
@@ -225,9 +225,7 @@ def test_cli_unsupported_backend(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "Unable to use backend vega yet." in completed.stdout.decode(
-        "ascii"
-    )
+    assert "Not implemented error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_invalid_plot(svl_script_template):
@@ -243,9 +241,7 @@ def test_cli_invalid_plot(svl_script_template):
     print(str(completed.stdout))
 
     assert completed.returncode == 1
-    assert "\n".join(
-        ["Plot error:", "XY plot does not have X and Y."]
-    ) in completed.stdout.decode("ascii")
+    assert "Plot error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_dataset_missing_file():
@@ -270,7 +266,7 @@ def test_cli_dataset_missing_file():
     )
 
     assert completed.returncode == 1
-    assert "Dataset error:" in completed.stdout.decode("ascii")
+    assert "Missing file error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_dataset_no_files():
@@ -288,9 +284,7 @@ def test_cli_dataset_no_files():
     )
 
     assert completed.returncode == 1
-    assert "Datasets needs at least one file." in completed.stdout.decode(
-        "ascii"
-    )
+    assert "Missing dataset error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_invalid_plot_dataset(svl_script_template):
@@ -308,7 +302,7 @@ def test_cli_invalid_plot_dataset(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "is not in provided datasets" in completed.stdout.decode("ascii")
+    assert "Missing dataset error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_missing_field(svl_script_template):
@@ -322,7 +316,7 @@ def test_cli_missing_field(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "Error processing plot data" in completed.stdout.decode("ascii")
+    assert "Data processing error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_invalid_dataset_sql(svl_script_template):
@@ -340,7 +334,7 @@ def test_cli_invalid_dataset_sql(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "Error loading data" in completed.stdout.decode("ascii")
+    assert "Data load error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_invalid_plot_filter_sql(svl_script_template):
@@ -359,7 +353,7 @@ def test_cli_invalid_plot_filter_sql(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "Error processing plot data" in completed.stdout.decode("ascii")
+    assert "Data processing error:" in completed.stdout.decode("ascii")
 
 
 def test_cli_invalid_plot_transform_sql(svl_script_template):
@@ -378,4 +372,4 @@ def test_cli_invalid_plot_transform_sql(svl_script_template):
     )
 
     assert completed.returncode == 1
-    assert "Error processing plot data" in completed.stdout.decode("ascii")
+    assert "Data processing error:" in completed.stdout.decode("ascii")
