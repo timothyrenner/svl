@@ -62,7 +62,9 @@ def test_svl_datasets(svl_source):
     svl(
         svl_source,
         datasets=[
-            f"bigfoot={CURRENT_DIR}/test_datasets/bigfoot_sightings.csv"
+            "bigfoot={}/test_datasets/bigfoot_sightings.csv".format(
+                CURRENT_DIR
+            )
         ],
     )
 
