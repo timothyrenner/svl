@@ -127,9 +127,7 @@ def parse_svl(svl_string, debug=False, **kwargs):
             exception_class = u.match_examples(parser.parse, SVL_SYNTAX_ERRORS)
             if not exception_class:
                 raise SvlSyntaxError(
-                    "{} line:{} column:{}".format(
-                        u.get_context(svl_string), u.line, u.column
-                    )
+                    u.get_context(svl_string), u.line, u.column
                 )
             else:
                 raise exception_class(

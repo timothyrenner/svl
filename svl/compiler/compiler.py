@@ -83,13 +83,15 @@ def svl(
 
     try:
         svl_ast = parse_svl(svl_source, **additional_datasets)
-    except SyntaxError as e:
-        raise SvlSyntaxError(str(e))
+    except SvlSyntaxError as e:
+        raise e
 
     # Validate that all of the files exist that need to exist.
     for _, dataset in svl_ast["datasets"].items():
         if ("file" in dataset) and (not os.path.exists(dataset["file"])):
-            raise SvlMissingFileError
+            raise SvlMissingFileError(
+                "File {} does not exist.".format(dataset["file"])
+            )
 
     # Flatten the AST plot representation into a list with grid coordinates.
     svl_plots = tree_to_grid(svl_ast)
