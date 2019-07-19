@@ -1,13 +1,13 @@
 import pytest
 
-from svl.errors import (
+from svl.compiler.errors import (
     SvlSyntaxError,
     SvlMissingValue,
     SvlMissingParen,
     SvlTypeError,
     SvlUnsupportedDeclaration,
 )
-from svl.svl import parse_svl
+from svl.compiler.ast import parse_svl
 
 
 def test_missing_dataset_definition():

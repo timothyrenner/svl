@@ -1,6 +1,6 @@
-from .svl import parse_svl
+from .compiler import svl
 
-__all__ = ["parse_svl"]
+__all__ = ["svl"]
 
 from ._version import get_versions
 
