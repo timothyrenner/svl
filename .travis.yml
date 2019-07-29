@@ -1,15 +1,33 @@
 language: python
 dist: xenial
 python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
+- '3.5'
+- '3.6'
+- '3.7'
 install:
-  - pip install -r test_requirements.txt
-  - pip install -e .[parquet]
+- pip install mkdocs mkdocs-material
+- pip install -r test_requirements.txt
+- pip install -e .[parquet]
 script:
-  - pytest test --cov=svl
-  - flake8 svl
-  - flake8 test
+- pytest test --cov=svl
+- flake8 svl
+- flake8 test
+- mkdocs build --verbose --clean --strict
+deploy:
+  - provider: pypi
+    user: timothyrenner
+    password:
+      secure: 2nbxyY/ivEk5D4GDU418PuD8uPZm/ZBAxti8oae/EZH/8T27k7VkZqJ64wB3+D5/ZBBa8pt+SM554YqH3l+N9R5eVkR56q0hi2gozEmuJXaHG04psyX3q398I7lCbxI7XGpAsjgWN1z/HdLrZL5nrZAs7g8LidBVn6dJDK9yKbGcxvkDsIX2Tj21sGgodMNHT1gf6azxnr7u+q+ZyX+6bkOZWHs+dZPBaGTKwoCxmKzKC5au62gYmT3czAQPHC+M/zKD/NXxeppwHfZOd+JSYyw+CuZh/SIuJFbG8RkHSq+jsrZa37YChEbL9zEdkfeapB5VcMOsQSBrYpZAwKz8cJaeTh33POmJ8GCrJB1+KFKYnAMKyWNRwv4BG3fdYiWndhaSEml3cFrvKl4X2bo8aQKd+rTbKYtOs9QCdK7nRfwaUajIns53OWILo+mR/HHV9NIg6idt56zsmSQ5KsxCdZs39bQ0nypPqBnPCFnFxiG3gdCbVARA2uE/JZlFGXLOZH9y7MG3egZZVO2Cyt5fGc3wU7r+5Nbd76mg9F89ElI39yORNEiJH53fCJpCUXjxZT+tnuPrRX9XhWj5zoY7U4T3kdDkhc16DliJGzR/5CGPiirBxKHq/dbQC7awU/52Uyc2ZP+zLg+OohPTIksE4MHBakghySTAs+VfSihsLPI=
+    on:
+      tags: true
+    skip_existing: true
+    skip_cleanup: true
+  - provider: pages
+    skip_cleanup: true
+    local_dir: site
+    on:
+      tags: true
+    github_token:
+      secure: 0TD8PM2XKo80D1MDI6QTS5dX4bcP7rOKuCfAXytukS1Odw+d7qq7TY+sCk6DvTM3d5FIZ6WbE3rCcQrWQ8dLafZABPe56gTCxhixENSrC0UXzVp89QaCTaMUt+DGAV4nflgHHrpaRTFX3gRpquNu5+p57aTHBAvCSUufuyZDvJSRcaLyj2MwOy9GJp/PMMAtqGux5SDjt4eNBhvieM+ndZFJ4nmSEqH6xRFYHWKDnmeQtOgvVJF51KpkW/K5Q6dfyHh94h/dKwVAP+pUMHjeHyq/7JIlqQ6BX/6tcUFfltYpKJIxYb3b5J/+2JlGl4rlLOJnXlDg8P4pux5Q8pVBIw4nXvdjJoplrUdjcCeWaoSqdgmd486wM48tbo8HbBQsuBEON9PaHdYf7meeoacsC/RWhCWxkQlOn+93Kekjj/Y1wjLHMk3Q31yv/Up1yKZSvIK44DnK1ysAXL9ob9xUd2CR4joWsw7YWzUPSsht7oWUTgKo5vd7H8NIueVSsX+KDyh5Hr2q7VT93rKHk0ZcY8DT3AZ6KyY8A0Qp1O66MmdwSsP50r39K3lfR964XcLwBEfAoHS5siHJNdVEPC+C5U6HaJIfNak+YMs8fypopOjGcU7bG3FdCW2991+Xf0r1GeQucb+V7dcppbWV1jVCIwUvyFQes7c1z4QO/Ma5lXQ=
 after_success:
-  - coveralls
+- coveralls
