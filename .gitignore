@@ -14,3 +14,5 @@ graffle/
 build/
 dist/
 site/
+debug_scripts
+debug_data
