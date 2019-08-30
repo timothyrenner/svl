@@ -1,7 +1,7 @@
 # Welcome to SVL
 
-SVL is a declarative, SQL-like language for data visualizations.
-It's designed to make it very easy to build simple or complex dashboard-like collections of plots for data in flat tabular files.
+SVL is a declarative, SQL-like language for dashboards and reports.
+It's designed to make it very easy to build simple or complex collections of plots for data in flat tabular files.
 Like SQL, there are no variables, loops, if/else statements or data structures.
 You declare your datasets, describe the charts you want built and how they're arranged, and SVL will produce an HTML file with your plots.
 
@@ -103,7 +103,7 @@ There are two things I notice while I'm working with these tools.
 
 There's another scenario I use plots for - operational metrics.
 When I execute a training / offline prediction run for a machine learning model, I want to visualize a whole bunch of stuff all at once to get a "feel" for what the model's doing with the features, as well as the kind of impacts we'll expect to put onto our downstream consumers.
-These are basically operational dashboards (like what you'd make with Splunk or Datadog), but for machine learning models.
+These are basically operational dashboards (like what you'd make with Splunk or Datadog), but for machine learning models in an offline environment.
 For these plots I don't want super customized stuff, I just want simple visualizations to give me a feel for what's going on in one place.
 Now I could just have a notebook that does this for me - in fact the [Lore](https://github.com/instacart/lore) framework from Instacart takes this approach, but there are a number of issues with using a notebook for operational stuff:
 
@@ -113,6 +113,7 @@ Now I could just have a notebook that does this for me - in fact the [Lore](http
 
 I do often write scripts for operational plots for these ML pipelines, but it's a lot of work.
 There's the verbosity of the plots themselves, plus I have to read the data myself, then I have to write the code for laying the plots out so they're visually coherent.
+Those scripts easily blow up to hundreds of lines of code.
 I found myself wishing there was some way for me to just write a plot like this:
 
 ```
@@ -137,18 +138,33 @@ CONCAT(
 
 and the scatter plot would be on top, and the histograms would be next to each other underneath it.
 
-After thinking about it a bit, I realized what I wanted was SQL for plots.
-SQL doesn't have variables, objects or control structures.
-There are some things that it's not well suited for, but for a huge amount of tabular data processing and manipulation it's easily the simplest tool for the job.
-SQL sits squarely between "spreadsheet" and "pandas/dplyr" on the simplicity<->flexibility spectrum for data processing.
+I wanted a tool with these characteristics:
 
-![](images/data_processing_complexity.png)
-<br><br><br>
+1. small and easy to remember
+2. combines plots easily
+3. allows data processing and transformations
 
-SVL sits between "GUI program" and "seaborn/ggplot" for data visualization.
+I created SVL (name and syntax inspired by SQL) with these three priorities in mind.
 
-![](images/visualization_tool_complexity.png)
-<br><br><br>
+For 1, I decided to create a declarative DSL rather than a library because a library must exist in the broader context of a fully fledged programming language.
+That means I have to represent plot inputs and outputs using abstractions provided by the language - variables / objects.
+This can get complicated, particularly the inputs.
+Sometimes that complication is justified, but for most of the plots I make it isn't.
+With a declarative DSL I don't have to worry about variables or objects, the compiler figures out what needs to be done - just like SQL.
+
+For 2, I created operators for vertical and horizontal concatenation.
+If you want vertical concatenation, just put two plot declarations next to each other.
+If you want horizontal concatenation, put them inside `CONCAT`.
+These operations compose, allowing for arbitrary nesting (under the hood plots are represented as a tree).
+Using these operators is much simpler than trying to put everything on a grid, especially when there are a lot of plots you want to make.
+It gets translated to a grid eventually (and yes it is complicated), but the compiler takes care of that.
+
+For 3, I decoupled the data source representations from the compiler.
+The advantage is that any transformations can be written in the language native to the data source.
+The compiler would then just pass those transformations directly to the data source before it builds the plots.
+Right now that's just SQL because the only backend I've written is SQLite, but in principle any data source is possible.
+All that's required is code to transform the data returned by the data source into the structures the plots need.
 
 My goal in creating SVL isn't to replace my usual set of plotting tools, it's to get me making _more plots, faster_.
+Most of what I use it for currently is basically reporting - answering the question "what's in the dataset?" concisely.
 Hopefully you will find SVL as useful as I do.
