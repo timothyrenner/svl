@@ -36,11 +36,14 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     install_requires=[
-        "click==6.7",
-        "toolz==0.9.0",
+        "click>=6.7,<7.0",
+        "toolz>=0.9.0,<1.0",
+        # Lark's made some backward incompatible changes, so pin this one
+        # and upgrade with caution.
         "lark-parser==0.6.6",
         "Jinja2>=2.10.1",
-        "pandas==0.23.4",
+        # TODO: Unpin pandas.
+        "pandas>=0.23.4",
         "importlib-resources>=1.0.2,<2",
     ],
     extras_require={"parquet": ["pyarrow==0.12.0"]},
