@@ -24,7 +24,7 @@ You're welcome.
 After SVL has been installed, download the sample dataset [from Github](https://github.com/timothyrenner/svl/blob/docs/sample_data/bigfoot_sightings.csv).
 
 ```
-wget https://github.com/timothyrenner/svl/raw/docs/sample_data/bigfoot_sightings.csv
+wget https://raw.githubusercontent.com/timothyrenner/svl/master/sample_data/bigfoot_sightings.csv
 ```
 
 In the same directory as the dataset, create a file named `quickstart.svl` and paste the following code in it.
