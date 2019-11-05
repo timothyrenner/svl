@@ -155,7 +155,7 @@ The quoted string following `FILTER` must be a valid SQL WHERE expression.
 ```
 
 The quoted string following `TRANSFORM` must be a valid SQL SELECT expression.
-`AGG` is one of `COUNT`, `MIN`, `MAX`, `AVG`.
+`AGG` is one of `COUNT`, `MIN`, `MAX`, `AVG`, `SUM`.
 Temporal is one of `YEAR`, `MONTH`, `DAY`, `HOUR`, `MINUTE`, `SECOND`.
 
 ## `SPLIT BY`

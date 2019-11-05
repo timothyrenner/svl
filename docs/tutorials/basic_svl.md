@@ -122,7 +122,7 @@ This plot will count the number of reports for each classification.
 
 A couple of things to note:
 
-1. There are four aggregations: `COUNT`, `MIN`, `MAX`, `AVG`. More will probably be added in the future.
+1. There are five aggregations: `COUNT`, `MIN`, `MAX`, `AVG`, `SUM`. More will probably be added in the future.
 2. It's probably not a good idea to bar chart continuous variables, but SVL won't stop you.
 3. `COUNT` _shouldn't_ need the field label but for technical reasons it does. I'll probably fix this at some point in the near future.
 
