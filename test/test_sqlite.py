@@ -427,6 +427,26 @@ def test_svl_to_sql_xy_agg_y():
     assert truth_query == answer_query
 
 
+def test_svl_to_sql_xy_agg_y_sum():
+    """ Tests that the svl_to_sql_xy function returns the correct value when
+        there's a SUM aggregation on y.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "x": {"agg": "SUM", "field": "temperature"},
+        "y": {"field": "classification"},
+    }
+
+    truth_query = (
+        "SELECT SUM(temperature) AS x, classification AS y "
+        "FROM bigfoot GROUP BY classification"
+    )
+
+    answer_query = svl_to_sql_xy(svl_plot)
+
+    assert truth_query == answer_query
+
+
 def test_svl_to_sql_xy_count():
     """ Tests that the svl_to_sql_xy function returns the correct value when
         one of the aggregations is a count.

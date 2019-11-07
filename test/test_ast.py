@@ -68,6 +68,35 @@ def test_bar_chart():
     assert parsed_svl_truth == parsed_svl_answer
 
 
+def test_bar_chart_sum():
+    """ Tests that the bar chart type is properly parsed with a SUM
+        aggregation.
+    """
+    svl_string = """
+    DATASETS
+        bigfoot "data/bigfoot_sightings.csv"
+    BAR bigfoot
+        X classification
+        Y temperature_mid SUM
+    """
+
+    parsed_svl_truth = {
+        "datasets": {"bigfoot": {"file": "data/bigfoot_sightings.csv"}},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "bar",
+                "x": {"field": "classification"},
+                "y": {"agg": "SUM", "field": "temperature_mid"},
+            }
+        ],
+    }
+
+    parsed_svl_answer = parse_svl(svl_string)
+
+    assert parsed_svl_truth == parsed_svl_answer
+
+
 def test_histogram_step():
     """ Tests that the histogram type is properly parsed when the step size
         is specified.

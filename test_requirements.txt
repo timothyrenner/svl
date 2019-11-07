@@ -1,5 +1,4 @@
 pytest
-pytest-cov==2.5.1
+pytest-cov
 python-coveralls
-hypothesis
 flake8

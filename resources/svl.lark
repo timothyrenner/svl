@@ -77,7 +77,7 @@ split_by: "SPLIT"i "BY"i axis_spec split_by_modifier*
 
 field: CNAME
 
-aggregation: COUNT | MIN | MAX | AVG
+aggregation: COUNT | MIN | MAX | AVG | SUM
 
 temporal: "BY"i (YEAR | MONTH | DAY | HOUR | MINUTE | SECOND)
 
@@ -104,6 +104,8 @@ MIN: "MIN"i
 MAX: "MAX"i
 
 AVG: "AVG"i
+
+SUM: "SUM"i
 
 YEAR: "YEAR"i
 
