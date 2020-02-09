@@ -184,3 +184,10 @@ class SvlDataProcessingError(Exception):
     """
 
     pass
+
+
+class SvlNumberValueError(Exception):
+    """ A number plot dataset has more than one row.
+    """
+
+    pass
