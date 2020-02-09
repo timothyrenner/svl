@@ -14,7 +14,7 @@ script:
 - flake8 test
 - mkdocs build --verbose --clean --strict
 after_script:
-- pip uninstall pyarrow
+- pip uninstall pyarrow -y
 deploy:
   - provider: pypi
     user: timothyrenner
