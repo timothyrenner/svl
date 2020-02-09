@@ -47,6 +47,9 @@ class SVLTransformer(lark.Transformer):
     def pie_chart(self, items):
         return merge({"type": "pie"}, *items)
 
+    def number_chart(self, items):
+        return merge({"type": "number"}, *items)
+
     def markxy(self, items):
         return {"type": str(items[0]).lower()}
 
@@ -79,6 +82,9 @@ class SVLTransformer(lark.Transformer):
 
     def axis(self, items):
         return {"axis": merge(*items)}
+
+    def value(self, items):
+        return {"value": merge(*items)}
 
     def split_by(self, items):
         return {"split_by": merge(*items)}
