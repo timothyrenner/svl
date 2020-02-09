@@ -42,7 +42,7 @@ setup(
         # and upgrade with caution.
         "lark-parser==0.6.6",
         "Jinja2>=2.10.1",
-        "pandas>=1.0.0,<2.0.0",
+        "pandas>=0.25.0,<1.0.0",
         "importlib-resources>=1.0.2,<2",
     ],
     extras_require={"parquet": ["pyarrow>=0.16.0"]},
