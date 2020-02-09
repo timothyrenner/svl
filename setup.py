@@ -42,10 +42,9 @@ setup(
         # and upgrade with caution.
         "lark-parser==0.6.6",
         "Jinja2>=2.10.1",
-        # TODO: Unpin pandas.
-        "pandas>=0.23.4",
+        "pandas>=0.25.0,<1.0.0",
         "importlib-resources>=1.0.2,<2",
     ],
-    extras_require={"parquet": ["pyarrow==0.12.0"]},
+    extras_require={"parquet": ["pyarrow>=0.12.0"]},
     entry_points={"console_scripts": ["svl=svl.cli:cli"]},
 )
