@@ -10,7 +10,7 @@ CONCAT(
             VALUE TRANSFORM "COUNT(DISTINCT number)"
             TITLE "Total Number of Sightings"
         NUMBER bigfoot
-            VALUE TRANSFORM "COUNT(DISTINCT number)"
+            VALUE number COUNT
             FILTER "classification = 'Class A'"
             TITLE "Total Number of Class A Sightings"
         NUMBER bigfoot
