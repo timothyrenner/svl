@@ -10,6 +10,7 @@ from svl.plotly.plotly import (
     _get_colorspec,
     plotly_histogram,
     plotly_pie,
+    plotly_number,
     plotly_bar,
     plotly_line,
     plotly_scatter,
@@ -29,6 +30,15 @@ def appended_data():
             "2018-08-15T00:00:00Z",
         ],
         "y": [98, 102, 94],
+    }
+
+
+@pytest.fixture
+def number_data():
+    """ A fixture  for data that's been generated for a number chart.
+    """
+    return {
+        "value": 10
     }
 
 
@@ -715,6 +725,25 @@ def test_plotly_pie_hole(univariate_categorical_data):
     }
 
     answer = plotly_pie(svl_plot, univariate_categorical_data)
+    assert truth == answer
+
+
+def test_plotly_number(number_data):
+    """ Tests that the plotly_number returns the correct value.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "value": {"field": "number", "agg": "COUNT"},
+        "type": "number",
+        "title": "Bigfoot Sightings"
+    }
+
+    truth = {
+        "layout": {"title": "Bigfoot Sightings"},
+        "data": [{"type": "indicator", "mode": "number", "value": 10}]
+    }
+
+    answer = plotly_number(svl_plot, number_data)
     assert truth == answer
 
 

@@ -252,6 +252,30 @@ def plotly_pie(svl_plot, data):
     return {"layout": layout, "data": [trace]}
 
 
+def plotly_number(svl_plot, data):
+    """ Creates a plotly number chart ("indicator" but without the silly gauge
+    stuff) from the SVL plot and data specs.
+
+    Parameters
+    ----------
+    svl_plot : dict
+        The SVL plot specifier.
+
+    data : dict
+        The SVL data specifier.
+
+    Returns
+    -------
+    dict
+        The dictionary defining the plotly plot.
+    """
+    layout = {"title": _get_title(svl_plot)}
+
+    trace = {"type": "indicator", "mode": "number", "value": data["value"]}
+
+    return {"layout": layout, "data": [trace]}
+
+
 def plotly_bar(svl_plot, data):
     """ Creates a plotly bar chart from the SVL plot and data specs.
 
@@ -373,6 +397,7 @@ PLOTLY_PLOTS = {
     "line": plotly_line,
     "scatter": plotly_scatter,
     "pie": plotly_pie,
+    "number": plotly_number,
 }
 
 
