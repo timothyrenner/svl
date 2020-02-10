@@ -221,6 +221,54 @@ def test_pie():
     assert parsed_svl_truth == parsed_svl_answer
 
 
+def test_number():
+    """ Tests that the number type is properly parsed.
+    """
+    svl_string = """
+    NUMBER bigfoot
+        VALUE report_id COUNT
+        TITLE "Number of Bigfoot Sightings"
+        FILTER "Classification = 'A'"
+    """
+    truth = {
+        "datasets": {},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "number",
+                "value": {"field": "report_id", "agg": "COUNT"},
+                "title": "Number of Bigfoot Sightings",
+                "filter": "Classification = 'A'",
+            }
+        ],
+    }
+    answer = parse_svl(svl_string)
+    assert truth == answer
+
+
+def test_number_transform():
+    """ Tests that the number chart type is properly parsed when the field is
+    a TRANSFORM.
+    """
+    svl_string = """
+    NUMBER bigfoot
+        VALUE TRANSFORM "COUNT(*)"
+    """
+    truth = {
+        "datasets": {},
+        "vcat": [
+            {
+                "data": "bigfoot",
+                "type": "number",
+                "value": {"transform": "COUNT(*)"},
+            }
+        ],
+    }
+
+    answer = parse_svl(svl_string)
+    assert truth == answer
+
+
 def test_scatter():
     """ Tests that the scatter type is properly parsed.
     """

@@ -16,7 +16,7 @@ vcat: "(" chart+ ")"
 
 hcat: "CONCAT"i "(" chart+ ")"
 
-chart: xy_chart | histogram_chart | pie_chart | vcat | hcat
+chart: xy_chart | histogram_chart | pie_chart | number_chart | vcat | hcat
 
 // The XX_property directives include the dimensions, so at least that one
 // is required. This is enforced by the compiler.
@@ -26,11 +26,15 @@ histogram_chart: "HISTOGRAM"i data histogram_property+
 
 pie_chart: "PIE"i data pie_property+
 
+number_chart: "NUMBER"i data number_property+
+
 ?xy_property: title | dimensions | filter
 
 ?histogram_property: title | dimensions | histogram_opts | filter
 
 ?pie_property: title | axis | pie_opts | filter
+
+?number_property: title | value | filter
 
 title: "TITLE"i ESCAPED_STRING
 
@@ -62,6 +66,10 @@ y: "Y"i axis_spec axis_modifier*
 color_by: "COLOR"i "BY"i axis_spec color_axis_modifier*
 
 axis: "AXIS"i axis_spec axis_modifier*
+
+// We only should aggregate as an axis modifier.
+// We don't need a label because the title is the label.
+value: "VALUE"i axis_spec aggregation?
 
 ?axis_spec: field | transform
 

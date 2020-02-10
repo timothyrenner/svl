@@ -143,12 +143,29 @@ PIE dataset_identifier
 The quoted string following `FILTER` must be a valid SQL WHERE expression.
 `HOLE` must take a floating point number between zero and one.
 
-## `X`, `Y`, `AXIS`
-
-`X`, `Y` and `AXIS` all take the same properties.
+## `NUMBER`
 
 ```
-{X | Y | AXIS} {field_identifier | TRANSFORM quoted_string}
+NUMBER dataset_identifier
+    {
+        value |
+        [FILTER quoted_string] |
+        [TITLE quoted_string]
+    },
+    ...
+```
+
+`NUMBER` requires one `VALUE`.
+If the provided value doesn't resolve to a single number, SVL will raise an error.
+
+## `X`, `Y`, `AXIS`. `VALUE`
+
+`X`, `Y` and `AXIS` all take the same properties.
+`VALUE` can only be aggregated.
+It does not accept temporal modifiers, labels or sorts.
+
+```
+{X | Y | AXIS | VALUE} {field_identifier | TRANSFORM quoted_string}
 [
     AGG | BY temporal | LABEL quoted_string | SORT {ASC | DESC}
 ], ...

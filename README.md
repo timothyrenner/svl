@@ -43,7 +43,7 @@ Results:
 
 ✅ **Easy to learn**: The entire grammar is under 150 lines.
 
-🖐 **Five chart types**: Line, bar, scatter, histogram and pie. I plan on adding more, so if I'm missing your favorite one let me know.
+6️⃣ **Chart types**: Line, bar, scatter, histogram and pie. And number. I plan on adding more, so if I'm missing your favorite one let me know.
 
 📈 **Complex layouts**: SVL scripts can support any number of plots and makes it straightforward to arrange them so that the most important plots get the most real estate.
 

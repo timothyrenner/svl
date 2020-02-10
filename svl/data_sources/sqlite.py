@@ -6,6 +6,7 @@ except ImportError:
     PANDAS = False
 
 import sqlite3
+from svl.compiler.errors import SvlNumberValueError
 
 TEMPORAL_CONVERTERS = {
     "YEAR": "STRFTIME('%Y', {})",
@@ -189,6 +190,35 @@ def svl_to_sql_pie(svl_plot):
     return query
 
 
+def svl_to_sql_number(svl_plot):
+    """ Constructs a SQL query for number charts.
+
+    Parameters
+    ----------
+    svl_plot : dict
+        The SVL plot definition.
+
+    Returns
+    -------
+    str
+        The SQL query for the dataset required for the plot.
+    """
+    if "agg" not in svl_plot["value"]:
+        query = "SELECT {} AS value FROM {}".format(
+            _get_field(svl_plot["value"]), svl_plot["data"]
+        )
+    else:
+        query = "SELECT {}({}) AS value FROM {}".format(
+            svl_plot["value"]["agg"],  # Agg function.
+            _get_field(svl_plot["value"]),  # The value or transform.
+            svl_plot["data"],  # The dataset.
+        )
+    if "filter" in svl_plot:
+        query = "{} WHERE {}".format(query, svl_plot["filter"])
+
+    return query
+
+
 def svl_to_sql_xy(svl_plot):
     """ Takes an SVL plot specification and produces a SQL query to retrieve
         the data.
@@ -301,6 +331,8 @@ def get_svl_data(svl_plot, conn):
         query = svl_to_sql_hist(svl_plot)
     elif svl_plot["type"] == "pie":
         query = svl_to_sql_pie(svl_plot)
+    elif svl_plot["type"] == "number":
+        query = svl_to_sql_number(svl_plot)
 
     # Step 2: Execute the query and retrieve the results.
     conn.row_factory = sqlite3.Row
@@ -357,4 +389,13 @@ def get_svl_data(svl_plot, conn):
         for row in data_list:
             svl_data["labels"].append(row["label"])
             svl_data["values"].append(row["value"])
+    elif svl_plot["type"] == "number":
+        if len(data_list) > 1:
+            raise SvlNumberValueError(
+                "Expected 1 row for a NUMBER plot, got {}".format(
+                    len(data_list)
+                )
+            )
+        svl_data = {"value": data_list[0]["value"]}
+
     return svl_data

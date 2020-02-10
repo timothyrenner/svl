@@ -15,8 +15,10 @@ from svl.data_sources.sqlite import (
     svl_to_sql_xy,
     svl_to_sql_hist,
     svl_to_sql_pie,
+    svl_to_sql_number,
     get_svl_data,
 )
+from svl.compiler.errors import SvlNumberValueError
 
 
 @pytest.fixture()
@@ -348,6 +350,38 @@ def test_svl_to_sql_pie_filter():
     answer_query = svl_to_sql_pie(svl_plot)
 
     assert truth_query == answer_query
+
+
+def test_svl_to_sql_number():
+    """ Tests that the svl_to_sql_number function returns the correct value.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "number",
+        "value": {"field": "report_id", "agg": "COUNT"},
+    }
+    truth = "SELECT COUNT(report_id) AS value FROM bigfoot"
+    answer = svl_to_sql_number(svl_plot)
+
+    assert truth == answer
+
+
+def test_svl_to_sql_number_filter():
+    """ Tests that the svl_to_sql_number function returns the correct value
+    when the plot has a "filter" directive.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "type": "number",
+        "value": {"transform": "COUNT DISTINCT report_id"},
+        "filter": "Classification = 'A'",
+    }
+    truth = (
+        "SELECT COUNT DISTINCT report_id AS value "
+        "FROM bigfoot WHERE Classification = 'A'"
+    )
+    answer = svl_to_sql_number(svl_plot)
+    assert truth == answer
 
 
 def test_svl_to_sql_xy():
@@ -790,6 +824,34 @@ def test_get_svl_data_pie(test_conn):
     assert "labels" in answer
     assert "values" in answer
     assert len(answer["labels"]) == len(answer["values"])
+
+
+def test_get_svl_data_number(test_conn):
+    """ Tests that the get_svl_data returns the correct data for number plots.
+    """
+    svl_plot = {
+        "type": "number",
+        "data": "bigfoot",
+        "value": {"field": "number", "agg": "COUNT"},
+        "filter": "Classification = 'A'",
+    }
+
+    answer = get_svl_data(svl_plot, test_conn)
+    assert "value" in answer
+
+
+def test_get_svl_data_number_multi_row(test_conn):
+    """ Tests that get_svl_data raises an SvlNumberValueError when the query
+    returns multiple values.
+    """
+    svl_plot = {
+        "type": "number",
+        "data": "bigfoot",
+        "value": {"field": "number"},
+    }
+
+    with pytest.raises(SvlNumberValueError):
+        get_svl_data(svl_plot, test_conn)
 
 
 def test_get_svl_data_empty_result_set(test_conn):
