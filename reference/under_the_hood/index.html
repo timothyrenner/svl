@@ -1,0 +1,927 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.2">
+    
+    
+      
+        <title>Under the Hood - SVL Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#under-the-hood" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="SVL Documentation" aria-label="SVL Documentation" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">show_chart</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              SVL Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Under the Hood
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="SVL Documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">show_chart</i>
+      
+    </a>
+    SVL Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/basic_svl/" title="Basic SVL" class="md-nav__link">
+      Basic SVL
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/advanced_svl/" title="Advanced SVL" class="md-nav__link">
+      Advanced SVL
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../syntax_reference/" title="Syntax" class="md-nav__link">
+      Syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Under the Hood
+      </label>
+    
+    <a href="./" title="Under the Hood" class="md-nav__link md-nav__link--active">
+      Under the Hood
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flattening-the-plot-tree" class="md-nav__link">
+    Flattening the Plot Tree
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-the-sqlite-db" class="md-nav__link">
+    Loading the SQLite DB
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retrieving-the-plot-data" class="md-nav__link">
+    Retrieving the Plot Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combining-plots-and-data" class="md-nav__link">
+    Combining Plots and Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jinja" class="md-nav__link">
+    Jinja
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-whole-enchilada" class="md-nav__link">
+    The Whole Enchilada
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Sample Visualizations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Sample Visualizations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/quickstart_example.html" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_chart_types.html" title="Basic SVL - Chart Types" class="md-nav__link">
+      Basic SVL - Chart Types
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_customizing_charts.html" title="Basic SVL - Customizing Charts" class="md-nav__link">
+      Basic SVL - Customizing Charts
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_3.html" title="Basic SVL - Plot Arrangement" class="md-nav__link">
+      Basic SVL - Plot Arrangement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_additional_axes.html" title="Basic SVL - Additional Axes" class="md-nav__link">
+      Basic SVL - Additional Axes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_sort.html" title="Advanced SVL - Sorting Data" class="md-nav__link">
+      Advanced SVL - Sorting Data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_data.html" title="Advanced SVL - Data in SVL" class="md-nav__link">
+      Advanced SVL - Data in SVL
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flattening-the-plot-tree" class="md-nav__link">
+    Flattening the Plot Tree
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-the-sqlite-db" class="md-nav__link">
+    Loading the SQLite DB
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retrieving-the-plot-data" class="md-nav__link">
+    Retrieving the Plot Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combining-plots-and-data" class="md-nav__link">
+    Combining Plots and Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jinja" class="md-nav__link">
+    Jinja
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-whole-enchilada" class="md-nav__link">
+    The Whole Enchilada
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/timothyrenner/svl/edit/master/docs/reference/under_the_hood.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="under-the-hood">Under the Hood</h1>
+<p>This document describes the structure of the compiler.
+I'll start by describing the compiler's stages in sequence, then present a diagram at the end with everything.</p>
+<p>The entire compiler is written in Python, with a sprinkling of HTML / JS to render the final HTML page.</p>
+<h2 id="parsing">Parsing</h2>
+<p>The language itself is defined as an EBNF grammar designed to be parsed by the freaking awesome <a href="https://github.com/lark-parser/lark">Lark</a> parser.
+The grammar itself is defined in <a href="https://github.com/timothyrenner/svl/blob/master/resources/svl.lark">this file</a>.
+This probably isn't the cleanest representation (I've never done this before / don't have formal CS training), but it gets the job done.</p>
+<p>Lark takes the grammar specification and the input script and parses that into a bunch of custom objects.
+I've implemented an adapter to convert those objects into a python dictionary that provides a tree-like representation of the plots.</p>
+<p>The reason this is a tree has to do with <code>CONCAT( ... )</code> and <code>( ... )</code>.
+A chart is defined as either a raw plot, or a concatenation of plots.
+This means they can nest within one another, which makes them a tree.</p>
+<p>Concretely, given this script:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">DATASETS</span>
+<span class="err">        bigfoot &quot;bigfoot_sightings.csv&quot;</span>
+<span class="err">CONCAT(</span>
+<span class="err">    SCATTER bigfoot</span>
+<span class="err">        X latitude</span>
+<span class="err">        Y temperature_mid</span>
+<span class="err">    BAR bigfoot</span>
+<span class="err">        X classification</span>
+<span class="err">        Y classification COUNT</span>
+<span class="err">)</span>
+</code></pre></div>
+
+
+<p>the resulting tree looks like:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;datasets&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;bigfoot&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;bigfoot_sightings.csv&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;vcat&quot;</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="s2">&quot;hcat&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;bigfoot&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;scatter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;temperature_mid&quot;</span><span class="p">}</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;bigfoot&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;agg&quot;</span><span class="p">:</span> <span class="s2">&quot;COUNT&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>The outermost <code>vcat</code> (vertical concatenation) is always there, and <em>inside</em> that there's an <code>hcat</code> (horizontal concatenation).
+Either of the plots inside the <code>hcat</code> could itself be an <code>hcat</code> or <code>vcat</code> ... and on and on.</p>
+<h2 id="flattening-the-plot-tree">Flattening the Plot Tree</h2>
+<p>Trees are nice inside a programming environment, but I need these plots to get rendered onto a web page, which means I need to project the tree onto a grid.
+I implemented plot layouts with <a href="https://css-tricks.com/snippets/css/complete-guide-grid/">CSS grids</a> because they're pretty straightforward once you get your head around it.
+Basically, CSS grids need a layout declaration, and each element in the grid needs a position.</p>
+<p>So I need to go from tree of plots to a list of plots that have grid positions.
+I can traverse the tree and track the position as I go, but there's a minor hiccup: CSS grids are <em>uniform</em>, but our plots aren't.</p>
+<p>If I've got one plot on one row, then there's only one CSS column / row.
+If I've got one plot on the first row and two on the second (via <code>CONCAT</code>), then I need CSS to have two columns and two rows.
+If I've got one plot on the first row and three plots on the second row, but the two on the right are stacked, then I need 4 columns and 4 rows... <em>and</em> I need to ensure that the top plot takes up 2 rows and 4 columns, and so forth.</p>
+<p>Concretely, given this tree (I've replaced the plot details with simple dicts for readability)...</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;vcat&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;hcat&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s2">&quot;vcat&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>This tree puts two side-by-side plots on the first row, and two vertical plots on the second row.
+As real output this would look weird, but it's a good example.
+The first row of plots take up one column and two rows each, while the second row of plots take up one row and two columns each.</p>
+<p>SVL flattens the above to this list.</p>
+<div class="codehilite"><pre><span></span><code><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;row_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;row_end&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;column_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;column_end&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;row_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;row_end&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;column_start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;column_end&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;row_start&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;row_end&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;column_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;column_end&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s2">&quot;plot&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;row_start&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;row_end&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;column_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;column_end&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+
+<p>This piece of the compiler is complicated.
+It took me over 2 months to get this right.
+The <a href="https://github.com/timothyrenner/svl/blob/master/test/test_layout.py">unit tests</a> for this algorithm total up to almost 700 lines of code.
+It's the only time I've ever used TDD (it worked very well for this).</p>
+<h2 id="loading-the-sqlite-db">Loading the SQLite DB</h2>
+<p>This piece is pretty straightforward.
+Because I'm <del>lazy</del> efficient, I decided to use <a href="https://pandas.pydata.org/">pandas</a> to read the files and load the SQLite database.
+Files are loaded first, then the SQL datasets are constructed in the order they appear in the script.</p>
+<h2 id="retrieving-the-plot-data">Retrieving the Plot Data</h2>
+<p>This functionality is the proud home of probably the <a href="https://github.com/timothyrenner/svl/blob/master/svl/sqlite.py#L340">worst</a> code of the whole compiler (I'm going to refactor it soon because it makes my eyes bleed), but the functionality <em>in principle</em> is simple.
+It translates the SVL plot specifier (after flattening) into a SQL query, then marshals those results into something that can be injected into a Plotly data structure.</p>
+<p>For example, consider the following plot.</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;bigfoot&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;agg&quot;</span><span class="p">:</span> <span class="s2">&quot;AVG&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;temperature&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>This is the internal representation of a bar chart that averages temperature by classification.
+SVL turns this into the following SQL query</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span> <span class="k">AVG</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span> <span class="k">AS</span> <span class="n">x</span><span class="p">,</span> <span class="n">classification</span> <span class="k">AS</span> <span class="n">y</span>
+<span class="k">FROM</span> <span class="n">bigfoot</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">classification</span>
+</code></pre></div>
+
+
+<p>This is where <code>FILTER</code> and <code>TRANSFORM</code> SQL gets applied as well.
+This is the internal representation of a scatter plot that puts latitude on X and temperature on Y, but filters latitudes.</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;bigfoot&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;temperature&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude &lt; 84&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>This is the query.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span> <span class="n">latitude</span> <span class="k">AS</span> <span class="n">x</span><span class="p">,</span> <span class="n">temperature</span> <span class="k">AS</span> <span class="n">y</span>
+<span class="k">FROM</span> <span class="n">bigfoot</span>
+<span class="k">WHERE</span> <span class="n">latitude</span> <span class="o">&lt;</span> <span class="mi">84</span>
+</code></pre></div>
+
+
+<p>Once the query is executed, the data is marshalled into a data structure that looks like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="o">...</span> <span class="p">],</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="o">...</span> <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>There are variations of that based on whether there are <code>SPLIT BY</code> or <code>COLOR BY</code> arguments, but basically that's all there is to it.
+There's tons of edge cases and other weird stuff that happens here that makes the code a little tedious, but I think I can probably find a nice way to do it in the future.</p>
+<h2 id="combining-plots-and-data">Combining Plots and Data</h2>
+<p>So we have a flat list of plot specifiers, and a flat list of data representations.
+Both of these are completely internal representations; they're agnostic to the plotting machinery.
+This is the point where they combine to form Plotly graphs (as dictionaries, not Plotly's graph objs).
+There's a function for each plot type that combines the data and specifier into a plotly graph.
+It's a little tedious so I'm not going to go into the details of the Plotly graph specifiers - you can read about it <a href="https://plot.ly/javascript/">here</a>.
+The important part is, for each plot, we extract this information:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;row_start&quot;</span><span class="p">:</span> <span class="n">row_start</span><span class="p">,</span>
+    <span class="s2">&quot;row_end&quot;</span><span class="p">:</span> <span class="n">row_end</span><span class="p">,</span>
+    <span class="s2">&quot;column_start&quot;</span><span class="p">:</span> <span class="n">column_start</span><span class="p">,</span>
+    <span class="s2">&quot;column_end&quot;</span><span class="p">:</span> <span class="n">column_end</span><span class="p">,</span>
+    <span class="s2">&quot;plotly&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>  <span class="c1"># This is a the plotly specifier.</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>Basically we have the plot's CSS grid position and the plot data structure itself.
+These plots, along with the number of columns and rows, are passed to the Jinja template.</p>
+<h2 id="jinja">Jinja</h2>
+<p>With the CSS grid position of each plot in place, the whole page is just a flat sequence of Plotly <code>div</code> elements that have the grid positions as CSS style elements.
+The identifiers for each <code>div</code> element is derived from the grid position.</p>
+<p>This is the whole thing.</p>
+<div class="codehilite"><pre><span></span><code><span class="x">&lt;!DOCTYPE html&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">    &lt;head&gt;</span>
+<span class="x">        &lt;meta charset=&quot;UTF-8&quot;/&gt;</span>
+<span class="x">        &lt;title&gt;SVL Plots&lt;/title&gt;</span>
+<span class="x">        &lt;script src=&quot;https://cdn.plot.ly/plotly-latest.min.js&quot;&gt;&lt;/script&gt;</span>
+<span class="x">        &lt;style&gt;</span>
+<span class="x">            .container {</span>
+<span class="x">                display: grid;</span>
+<span class="x">                grid-template-columns: repeat(</span><span class="cp">{{</span> <span class="nv">num_columns</span> <span class="cp">}}</span><span class="x">, minmax(300px, </span><span class="cp">{{</span> <span class="m">100</span> <span class="o">/</span> <span class="nv">num_columns</span> <span class="cp">}}</span><span class="x">vw));</span>
+<span class="x">                grid-template-rows: repeat(</span><span class="cp">{{</span> <span class="nv">num_rows</span> <span class="cp">}}</span><span class="x">, minmax(300px, </span><span class="cp">{{</span> <span class="m">100</span> <span class="o">/</span> <span class="nv">num_rows</span> <span class="cp">}}</span><span class="x">vh));</span>
+<span class="x">            }</span>
+
+<span class="x">            </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">plot</span> <span class="k">in</span> <span class="nv">plots</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">            #p</span><span class="cp">{{</span> <span class="nv">plot.row_start</span> <span class="cp">}}</span><span class="x">_</span><span class="cp">{{</span> <span class="nv">plot.column_start</span> <span class="cp">}}</span><span class="x"> {</span>
+<span class="x">                grid-column-start: </span><span class="cp">{{</span> <span class="nv">plot.column_start</span> <span class="cp">}}</span><span class="x">;</span>
+<span class="x">                grid-column-end: </span><span class="cp">{{</span> <span class="nv">plot.column_end</span> <span class="cp">}}</span><span class="x">;</span>
+<span class="x">                grid-row-start: </span><span class="cp">{{</span> <span class="nv">plot.row_start</span> <span class="cp">}}</span><span class="x">;</span>
+<span class="x">                grid-row-end: </span><span class="cp">{{</span> <span class="nv">plot.row_end</span> <span class="cp">}}</span><span class="x">;</span>
+<span class="x">            }</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;/style&gt;</span>
+<span class="x">    &lt;/head&gt;</span>
+<span class="x">    &lt;body&gt;</span>
+<span class="x">        &lt;div class=&quot;container&quot;&gt;</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">plot</span> <span class="k">in</span> <span class="nv">plots</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">            &lt;div id=&quot;p</span><span class="cp">{{</span> <span class="nv">plot.row_start</span> <span class="cp">}}</span><span class="x">_</span><span class="cp">{{</span> <span class="nv">plot.column_start</span> <span class="cp">}}</span><span class="x">&quot;&gt;</span>
+<span class="x">            &lt;/div&gt;</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;/div&gt;</span>
+<span class="x">        &lt;script&gt;</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">plot</span> <span class="k">in</span> <span class="nv">plots</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">            var plot_</span><span class="cp">{{</span> <span class="nv">plot.row_start</span> <span class="cp">}}</span><span class="x">_</span><span class="cp">{{</span> <span class="nv">plot.column_start</span> <span class="cp">}}</span><span class="x"> = </span>
+<span class="x">                Plotly.newPlot(</span>
+<span class="x">                    &quot;p</span><span class="cp">{{</span> <span class="nv">plot.row_start</span> <span class="cp">}}</span><span class="x">_</span><span class="cp">{{</span> <span class="nv">plot.column_start</span> <span class="cp">}}</span><span class="x">&quot;,</span>
+<span class="x">                    </span><span class="cp">{{</span> <span class="nv">plot.plotly</span> <span class="o">|</span> <span class="nf">tojson</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">                );</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;/script&gt;</span>
+<span class="x">    &lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+</code></pre></div>
+
+
+<p>And that's it.
+Hopefully it's clear that elements are loosely coupled - in particular the data processor doesn't <em>have</em> to be SQLite and the final plot output doesn't <em>have</em> to be drawn by Plotly.
+If there's enough demand I could certainly see future work in expanding the plot renderers as well as additional data processors.</p>
+<h2 id="the-whole-enchilada">The Whole Enchilada</h2>
+<p><img alt="" src="../../images/under_the_hood.png" /></p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../syntax_reference/" title="Syntax" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Syntax
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../sample_visualizations/quickstart_example.html" title="Quickstart" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Quickstart
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

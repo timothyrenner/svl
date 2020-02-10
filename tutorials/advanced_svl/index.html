@@ -1,0 +1,998 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.2">
+    
+    
+      
+        <title>Advanced SVL - SVL Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#advanced-svl" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="SVL Documentation" aria-label="SVL Documentation" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">show_chart</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              SVL Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Advanced SVL
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="SVL Documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">show_chart</i>
+      
+    </a>
+    SVL Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../basic_svl/" title="Basic SVL" class="md-nav__link">
+      Basic SVL
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Advanced SVL
+      </label>
+    
+    <a href="./" title="Advanced SVL" class="md-nav__link md-nav__link--active">
+      Advanced SVL
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sorting-data" class="md-nav__link">
+    Sorting Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets-at-the-command-line" class="md-nav__link">
+    Datasets at the Command Line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-in-svl" class="md-nav__link">
+    Data in SVL
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering-data" class="md-nav__link">
+    Filtering Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transforming-data" class="md-nav__link">
+    Transforming Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-datasets" class="md-nav__link">
+    Custom Datasets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#all-together" class="md-nav__link">
+    All Together
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/syntax_reference/" title="Syntax" class="md-nav__link">
+      Syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/under_the_hood/" title="Under the Hood" class="md-nav__link">
+      Under the Hood
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Sample Visualizations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Sample Visualizations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/quickstart_example.html" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_chart_types.html" title="Basic SVL - Chart Types" class="md-nav__link">
+      Basic SVL - Chart Types
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_customizing_charts.html" title="Basic SVL - Customizing Charts" class="md-nav__link">
+      Basic SVL - Customizing Charts
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_3.html" title="Basic SVL - Plot Arrangement" class="md-nav__link">
+      Basic SVL - Plot Arrangement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_additional_axes.html" title="Basic SVL - Additional Axes" class="md-nav__link">
+      Basic SVL - Additional Axes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_sort.html" title="Advanced SVL - Sorting Data" class="md-nav__link">
+      Advanced SVL - Sorting Data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_data.html" title="Advanced SVL - Data in SVL" class="md-nav__link">
+      Advanced SVL - Data in SVL
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sorting-data" class="md-nav__link">
+    Sorting Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets-at-the-command-line" class="md-nav__link">
+    Datasets at the Command Line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-in-svl" class="md-nav__link">
+    Data in SVL
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering-data" class="md-nav__link">
+    Filtering Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transforming-data" class="md-nav__link">
+    Transforming Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-datasets" class="md-nav__link">
+    Custom Datasets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#all-together" class="md-nav__link">
+    All Together
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/timothyrenner/svl/edit/master/docs/tutorials/advanced_svl.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="advanced-svl">Advanced SVL</h1>
+<p>The <a href="../basic_svl/">basic SVL</a> tutorial covered how to make, customize and arrange plots.
+SVL also has advanced SQL-powered data processing capabilities that make it easy to adjust your datasets without writing a bunch of additional code.</p>
+<p>Before getting in to the SQL parts, there are a couple of things to cover first.
+This tutorial uses the same dataset as the basic tutorial.
+I'll go ahead and use the <code>basic_tutorial.svl</code> script from the basic SVL tutorial as a starting point.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">cp basic_tutorial.svl advanced_tutorial.svl</span>
+</code></pre></div>
+
+
+<h2 id="sorting-data">Sorting Data</h2>
+<p>Suppose I want to see which states have the most bigfoot sightings.
+That's pretty easy.
+Add this underneath the line chart.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">BAR bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sightings by State&quot;</span>
+<span class="err">    X state LABEL &quot;State&quot;</span>
+<span class="err">    Y state COUNT LABEL &quot;Number of Sightings&quot;</span>
+</code></pre></div>
+
+
+<p>It looks like this:</p>
+<p><img alt="" src="../../images/advanced_tutorial_sort_bar_1.png" /></p>
+<p>Notice that it's unsorted.
+SVL supports sorting an axis as a modifier.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">BAR bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sightings by State&quot;</span>
+<span class="err">    X state LABEL &quot;State&quot;</span>
+<span class="err">    Y state COUNT LABEL &quot;Number of Sightings&quot; SORT DESC</span>
+</code></pre></div>
+
+
+<p>Now our bar chart looks like this:</p>
+<p><img alt="" src="../../images/advanced_tutorial_sort_bar_2.png" /></p>
+<p><code>SORT</code> must be followed by <code>ASC</code> or <code>DESC</code>.</p>
+<p>Here's the full script.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+    <span class="n">SPLIT</span> <span class="k">BY</span> <span class="n">classification</span>
+
+<span class="n">BAR</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by State&quot;</span>
+    <span class="n">X</span> <span class="k">state</span> <span class="n">LABEL</span> <span class="ss">&quot;State&quot;</span>
+    <span class="n">Y</span> <span class="k">state</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span> <span class="n">SORT</span> <span class="k">DESC</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">AXIS</span> <span class="n">classification</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+    <span class="n">COLOR</span> <span class="k">BY</span> <span class="n">moon_phase</span> <span class="ss">&quot;YlOrRd&quot;</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/basic_tutorial_additional_axes_1.png" />
+<img alt="" src="../../images/advanced_tutorial_sort_bar_2.png" />
+<img alt="" src="../../images/basic_tutorial_additional_axes_2.png" />
+<img alt="" src="../../images/basic_tutorial_additional_axes_3.png" /></p>
+<p>Interactive version <a href="../../sample_visualizations/advanced_tutorial_sort.html">here</a></p>
+<h2 id="datasets-at-the-command-line">Datasets at the Command Line</h2>
+<p>Sometimes it might be convenient not to have the name of the file hard coded into the SVL script.
+For example, suppose you've got a pipeline that produces files with dates in the name.
+It would be nice if you could create the same visualizations and treat the file as a parameter.
+SVL supports passing in dataset file definitions from the command line.
+In fact, the <code>DATASETS</code> declaration is optional.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">-- No DATASETS!</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+    <span class="n">SPLIT</span> <span class="k">BY</span> <span class="n">classification</span>
+
+<span class="n">BAR</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by State&quot;</span>
+    <span class="n">X</span> <span class="k">state</span> <span class="n">LABEL</span> <span class="ss">&quot;State&quot;</span>
+    <span class="n">Y</span> <span class="k">state</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span> <span class="n">SORT</span> <span class="k">DESC</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">AXIS</span> <span class="n">classification</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+    <span class="n">COLOR</span> <span class="k">BY</span> <span class="n">moon_phase</span> <span class="ss">&quot;YlOrRd&quot;</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+</code></pre></div>
+
+
+<p>is what our Bigfoot SVL script looks like without a <code>DATASETS</code> declaration.
+It won't compile without one additional command line argument.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">svl advanced_tutorial.svl --dataset bigfoot=bigfoot_sightings.csv</span>
+</code></pre></div>
+
+
+<p>You can pass multiple files with different labels by repeating <code>--dataset label=path</code> for each file.</p>
+<p>For simplicity I haven't changed this in the <code>advanced_tutorial.svl</code> script, I just wanted to demonstrate what it would look like.</p>
+<h2 id="data-in-svl">Data in SVL</h2>
+<p>Before proceeding with the next few topics it's worth describing a <em>tiny bit</em> what's under the hood when it processes data.
+I'll leave the gory parts to <a href="../../reference/under_the_hood/">this section</a>, but a quick description of how SVL processes and retrieves data for plots will make the next few topics easier.</p>
+<p>SVL's data processing is powered by SQLite.
+After the source code is parsed and checked for syntax errors, SVL assembles the datasets in the <code>DATASETS</code> declaration plus any that were passed in via command line and loads them into an in-memory SQLite database.
+For each plot, SVL constructs a SQL query to produce the data needed for the plot, executes it, and arranges it in a data structure that Plotly can understand.</p>
+<p>Doing data processing using SQLite has a couple of big advantages.</p>
+<ol>
+<li>If most of the data work is in SQL, then there's nothing specific about the data being "in-memory" or SQLite itself. In the future this keeps open the possibility of supporting other databases.</li>
+<li>SVL can inject SQL directly into the data processing queries for the plots. This means SVL can support filters and transformations on the data without the need for tons of additional syntax - you can use what you already know.</li>
+</ol>
+<p>The next three sections cover using <code>FILTER</code> to filter the data, using <code>TRANSFORM</code> to transform the data for an axis, and creating custom datasets within SVL by transforming the datasets that live in files.
+All three of these use the underlying SQLite processor to do the heavy lifting.</p>
+<h3 id="filtering-data">Filtering Data</h3>
+<p>In the last tutorial I mentioned our line chart had some outliers that were causing the plot to look funny.
+Let's fix that by applying a filter to the data for that plot.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">LINE bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sightings by Year&quot;</span>
+<span class="err">    X date BY YEAR LABEL &quot;Year of Sighting&quot;</span>
+<span class="err">    Y number COUNT LABEL &quot;Number of Sightings&quot;</span>
+<span class="err">    SPLIT BY classification</span>
+<span class="err">    -- The filter string gets pasted into a SQL WHERE clause.</span>
+<span class="err">    FILTER &quot;date &gt; &#39;1960-01-01&#39;&quot;</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/advanced_tutorial_filter_line.png" /></p>
+<p>🎉 Much better! 🎉</p>
+<p>The most important thing to note about <code>FILTER</code> (and really all of SVL's SQL support) is that SVL has <em>no idea</em> what's in those quotes.
+It literally pastes the stuff in quotes right into the query.
+The field names of the dataset match the field names in the SQLite database.
+Other than that - there are no rules, so use with caution.
+I might have to rethink this when introducing remote data sources for security reasons, but for now it's only dangerous to you 😉.</p>
+<h3 id="transforming-data">Transforming Data</h3>
+<p>I have a confession to make - I like pie charts.
+The caveat is that I pretty much only like them for one thing: counting null values.
+As an engineer who has to send data-powered software into production environments, I count null values a <em>lot</em>.
+I want to rewrite our pie chart to count the number of null locations in the Bigfoot dataset.</p>
+<p>Thankfully SVL doesn't support SQL just for filters.
+It can also apply arbitrary SQL to transform an axis as well.
+Replace the existing pie chart in the <code>advanced_tutorial.svl</code> script with this.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">PIE bigfoot</span>
+<span class="err">    TITLE &quot;Number of Geocoded Sightings&quot;</span>
+<span class="err">    -- Yes line breaks do work.</span>
+<span class="err">    AXIS TRANSFORM </span>
+<span class="err">        &quot;CASE WHEN latitude IS NULL THEN &#39;No Location&#39; </span>
+<span class="err">         ELSE &#39;Location&#39; END&quot;</span>
+<span class="err">    HOLE 0.3</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/advanced_tutorial_transform_pie.png" /></p>
+<p>Just like with <code>FILTER</code>, everything in quotes after <code>TRANSFORM</code> literally gets pasted into a SQL query (this time it's a SELECT instead of WHERE).
+SVL has <em>no idea</em> what's in those quotes, so keeping it simple is probably a good idea.</p>
+<p>Also, <code>TRANSFORM</code> replaces a field specifier in an axis declaration.
+It can apply to <code>X</code>, <code>Y</code>, <code>AXIS</code>, <code>COLOR BY</code>, and <code>SPLIT BY</code>.</p>
+<h3 id="custom-datasets">Custom Datasets</h3>
+<p>When SVL loads each dataset into the SQLite database, it creates a table with the same name as the dataset.
+Once all of the files have been loaded, SVL can actually create <em>new</em> tables from SQL queries on file-based datasets.
+This is useful if you can't get what you want from <code>FILTER</code>s, <code>TRANSFORM</code>s, or any of SVL's built in aggregation functions.
+Joining two files would be one example.</p>
+<p>To illustrate, suppose I want to aggregate the number of sightings by classification separate from the bar chart (maybe I want this precomputed because I'm going to plot it a whole lot or something).
+Then I'll need to construct a second dataset using SQL.
+This is done in the <code>DATASETS</code> declaration with the <code>SQL</code> keyword.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">DATASETS</span>
+<span class="err">    bigfoot &quot;bigfoot_sightings.csv&quot;</span>
+<span class="err">    -- Note the aggregation must be aliased so it&#39;s a valid SVL identifier.</span>
+<span class="err">    bigfoot_class_counts SQL </span>
+<span class="err">        &quot;SELECT </span>
+<span class="err">            classification,</span>
+<span class="err">            COUNT(*) AS count </span>
+<span class="err">        FROM bigfoot </span>
+<span class="err">        GROUP BY classification&quot;</span>
+</code></pre></div>
+
+
+<p>The bar chart can now reference the new dataset.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">BAR bigfoot_class_counts</span>
+<span class="err">    TITLE &quot;Number of Bigfoot Sightings by Classification&quot;</span>
+<span class="err">    X classification LABEL &quot;Sighting Classification&quot;</span>
+<span class="err">    Y count LABEL &quot;Number of Sightings&quot;</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/advanced_tutorial_data_bar.png" /></p>
+<p>The plot is the same as before.</p>
+<h3 id="all-together">All Together</h3>
+<p>In this section I've demonstrated the features of SVL that take advantage of the underlying SQLite-powered data processing.
+By allowing functions that can directly leverage SQL to be integrated with the language, SVL no longer has to provide a huge suite of data processing capability, and you the user do not have to learn yet another data processing language.
+SVL stays both small and flexible.
+Adding SQL commands does make things a little more complicated, but there will probably be cases where the tradeoff is worth it.</p>
+<p>Here's the final <code>advanced_tutorial.svl</code> script with all of the modifications in this section.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+    <span class="c1">-- Note the aggregation must be aliased to a valid SVL identifier.</span>
+    <span class="n">bigfoot_class_counts</span> <span class="k">SQL</span> 
+        <span class="ss">&quot;SELECT </span>
+<span class="ss">            classification,</span>
+<span class="ss">            COUNT(*) AS count </span>
+<span class="ss">        FROM bigfoot </span>
+<span class="ss">        GROUP BY classification&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+    <span class="n">SPLIT</span> <span class="k">BY</span> <span class="n">classification</span>
+    <span class="c1">-- The filter string gets pasted into a SQL WHERE clause.</span>
+    <span class="n">FILTER</span> <span class="ss">&quot;date &gt; &#39;1960-01-01&#39;&quot;</span>
+
+<span class="n">BAR</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by State&quot;</span>
+    <span class="n">X</span> <span class="k">state</span> <span class="n">LABEL</span> <span class="ss">&quot;State&quot;</span>
+    <span class="n">Y</span> <span class="k">state</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span> <span class="n">SORT</span> <span class="k">DESC</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot_class_counts</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="k">count</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Geocoded Sightings&quot;</span>
+            <span class="c1">-- Yes line breaks do work.</span>
+            <span class="n">AXIS</span> <span class="k">TRANSFORM</span> 
+                <span class="ss">&quot;CASE WHEN latitude IS NULL THEN &#39;No Location&#39; </span>
+<span class="ss">                 ELSE &#39;Location&#39; END&quot;</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+    <span class="n">COLOR</span> <span class="k">BY</span> <span class="n">moon_phase</span> <span class="ss">&quot;YlOrRd&quot;</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+</code></pre></div>
+
+
+<p>This script is just over 50 lines of very spread out code.
+The visualization looks like this.</p>
+<p><img alt="" src="../../images/advanced_tutorial_final_data_1.png" />
+<img alt="" src="../../images/advanced_tutorial_final_data_2.png" />
+<img alt="" src="../../images/advanced_tutorial_final_data_3.png" />
+<img alt="" src="../../images/advanced_tutorial_final_data_4.png" /></p>
+<p>Interactive version <a href="../../sample_visualizations/advanced_tutorial_data.html">here</a>.</p>
+<p>This script demonstrates every syntax feature of the SVL language.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In addition to syntax for declaring datasets and creating / customizing charts, SVL also provides advanced data processing capability by exposing the underlying SQL processing engine directly.
+This provides an immense amount of flexibility for arranging the data in a way that best suits the charts without leaving SVL <em>or</em> adding a bunch of duplicate syntax.</p>
+<p>At this point you know the whole language.
+The final script in this tutorial touched every part of the SVL grammar.</p>
+<p>If you need a reference to the grammar, head on over to the <a href="../../reference/syntax_reference/">language reference</a> section.
+If you'd like to <em>really</em> know how SVL works from top to bottom, check out <a href="../../reference/under_the_hood/">this article</a>.</p>
+<p>Thanks for taking the time to walk through the SVL language.
+I hope you find yourself using it to make and share lots and lots of plots.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../basic_svl/" title="Basic SVL" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Basic SVL
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../reference/syntax_reference/" title="Syntax" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Syntax
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

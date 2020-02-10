@@ -1,0 +1,1259 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.2">
+    
+    
+      
+        <title>Basic SVL - SVL Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#basic-svl" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="SVL Documentation" aria-label="SVL Documentation" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon">show_chart</i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              SVL Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Basic SVL
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="SVL Documentation" class="md-nav__button md-logo">
+      
+        <i class="md-icon">show_chart</i>
+      
+    </a>
+    SVL Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/timothyrenner/svl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    timothyrenner/svl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Basic SVL
+      </label>
+    
+    <a href="./" title="Basic SVL" class="md-nav__link md-nav__link--active">
+      Basic SVL
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#boring-stuff" class="md-nav__link">
+    Boring Stuff
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    Datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chart-types" class="md-nav__link">
+    Chart Types
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#histogram" class="md-nav__link">
+    HISTOGRAM
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scatter" class="md-nav__link">
+    SCATTER
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bar" class="md-nav__link">
+    BAR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line" class="md-nav__link">
+    LINE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pie" class="md-nav__link">
+    PIE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#number" class="md-nav__link">
+    NUMBER
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-summary" class="md-nav__link">
+    In Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customizing-charts-titles-and-axis-labels" class="md-nav__link">
+    Customizing Charts - Titles and Axis Labels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-arrangement" class="md-nav__link">
+    Plot Arrangement
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-axes-split-by-and-color-by" class="md-nav__link">
+    Additional Axes: SPLIT BY and COLOR BY
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced_svl/" title="Advanced SVL" class="md-nav__link">
+      Advanced SVL
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/syntax_reference/" title="Syntax" class="md-nav__link">
+      Syntax
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/under_the_hood/" title="Under the Hood" class="md-nav__link">
+      Under the Hood
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Sample Visualizations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Sample Visualizations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/quickstart_example.html" title="Quickstart" class="md-nav__link">
+      Quickstart
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_chart_types.html" title="Basic SVL - Chart Types" class="md-nav__link">
+      Basic SVL - Chart Types
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_customizing_charts.html" title="Basic SVL - Customizing Charts" class="md-nav__link">
+      Basic SVL - Customizing Charts
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_3.html" title="Basic SVL - Plot Arrangement" class="md-nav__link">
+      Basic SVL - Plot Arrangement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/basic_tutorial_additional_axes.html" title="Basic SVL - Additional Axes" class="md-nav__link">
+      Basic SVL - Additional Axes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_sort.html" title="Advanced SVL - Sorting Data" class="md-nav__link">
+      Advanced SVL - Sorting Data
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../sample_visualizations/advanced_tutorial_data.html" title="Advanced SVL - Data in SVL" class="md-nav__link">
+      Advanced SVL - Data in SVL
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#boring-stuff" class="md-nav__link">
+    Boring Stuff
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    Datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chart-types" class="md-nav__link">
+    Chart Types
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#histogram" class="md-nav__link">
+    HISTOGRAM
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scatter" class="md-nav__link">
+    SCATTER
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bar" class="md-nav__link">
+    BAR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line" class="md-nav__link">
+    LINE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pie" class="md-nav__link">
+    PIE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#number" class="md-nav__link">
+    NUMBER
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-summary" class="md-nav__link">
+    In Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customizing-charts-titles-and-axis-labels" class="md-nav__link">
+    Customizing Charts - Titles and Axis Labels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-arrangement" class="md-nav__link">
+    Plot Arrangement
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-axes-split-by-and-color-by" class="md-nav__link">
+    Additional Axes: SPLIT BY and COLOR BY
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/timothyrenner/svl/edit/master/docs/tutorials/basic_svl.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="basic-svl">Basic SVL</h1>
+<p>This tutorial will walk through the basics of creating SVL programs.
+By the end of this tutorial you will know how to</p>
+<ul>
+<li>declare datasets</li>
+<li>create all chart types</li>
+<li>customize charts with titles and axis labels</li>
+<li>split dataset by a categorical variable</li>
+<li>color a dataset by a continuous variable</li>
+<li>normalize temporal fields</li>
+<li>arrange multiple plots in a single output file</li>
+</ul>
+<p>And you will learn all of these things working on a real world not-really-cleaned dataset of <a href="https://data.world/timothyrenner/bfro-sightings-data">Bigfoot sightings</a>.
+This dataset was collected by the Bigfoot Field Researchers Organization (<a href="http://bfro.net/">BFRO</a>).</p>
+<p>Start by downloading that dataset into the current directory.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">wget https://github.com/timothyrenner/svl/raw/docs/sample_data/bigfoot_sightings.csv</span>
+</code></pre></div>
+
+
+<p>The tutorial's been designed to operate on a single file, but it can be split up too.
+I'll include a complete version of the state of the file (which I'll name <code>basic_tutorial.svl</code>) at the end of each section.</p>
+<h2 id="boring-stuff">Boring Stuff</h2>
+<p>Before I start there's boring stuff I need to cover.</p>
+<ol>
+<li>All keywords in SVL are case-<strong>insensitive</strong>, but field names, file names, and anything in quotes are not. By convention I will capitalize keywords but it's not required.</li>
+<li>Comments start with <code>--</code> and extend to the end of the line.</li>
+<li>All dataset and field names (basically anything not in quotes) must start with an underscore or letter, and can only contain letters, underscores or digits.</li>
+<li>SVL is not sensitive to tabs or newlines. The entire program could be written on one line if you wanted.</li>
+</ol>
+<p>Aside from field and dataset names being case sensitive, this is pretty much just like SQL.</p>
+<h2 id="datasets">Datasets</h2>
+<p>An SVL program usually starts with a datset declaration.
+This tells the compiler where your datsets live and assigns them a label.
+This isn't required - datsets can be declared as compiler command line arguments, but that will be covered in the advanced SVL tutorial.</p>
+<p>If an SVL program has a DATASETS declaration, it must be at the beginning of the program.
+It looks like this.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">DATASETS</span>
+<span class="err">    bigfoot &quot;bigfoot_sightings.csv&quot;</span>
+</code></pre></div>
+
+
+<p>The name of the dataset is an identifier, and the name of the file must be in quotes.</p>
+<p>Naturally this SVL program won't compile - we need some plots first.
+The next section will walk you through the plot types.</p>
+<h2 id="chart-types">Chart Types</h2>
+<p>SVL supports six plot types: histogram, scatter, bar, line, number (for all your big number©️ needs), and ... my personal favorite ... pie charts.
+Don't worry, you can add holes to your pie charts so your friends won't judge.</p>
+<h3 id="histogram">HISTOGRAM</h3>
+<p>Histograms are for binning a single variable.
+Let's say we want to (and we <em>definitely</em> do) figure out if more bigfoot sightings occur during a particular phase of the moon.
+Add this to your <code>basic_tutorial.svl</code> file under the DATASETS declaration.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">HISTOGRAM bigfoot    -- same name as DATASETS</span>
+<span class="err">    X moon_phase     -- can specify Y for vertical histogram</span>
+<span class="err">    STEP 0.1         -- optional, can also specify BINS to set number of bins</span>
+</code></pre></div>
+
+
+<p>Compile it with</p>
+<div class="codehilite"><pre><span></span><code><span class="err">svl basic_tutorial.svl</span>
+</code></pre></div>
+
+
+<p>and you should see</p>
+<p><img alt="" src="../../images/basic_tutorial_histogram.png" /></p>
+<p>A couple of things to note:</p>
+<ol>
+<li>Axes are declared by <code>X</code> or <code>Y</code> followed by the field. This is true of all plot types except pie charts.</li>
+<li>Only histograms take a <code>STEP</code> or <code>BINS</code>, but they aren't required.</li>
+</ol>
+<h3 id="scatter">SCATTER</h3>
+<p>Scatter plots need two axes.
+Suppose we want to see if the southern Sasquatch (colloquially referred to as "skunk ape") prefers warmer temperatures farther south, or if they prefer the same temperature as their Pacific Northwest cousins).</p>
+<p>Add this to <code>basic_tutorial.svl</code> underneath the histogram.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">SCATTER bigfoot</span>
+<span class="err">    X latitude</span>
+<span class="err">    Y temperature_mid</span>
+</code></pre></div>
+
+
+<p>That's it.
+Compile again and it'll appear right under the histogram.</p>
+<p><img alt="" src="../../images/basic_tutorial_scatter.png" /></p>
+<h3 id="bar">BAR</h3>
+<p>Bar charts are basically declared the same way as scatter plots, except that they usually appear with aggregations.
+Bigfoot sighting reports are classified by three types: A, B and C.
+A is direct evidence, B is indirect evidence, and C is a secondhand account.
+Suppose we want to count the number of sightings with each classification rating.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">BAR bigfoot</span>
+<span class="err">    X classification</span>
+<span class="err">    Y number COUNT    -- COUNT is an aggregation, number is a field in the dataset.</span>
+</code></pre></div>
+
+
+<p>This plot will count the number of reports for each classification.</p>
+<p><img alt="" src="../../images/basic_tutorial_bar.png" /></p>
+<p>A couple of things to note:</p>
+<ol>
+<li>There are five aggregations: <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code>, <code>SUM</code>. More will probably be added in the future.</li>
+<li>It's probably not a good idea to bar chart continuous variables, but SVL won't stop you.</li>
+<li><code>COUNT</code> <em>shouldn't</em> need the field label but for technical reasons it does. I'll probably fix this at some point in the near future.</li>
+</ol>
+<h3 id="line">LINE</h3>
+<p>Line charts, like bar charts, usually appear with aggregations.
+They are good for plotting things like time.
+If we want to know the number of bigfoot sightings over time, this plot will get us there.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">LINE bigfoot</span>
+<span class="err">    X date BY YEAR</span>
+<span class="err">    Y number COUNT</span>
+</code></pre></div>
+
+
+<p>This plot counts the number of sightings by year.</p>
+<p><img alt="" src="../../images/basic_tutorial_line.png" /></p>
+<p>This plot also introduces a <strong>temporal transformation</strong>.
+Basically, SVL truncates each date at the year and then counts each year's worth of sightings.
+Currently only <code>YYYY-mm-ddTH:MM:S</code> format is supported but it should be straightforward to support custom formats in the future.
+The following temporal transformations are available: <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>, <code>HOUR</code>, <code>MINUTE</code>, <code>SECOND</code>.
+Temporal transformations can be applied to <code>X</code>, <code>Y</code>, <code>COLOR BY</code> and <code>SPLIT BY</code> axes (more on those last two shortly).</p>
+<h3 id="pie">PIE</h3>
+<p>Pie charts are a little different from the others.
+Basically they count the different values of the axis we select.
+Suppose we wanted to view the proportion of sighting classifications.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">PIE bigfoot</span>
+<span class="err">    AXIS classification</span>
+<span class="err">    HOLE 0.3               -- HOLE is only available for pie charts.</span>
+</code></pre></div>
+
+
+<p>We get this</p>
+<p><img alt="" src="../../images/basic_tutorial_pie.png" /></p>
+<p>Note:</p>
+<ol>
+<li>Pie charts require <code>AXIS</code> <em>instead</em> of <code>X</code> or <code>Y</code>.</li>
+<li><code>HOLE</code> only applies to pie charts, and must be values between zero and one.</li>
+</ol>
+<h3 id="number">NUMBER</h3>
+<p>Number was added a little later than the others, but it's pretty useful.
+It takes a <em>single</em> value and prints it.
+That's all.
+If we want to show a big number©️ for the bigfoot sightings, we could do this.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">NUMBER bigfoot</span>
+<span class="err">    VALUE number COUNT</span>
+</code></pre></div>
+
+
+<p>We get this:</p>
+<p><img alt="" src="../../images/basic_tutorial_number.png" /></p>
+<p>Note:</p>
+<ol>
+<li>Whatever's in <code>VALUE</code> needs to be a single number. If not SVL will raise an error.</li>
+</ol>
+<h3 id="in-summary">In Summary</h3>
+<p>Let's tally up our Bigfoot knowledge.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="c1">-- Keep in mind the line breaks and tabs are only to make things visually</span>
+<span class="c1">-- coherent. They&#39;re not required by language syntax.</span>
+
+<span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>    <span class="c1">-- same name as DATASETS</span>
+    <span class="n">X</span> <span class="n">moon_phase</span>     <span class="c1">-- can specify Y for vertical histogram</span>
+    <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>         <span class="c1">-- optional, can also specify BINS to set number of bins</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="n">latitude</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span>
+
+<span class="n">BAR</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="n">classification</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span>    <span class="c1">-- COUNT is an aggregation, number is a field in the dataset.</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span>
+
+<span class="n">PIE</span> <span class="n">bigfoot</span>
+    <span class="n">AXIS</span> <span class="n">classification</span>
+    <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>               <span class="c1">-- HOLE is only available for pie charts.</span>
+</code></pre></div>
+
+
+<p>And this is what it looks like:</p>
+<p><img alt="" src="../../images/basic_tutorial_chart_types_1.png" />
+<img alt="" src="../../images/basic_tutorial_chart_types_2.png" /></p>
+<p>You can view an interactive version <a href="../../sample_visualizations/basic_tutorial_chart_types.html">here</a>.</p>
+<p>A few things that jump out:</p>
+<ol>
+<li>The titles and axis labels aren't pretty. I'll cover how to do that next.</li>
+<li>The plots look stretched and weird. This is partly due to browser window width, and partly due to the fact that some of those plots (looking at you pie chart) don't need <em>that</em> much screen real estate. The "Plot Arrangement" section covers this.</li>
+<li>What if you want multiple lines / bars /etc on one plot - like number of sightings per classification? <code>SPLIT BY</code> and it's cousin <code>COLOR BY</code> cover how these additional axes work.</li>
+</ol>
+<h2 id="customizing-charts-titles-and-axis-labels">Customizing Charts - Titles and Axis Labels</h2>
+<p>SVL provides default titles and labels for axes based on the fields in the file, but those aren't the prettiest.
+To add some class to your plots, SVL provides the <code>TITLE</code> and <code>LABEL</code> keywords.
+Here's a beautified version of our histogram.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">HISTOGRAM bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sighting Moon Phases&quot;</span>
+<span class="err">    X moon_phase LABEL &quot;Moon Phase&quot;</span>
+<span class="err">    STEP 0.1</span>
+</code></pre></div>
+
+
+<p>It looks like this:</p>
+<p><img alt="" src="../../images/basic_tutorial_histogram_with_labels_and_title.png" /></p>
+<p><code>TITLE</code> can appear anywhere after the plot declaration (i.e. <code>HISTOGRAM bigfoot</code>).
+<code>LABEL</code> can appear anywhere after the axis declaration (i.e. <code>X moon_phase</code>).
+<code>LABEL</code> is valid SVL syntax for <code>SPLIT BY</code> but doesn't do anything for Plotly, because they don't currently have a straightforward way to add legend titles to plots.</p>
+<p>✅ <strong>VALID AXIS LABEL</strong>: <code>X moon_phase LABEL "Moon Phase"</code></p>
+<p>❌ <strong>INVALID AXIS LABEL</strong>: <code>X LABEL "Moon Phase" moon_phase</code></p>
+<p>For completeness here's a fully beautified example of our earlier results.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span><span class="w"></span>
+<span class="w">    </span><span class="c1">-- Path is a little different from tutorial.</span>
+<span class="w">    </span><span class="n">bigfoot</span><span class="w"> </span><span class="ss">&quot;sample_data/bigfoot_sightings.csv&quot;</span><span class="w"></span>
+
+<span class="n">HISTOGRAM</span><span class="w"> </span><span class="n">bigfoot</span><span class="w"></span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w"> </span><span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="n">moon_phase</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Moon Phase&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">STEP</span><span class="w"> </span><span class="mf">0.1</span><span class="w"></span>
+
+<span class="n">SCATTER</span><span class="w"> </span><span class="n">bigfoot</span><span class="w"></span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w"> </span><span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="n">latitude</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Latitude&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="n">temperature_mid</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Temperature (F)&quot;</span><span class="w"></span>
+
+<span class="n">BAR</span><span class="w"> </span><span class="n">bigfoot</span><span class="w"></span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w"> </span><span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="n">classification</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Sighting Classification&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="nf">COUNT</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Number of Sightings&quot;</span><span class="w"></span>
+
+<span class="n">LINE</span><span class="w"> </span><span class="n">bigfoot</span><span class="w"></span>
+<span class="w">    </span><span class="n">X</span><span class="w"> </span><span class="nc">date</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="nf">YEAR</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Year of Sighting&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w"> </span><span class="ss">&quot;Bigfoot Sightings by Year&quot;</span><span class="w">    </span><span class="c1">-- TITLE can go between axes nbd.</span>
+<span class="w">    </span><span class="n">Y</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="nf">COUNT</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;Number of Sightings&quot;</span><span class="w"></span>
+
+<span class="n">PIE</span><span class="w"> </span><span class="n">bigfoot</span><span class="w"></span>
+<span class="w">    </span><span class="n">TITLE</span><span class="w"> </span><span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">AXIS</span><span class="w"> </span><span class="n">classification</span><span class="w"> </span><span class="n">LABEL</span><span class="w"> </span><span class="ss">&quot;This gets ignored&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">HOLE</span><span class="w"> </span><span class="mf">0.3</span><span class="w"></span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/basic_tutorial_customizing_charts_1.png" />
+<img alt="" src="../../images/basic_tutorial_customizing_charts_2.png" /></p>
+<p>You can see an interactive version of this visualization <a href="../../sample_visualizations/basic_tutorial_customizing_charts.html">here</a>.</p>
+<h2 id="plot-arrangement">Plot Arrangement</h2>
+<p>So far we've been placing the plots one after the other, and SVL has just stacked them.
+SVL provides a significant amount of control over how plots are laid out, however.
+In my opinion this is the coolest part of the language.</p>
+<p>SVL has a couple of ways of arranging plots to help you make the most of your screen real estate.
+SVL supports both vertical and horizontal concatenation, and allows these concatenations to be nested.
+The only plots in <code>basic_tutorial.svl</code> that really need the whole width of the screen are the line chart and scatter plot; the others can use a shrinking.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+<span class="c1">-- The CONCAT function performs a horizontal concatenation.</span>
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="n">BAR</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+        <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+        <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+    <span class="n">PIE</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+        <span class="n">AXIS</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;This gets ignored&quot;</span>
+        <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+</code></pre></div>
+
+
+<p>What I've done is switched the order of the plots by putting the line on top and the scatter on the bottom, and placing the bar, pie and histogram in the middle wrapped in a function called <code>CONCAT</code>.
+<code>CONCAT</code> <em>horizonally</em> concatenates plots, placing them on the same row.
+The above chart looks like this.</p>
+<p><img alt="" src="../../images/basic_tutorial_plot_arrangement_1.png" /></p>
+<p>View an interactive version <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_1.html">here</a>.</p>
+<p>Pretty sweet right?
+Think of things this way - at the top "level" of nesting there are three rows.
+The first row haw one plot, so it gets the full width of the page.
+The middle row has three plots that are horizontally concatenated, so each plot gets a third of the width.
+The final row just has one, so it takes the full screen.</p>
+<p>Let's say we want that histogram to take a little more space, and the bar / pie charts to take a little less.
+We can <em>nest</em> concatenations.
+Check this out.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="n">CONCAT</span><span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">AXIS</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;This gets ignored&quot;</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+</code></pre></div>
+
+
+<p>What do you think it will look like?
+The top and bottom rows are the same, but the middle row is now split twice - one half is the histogram, and the other half is split between the bar chart and the pie chart.</p>
+<p><img alt="" src="../../images/basic_tutorial_plot_arrangement_2.png" /></p>
+<p>That is what we see (interactive example <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_2.html">here</a>), but now there's an unintended side effect: the plot titles are cut off because there's not enough width.
+Resizing the browser can fix this, but we can also change the concatenation of those two plots from a horizontal one to a vertical one.
+Vertical concatenations are implicit at the top level, but inside a <code>CONCAT</code> there needs to be something to denote vertical vs horizontal concatenation.
+This is done using parens.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="c1">-- Same as before, but with CONCAT removed. Now these two are vertically</span>
+    <span class="c1">-- stacked.</span>
+    <span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">AXIS</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;This gets ignored&quot;</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/basic_tutorial_plot_arrangement_3a.png" />
+<img alt="" src="../../images/basic_tutorial_plot_arrangement_3b.png" />
+<img alt="" src="../../images/basic_tutorial_plot_arrangement_3c.png" /></p>
+<p>Interactive version <a href="../../sample_visualizations/basic_tutorial_plot_arrangement_3.html">here</a>.</p>
+<p>Not only did the bar and pie charts stack, every row got taller making the whole page bigger.
+This happens because there's a minimum plot height.
+When the most nested plot reaches that minimum height, the entire document will resize to make sure everything remains proportional to what's in the script.</p>
+<h2 id="additional-axes-split-by-and-color-by">Additional Axes: SPLIT BY and COLOR BY</h2>
+<p>So now we know a thing or two about Bigfoot - can we go deeper?
+Well for one thing it might be worth checking out how the number of sightings by time breaks down by sighting classification.
+For that we'd need three lines.
+SVL allows us to split a plot by a field's values using a special axis specifier called ... <code>SPLIT BY</code>.</p>
+<p>Focusing on just the line plot,</p>
+<div class="codehilite"><pre><span></span><code><span class="err">LINE bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sightings by Year&quot;</span>
+<span class="err">    X date BY YEAR LABEL &quot;Year of Sighting&quot;</span>
+<span class="err">    Y number COUNT LABEL &quot;Number of Sightings&quot;</span>
+<span class="err">    SPLIT BY classification</span>
+</code></pre></div>
+
+
+<p>This splits the data into three lines, one for each classification value.</p>
+<p><img alt="" src="../../images/basic_tutorial_additional_axes_1.png" /></p>
+<p><code>SPLIT BY</code> is perfect for categorical variables - what about continuous ones?</p>
+<p>Suppose we want to overlay the moon phase onto the scatter plot.
+Then we'd know for sure if more Bigfoot sightings in Florida happened during a full moon (be honest ... you think it's true).
+SVL also has syntax for that - <code>COLOR BY</code> colors the existing points by the specified field.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">SCATTER bigfoot</span>
+<span class="err">    TITLE &quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+<span class="err">    X latitude LABEL &quot;Latitude&quot;</span>
+<span class="err">    Y temperature_mid LABEL &quot;Temperature (F)&quot;</span>
+<span class="err">    COLOR BY moon_phase &quot;YlOrRd&quot; LABEL &quot;Moon Phase&quot;</span>
+</code></pre></div>
+
+
+<p><img alt="" src="../../images/basic_tutorial_additional_axes_3.png" /></p>
+<p>For <code>COLOR BY</code>, you can optionally provide a color scale.
+It must appear after the axis declaration before any modifiers.</p>
+<p>✅ <strong>VALID</strong> <code>COLOR BY moon_phase "YlOrRd" LABEL "Moon Phase"</code></p>
+<p>❌ <strong>INVALID</strong> <code>COLOR BY moon_phase LABEL "Moon Phase" "YlOrRd"</code></p>
+<p>❌ <strong>INVALID</strong> <code>COLOR BY "YlOrRd" moon_phase LABEL "Moon Phase"</code></p>
+<p>All together, the script looks like this...</p>
+<div class="codehilite"><pre><span></span><code><span class="n">DATASETS</span>
+    <span class="n">bigfoot</span> <span class="ss">&quot;bigfoot_sightings.csv&quot;</span>
+
+<span class="n">LINE</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sightings by Year&quot;</span>
+    <span class="n">X</span> <span class="nb">date</span> <span class="k">BY</span> <span class="k">YEAR</span> <span class="n">LABEL</span> <span class="ss">&quot;Year of Sighting&quot;</span>
+    <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+    <span class="n">SPLIT</span> <span class="k">BY</span> <span class="n">classification</span>
+
+<span class="n">CONCAT</span><span class="p">(</span>
+    <span class="n">HISTOGRAM</span> <span class="n">bigfoot</span>
+        <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Moon Phases&quot;</span>
+        <span class="n">X</span> <span class="n">moon_phase</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+        <span class="n">STEP</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+
+    <span class="p">(</span>
+        <span class="n">BAR</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">X</span> <span class="n">classification</span> <span class="n">LABEL</span> <span class="ss">&quot;Sighting Classification&quot;</span>
+            <span class="n">Y</span> <span class="nb">number</span> <span class="k">COUNT</span> <span class="n">LABEL</span> <span class="ss">&quot;Number of Sightings&quot;</span>
+
+        <span class="n">PIE</span> <span class="n">bigfoot</span>
+            <span class="n">TITLE</span> <span class="ss">&quot;Number of Bigfoot Sightings by Classification&quot;</span>
+            <span class="n">AXIS</span> <span class="n">classification</span>
+            <span class="n">HOLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">SCATTER</span> <span class="n">bigfoot</span>
+    <span class="n">TITLE</span> <span class="ss">&quot;Bigfoot Sighting Temperature by Latitude&quot;</span>
+    <span class="n">X</span> <span class="n">latitude</span> <span class="n">LABEL</span> <span class="ss">&quot;Latitude&quot;</span>
+    <span class="n">Y</span> <span class="n">temperature_mid</span> <span class="n">LABEL</span> <span class="ss">&quot;Temperature (F)&quot;</span>
+    <span class="n">COLOR</span> <span class="k">BY</span> <span class="n">moon_phase</span> <span class="ss">&quot;YlOrRd&quot;</span> <span class="n">LABEL</span> <span class="ss">&quot;Moon Phase&quot;</span>
+</code></pre></div>
+
+
+<p>... and produces plots that look like this:</p>
+<p><img alt="" src="../../images/basic_tutorial_additional_axes_1.png" />
+<img alt="" src="../../images/basic_tutorial_additional_axes_2.png" />
+<img alt="" src="../../images/basic_tutorial_additional_axes_3.png" /></p>
+<p>View an interactive version <a href="../../sample_visualizations/basic_tutorial_additional_axes.html">here</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>That's it for the basic SVL tutorial.
+Here's what we covered.</p>
+<ul>
+<li>The structure of an SVL program.</li>
+<li>The five plot types: histogram, bar, scatter, line and pie.</li>
+<li>Customizing plots with titles and axis labels.</li>
+<li>Arranging plots with <code>CONCAT</code>.</li>
+<li>Additional axes with <code>SPLIT BY</code> and <code>COLOR BY</code>.</li>
+</ul>
+<p>There are a few questions this tutorial doesn't answer.</p>
+<ul>
+<li>What if I want to sort the results of a plot?</li>
+<li>That line plot has some outliers on the X axis. What if I want to filter the results of a plot?</li>
+<li>What if I don't want to hard code the file name in the script?</li>
+<li>What if I want to transform the data with something other than a temporal transformation?</li>
+</ul>
+<p>SVL supports all of the above.
+That's all covered in the <a href="../advanced_svl/">Advanced SVL</a> tutorial.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../.." title="Home" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../advanced_svl/" title="Advanced SVL" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Advanced SVL
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>
