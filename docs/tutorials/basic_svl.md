@@ -4,7 +4,7 @@ This tutorial will walk through the basics of creating SVL programs.
 By the end of this tutorial you will know how to
 
 * declare datasets
-* create all five chart types
+* create all chart types
 * customize charts with titles and axis labels
 * split dataset by a categorical variable
 * color a dataset by a continuous variable
@@ -55,7 +55,7 @@ The next section will walk you through the plot types.
 
 ## Chart Types
 
-SVL supports five plot types: histogram, scatter, bar, line, and ... my personal favorite ... pie charts.
+SVL supports six plot types: histogram, scatter, bar, line, number (for all your big number©️ needs), and ... my personal favorite ... pie charts.
 Don't worry, you can add holes to your pie charts so your friends won't judge.
 
 ### HISTOGRAM
@@ -168,6 +168,26 @@ Note:
 
 1. Pie charts require `AXIS` _instead_ of `X` or `Y`.
 2. `HOLE` only applies to pie charts, and must be values between zero and one.
+
+### NUMBER
+
+Number was added a little later than the others, but it's pretty useful.
+It takes a _single_ value and prints it.
+That's all.
+If we want to show a big number©️ for the bigfoot sightings, we could do this.
+
+```
+NUMBER bigfoot
+    VALUE number COUNT
+```
+
+We get this:
+
+![](../images/basic_tutorial_number.png)
+
+Note:
+
+1. Whatever's in `VALUE` needs to be a single number. If not SVL will raise an error.
 
 ### In Summary
 
