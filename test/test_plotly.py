@@ -314,6 +314,22 @@ def test_get_title_pie():
     assert truth == answer
 
 
+def test_get_title_number():
+    """ Tests that the _get_title function returns the correct value for
+        number charts.
+    """
+    svl_plot = {
+        "data": "bigfoot",
+        "value": {"field": "number", "agg": "COUNT"},
+        "type": "number"
+    }
+
+    truth = "bigfoot: number"
+    answer = _get_title(svl_plot)
+
+    assert truth == answer
+
+
 def test_get_title_xy():
     """ Tests that the _get_title function returns the correct value for xy
         plots.

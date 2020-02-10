@@ -76,6 +76,10 @@ def _get_title(svl_plot):
         return "{}: {}".format(
             svl_plot["data"], _get_field_name(svl_plot[svl_axis])
         )
+    elif svl_plot["type"] == "number":
+        return "{}: {}".format(
+            svl_plot["data"], _get_field_name(svl_plot["value"])
+        )
     else:
         # xy plot
         return "{}: {} - {}".format(
